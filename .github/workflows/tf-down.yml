@@ -1,4 +1,4 @@
-name: 'tf-up'
+name: 'tf-down'
 
 on:
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
       working-directory: ./iac
       run: |
         ./print-dependencies.sh
-    - name: 'Terraform Up'
+    - name: 'Terraform Down'
       working-directory: ./iac
       timeout-minutes: 20
       env:
