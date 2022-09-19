@@ -1,0 +1,44 @@
+name: 'tf-apply'
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+#    types: do-terraform-apply-aws-from-master-development
+# push:
+#   branches:
+#     - master
+#     - 'story-*'  # Push events to branches matching story-1001
+#     - 'releases/**'  # Push events to branches matching refs/heads/releases/10
+#   tags:
+#     - v1
+#     - v*   # Push events to branches matching v1, v1.1, v10
+#     - v**   # Push events to branches matching version/1, v/2
+#     - v1.* # Push events to tags v1.0, v1.1, and v1.9
+# schedule:
+#   - cron:  '0 17 * * *' # runs on every day at 5pm UTC
+
+jobs:
+  tf-apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30 # default 360
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        ref: 'iac-test'
+        fetch-depth: '1'
+    - name: 'Print Dependencies'
+      run: |
+        ./print-dependencies.sh
+    - name: 'Terraform Apply'
+      timeout-minutes: 20
+      env:
+        ENV_NAME: 'development'
+        TF_VAR_database_name: ${{ secrets.DatabaseNameDevelopment }}
+        TF_VAR_database_username: ${{ secrets.DatabaseUserDevelopment }}    
+        TF_VAR_database_password: ${{ secrets.DatabasePasswordDevelopment }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AwsAccessKeyId }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AwsSecretAccessKey }}
+        AWS_DEFAULT_REGION: ${{ secrets.AwsDefaultRegion }}
+        AWS_DEFAULT_OUTPUT: 'json'
+      run: |
+        ./tf-plan-apply.sh
