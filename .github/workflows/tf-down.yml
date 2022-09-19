@@ -40,4 +40,4 @@ jobs:
         AWS_DEFAULT_OUTPUT: 'json'
         TF_VAR_APP_NAME: ${{ secrets.APP_NAME }}
       run: |
-        ./tf-up.sh
+        ./tf-down.sh
