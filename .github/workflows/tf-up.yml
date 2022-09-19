@@ -38,6 +38,6 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         AWS_DEFAULT_OUTPUT: 'json'
-        TF_VAR_APP_NAME: ${{ secrets.APP_NAME }}
+        TF_VAR_appName: ${{ secrets.APP_NAME }}
       run: |
         ./tf-up.sh

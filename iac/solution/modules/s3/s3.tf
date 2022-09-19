@@ -1,3 +1,3 @@
-resource "aws_s3_bucket" "oatg-s3" {
-  bucket = "oatg-s3"
+resource "aws_s3_bucket" "s3" {
+  bucket = "${var.appName}-s3"
 }
