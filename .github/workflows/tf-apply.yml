@@ -1,6 +1,8 @@
 name: 'tf-apply'
 
 on:
+  push:
+    branches: ["master", "iac-test"]
   workflow_dispatch:
   repository_dispatch:
 #    types: do-terraform-apply-aws-from-master-development
