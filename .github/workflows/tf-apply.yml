@@ -30,7 +30,7 @@ jobs:
         fetch-depth: '1'
     - name: 'Print Dependencies'
       run: |
-        ./print-dependencies.sh
+        ./iac/print-dependencies.sh
     - name: 'Terraform Apply'
       timeout-minutes: 20
       env:
@@ -43,4 +43,4 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.AwsDefaultRegion }}
         AWS_DEFAULT_OUTPUT: 'json'
       run: |
-        ./tf-plan-apply.sh
+        ./iac/tf-plan-apply.sh
