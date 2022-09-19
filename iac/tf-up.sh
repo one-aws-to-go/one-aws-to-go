@@ -10,4 +10,4 @@ terraform -chdir=solution init \
   -reconfigure -input=false
 
 terraform -chdir=solution plan -input=false
-# terraform -chdir=solution apply -auto-approve
+terraform -chdir=solution apply -auto-approve
