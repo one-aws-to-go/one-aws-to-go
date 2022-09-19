@@ -1,4 +1,4 @@
-name: 'tf-apply'
+name: 'tf-up'
 
 on:
   push:
@@ -31,16 +31,13 @@ jobs:
     - name: 'Print Dependencies'
       run: |
         ./iac/print-dependencies.sh
-    - name: 'Terraform Apply'
+    - name: 'Terraform Up'
       timeout-minutes: 20
       env:
-        ENV_NAME: 'development'
-        TF_VAR_database_name: ${{ secrets.DatabaseNameDevelopment }}
-        TF_VAR_database_username: ${{ secrets.DatabaseUserDevelopment }}    
-        TF_VAR_database_password: ${{ secrets.DatabasePasswordDevelopment }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AwsAccessKeyId }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AwsSecretAccessKey }}
-        AWS_DEFAULT_REGION: ${{ secrets.AwsDefaultRegion }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         AWS_DEFAULT_OUTPUT: 'json'
+        TF_VAR_APP_NAME: ${{ secrets.APP_NAME }}
       run: |
-        ./iac/tf-plan-apply.sh
+        ./iac/tf-up.sh
