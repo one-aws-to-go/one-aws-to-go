@@ -1,26 +1,11 @@
-data "archive_file" "backend" {
-  type = "zip"
-
-  source_dir  = "${path.cwd}/../backend"
-  output_path = "${path.cwd}/../backend.zip"
-}
-
-resource "aws_s3_object" "backend_bucket" {
-  bucket = var.backend_bucket_id
-
-  key    = "backend.zip"
-  source = data.archive_file.backend.output_path
-  etag   = filemd5(data.archive_file.backend.output_path)
-}
-
 resource "aws_lambda_function" "backend" {
   function_name = "${var.appName}-backend"
 
   s3_bucket        = var.backend_bucket_id
-  s3_key           = aws_s3_object.backend_bucket.key
+  s3_key           = var.backend_bucket_key
   runtime          = "nodejs16.x"
   handler          = "backend.handler"
-  source_code_hash = data.archive_file.backend.output_base64sha256
+  source_code_hash = var.backend_source_hash
   role             = aws_iam_role.backend_role.arn
 }
 
