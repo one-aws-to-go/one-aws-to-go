@@ -1,9 +1,12 @@
 # One AWS To Go: IaC
 
 ## Prerequisites
-- AWS IAM role with the following permissions: (e.g., S3...)
+- AWS IAM role with the following permissions:
     - DynamoDB full access
     - S3 full access
+    - IAM full access
+    - Lambda full access
+    - API Gateway adminstrator
 
 ## Env
 
