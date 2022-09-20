@@ -30,6 +30,10 @@ jobs:
       working-directory: ./iac
       run: |
         ./print-dependencies.sh
+    - name: 'Build Backend'
+      working-directory: './backend'
+      run: |
+        npm i && npm run build
     - name: 'Terraform Up'
       working-directory: ./iac
       timeout-minutes: 20
