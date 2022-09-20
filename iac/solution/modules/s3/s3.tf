@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "frontend" {
 data "archive_file" "backend" {
   type = "zip"
 
-  source_dir  = "${path.cwd}/../backend"
+  source_dir  = "${path.cwd}/../backend/build"
   output_path = "${path.cwd}/../backend.zip"
 }
 

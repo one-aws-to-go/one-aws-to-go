@@ -5,3 +5,4 @@ set -x
 
 aws --version
 terraform --version
+npm --version
