@@ -1,2 +1,2 @@
 variable "appName" {}
-variable "lambda" {}
+variable "backend_lambda" {}

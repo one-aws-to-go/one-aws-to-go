@@ -1,2 +1,2 @@
 variable "appName" {}
-variable "lambda_bucket_id" {}
+variable "backend_bucket_id" {}

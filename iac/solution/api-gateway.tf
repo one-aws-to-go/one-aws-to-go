@@ -2,5 +2,5 @@ module "api-gateway" {
   source = "./modules/api-gateway"
 
   appName = var.appName
-  lambda  = module.lambda.lambda
+  backend_lambda = module.lambda.backend_lambda
 }
