@@ -3,7 +3,7 @@ output "backend_bucket_id" {
 }
 
 output "backend_bucket_key" {
-  value = aws_s3_object.backend_bucket.key
+  value = aws_s3_object.backend.key
 }
 
 output "backend_source_hash" {
