@@ -34,6 +34,10 @@ jobs:
       working-directory: './backend'
       run: |
         npm i && npm run build
+    - name: 'Build Frontend'
+      working-directory: './frontend'
+      run: |
+        npm i && npm run build
     - name: 'Terraform Up'
       working-directory: ./iac
       timeout-minutes: 20
