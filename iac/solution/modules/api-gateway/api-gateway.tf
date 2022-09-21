@@ -1,6 +1,12 @@
 resource "aws_apigatewayv2_api" "lambda" {
   name          = "${var.appName}-lambda-gw"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["*"]
+    allow_headers = ["*"]
+  }
 }
 
 resource "aws_apigatewayv2_stage" "lambda" {

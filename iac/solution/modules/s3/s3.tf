@@ -4,6 +4,7 @@ resource "aws_s3_bucket" "backend" {
 
 resource "aws_s3_bucket" "frontend" {
   bucket = "${var.appName}-frontend"
+  
 }
 
 data "archive_file" "backend" {
