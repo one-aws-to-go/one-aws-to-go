@@ -2,11 +2,13 @@ import { ReactComponent as Clouds } from "./Clouds.svg";
 
 import "./TemplateButton.css";
 
-const TemplateButton = () => {
+const TemplateButton: React.FC = () => {
   return (
-    <div className="container" onClick={console.log}>
-      <Clouds />
-      <strong>Text</strong>
+    <div className="template-select-container">
+      <div className="template-select-content">
+        <Clouds className="image" />
+        <p className="template-text">Template</p>
+      </div>
     </div>
   );
 };

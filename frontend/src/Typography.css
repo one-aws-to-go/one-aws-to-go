@@ -10,7 +10,8 @@ body {
   letter-spacing: 0.02em;
 
   /* Black */
-  color: #020106;
+  background-color: #020106;
+  color: #f2f2f2;
 
   /* Inside auto layout */
   flex: none;
