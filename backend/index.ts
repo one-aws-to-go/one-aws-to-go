@@ -1,4 +1,7 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 // TODO: Actually do something :D
 export const handler = async (e: APIGatewayEvent, _ctx: Context): Promise<APIGatewayProxyResult> => {
