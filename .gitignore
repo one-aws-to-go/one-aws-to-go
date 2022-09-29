@@ -13,6 +13,10 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
+# AWS
+.aws-sam
+env.json
+
 # Draw.io
 *.dtmp
 
