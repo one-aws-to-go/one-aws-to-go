@@ -1,10 +1,19 @@
 # One AWS To Go: Backend
 
-## REST API
+## REST(-like) API
+
+**Authentication:** GitHub Token
 
 | **Method** | **Route** | **Description** |
 | ----- | ----- | ----- |
-| `GET` | TODO | TODO
+| `GET` | `/user` | Return user's information
+| `GET` | `/forks` | Get all forks associated with the user and the application
+| `GET` | `/forks/<fork_id>` | Get fork information
+| `POST` | `/forks` | Create new fork |
+| `PUT` | `/forks/<fork_id>/secrets` | Set fork secrets for IaC |
+| `POST` | `/forks/<fork_id>/action/<action_name>`* | Trigger GitHub IaC Action |
+
+**\* `<action_name>` = `up`|`down`|`setup`**
 
 ## Local Development
 
@@ -13,7 +22,7 @@
 - [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 
 ### Setup
-1. Setup Postgres SQL database with Docker:
+1. Setup Postgres SQL database with Docker **(this need to be done only once)**:
     ```
     docker pull postgres
     docker run -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root --name oatg-db -p 5432:5432 postgres
@@ -53,7 +62,7 @@ In local development environment, API Gateway is defined in [`template.yaml`](./
 ```yaml
 ...
 Resources:
-  BackedndFunction:
+  BackendFunction:
     ...
     Events:
       ApiExample:
