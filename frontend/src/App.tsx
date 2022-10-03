@@ -1,7 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
 import { getMessage } from "./service";
-import "./App.css";
 
 const App = () => {
   const [message, setMessage] = React.useState<string>(
@@ -23,7 +21,6 @@ const App = () => {
 
   return (
     <div className="background">
-      <img src={logo} className="logo" alt="logo" />
       <p>{message}</p>
     </div>
   );
