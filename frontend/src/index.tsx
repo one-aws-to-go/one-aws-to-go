@@ -9,6 +9,8 @@ import Test from "./Test";
 
 import "./index.css";
 import Main from "./pages/Main";
+import Logs from "./pages/Logs";
+import Configurations from "./pages/Configurations";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -23,6 +25,14 @@ const router = createBrowserRouter([
   {
     path: "main",
     element: <Main />,
+  },
+  {
+    path: "logs",
+    element: <Logs />,
+  },
+  {
+    path: "configurations",
+    element: <Configurations />,
   },
 ]);
 

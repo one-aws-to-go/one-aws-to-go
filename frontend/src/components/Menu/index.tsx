@@ -5,8 +5,7 @@ const Menu = () => {
     // For some reason 'to': '/' is always true
     { to: "/home", text: "Home" },
     { to: "/main", text: "Main" },
-    { to: "/asdf", text: "ASDf" },
-    { to: "/asdf", text: "ASDf" },
+    { to: "/logs", text: "Logs" },
   ];
   return (
     <div className="flex flex-wrap gap-10 justify-center font-bold text-4xl">
