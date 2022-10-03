@@ -1,13 +1,13 @@
-import "./Typography.css";
+//import "./Typography.css";
 
-import {
-  RouterProvider,
-  createBrowserRouter
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import App from "./App";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import Test from "./Test";
+
+import "./index.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,7 +16,7 @@ const root = ReactDOM.createRoot(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />
+    element: <Test />,
   },
 ]);
 

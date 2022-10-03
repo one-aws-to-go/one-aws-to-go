@@ -15,7 +15,7 @@ const Test = () => {
 
   return (
     <>
-      <h1 className={"logo"}>Test</h1>
+      <h1 className={"text-3xl font-bold underline"}>Test</h1>
       <StatusIndicator status={status} />
       <br></br>
       <button onClick={handleClick}>Hae data</button>
