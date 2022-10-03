@@ -22,7 +22,7 @@
 - [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 
 ### Setup
-1. Setup Postgres SQL database with Docker **(this need to be done only once)**:
+1. Setup Postgres SQL database with Docker **(this needs to be done only once)**:
     ```
     docker pull postgres
     docker run -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root --name oatg-db -p 5432:5432 postgres
@@ -33,12 +33,17 @@
     docker start oatg-db
     ```
 
-3. Run Prisma migrations:
+3. Set database connection string to `.env` (for Prisma migration script):
+    ```
+    DATABASE_URL=postgres://root:root@host.docker.internal:5432
+    ```
+
+4. Run Prisma migrations:
     ```
     npm run db:migrate
     ```
 
-4. Set database connection string to `env.json` (create if it doesn't exist):
+5. Set database connection string to `env.json` (for local dev with SAM):
     ```json
     {
       "BackendFunction": {
