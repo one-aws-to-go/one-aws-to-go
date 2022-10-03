@@ -1,15 +1,27 @@
+import "./Typography.css";
+
+import {
+  RouterProvider,
+  createBrowserRouter
+} from "react-router-dom";
+
+import App from "./App";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Test from "./Test";
-
-import "./Typography.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />
+  },
+]);
+
 root.render(
   <React.StrictMode>
-    <Test />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
