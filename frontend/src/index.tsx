@@ -1,16 +1,17 @@
 //import "./Typography.css";
 
+import "./index.css";
+
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import App from "./App";
+import Configurations from "./pages/Configurations";
+import Login from "./pages/Login";
+import Logs from "./pages/Logs";
+import Main from "./pages/Main";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Test from "./Test";
-
-import "./index.css";
-import Main from "./pages/Main";
-import Logs from "./pages/Logs";
-import Configurations from "./pages/Configurations";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,8 +20,12 @@ const root = ReactDOM.createRoot(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Test />,
+    element: <Login />,
     errorElement: <div>Error page</div>,
+  },
+  {
+    path: "home",
+    element: <Login />,
   },
   {
     path: "main",

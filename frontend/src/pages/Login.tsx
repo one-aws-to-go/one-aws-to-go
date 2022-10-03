@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 const Login = () => {
+  let navigate = useNavigate();
+
   return (
     <div className='h-screen bg-office bg-cover'>
       <div className='flex flex-col h-screen backdrop-brightness-15 justify-center items-center'>
@@ -17,6 +21,7 @@ const Login = () => {
                   placeholder='Token'
                 />
                 <button
+                  onClick={() => navigate('/main')}
                   type='button'
                   className='text-white bg-primary focus:outline-none font-medium text-sm px-5 h-full  text-center inline-flex items-center dark:bg-primary dark:hover:bg-orange-400'
                 >
