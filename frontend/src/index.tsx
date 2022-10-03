@@ -8,6 +8,7 @@ import ReactDOM from "react-dom/client";
 import Test from "./Test";
 
 import "./index.css";
+import Main from "./pages/Main";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
   },
   {
     path: "main",
-    element: <App />,
+    element: <Main />,
   },
 ]);
 

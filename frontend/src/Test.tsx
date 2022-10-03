@@ -18,8 +18,15 @@ const Test = () => {
       <h1 className={"text-3xl font-bold underline"}>Test</h1>
       <StatusIndicator status={status} />
       <br></br>
-      <button onClick={handleClick}>Hae data</button>
-      <TemplateButton />
+      <button
+        className="bg-primary rounded-md align-middle m-2 p-2"
+        onClick={handleClick}
+      >
+        Hae data
+      </button>
+      <div className="m-4 outline-dashed w-max">
+        <TemplateButton>Very Long Template Name</TemplateButton>
+      </div>
       <br></br>
       <Menu />
       <br></br>

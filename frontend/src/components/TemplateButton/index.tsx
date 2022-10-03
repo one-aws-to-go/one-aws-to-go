@@ -1,13 +1,13 @@
 import { ReactComponent as Clouds } from "./Clouds.svg";
 
-import "./TemplateButton.css";
-
-const TemplateButton: React.FC = () => {
+const TemplateButton = (props: { children: string }) => {
   return (
-    <div className="template-select-container">
-      <div className="template-select-content">
-        <Clouds className="image" />
-        <p className="template-text">Template</p>
+    <div className="rounded-3xl bg-primary-container border-4 border-primary w-96">
+      <div className="flex flex-col justify-center px-20 py-10">
+        <Clouds className="w-full" />
+        <p className="text-center align-middle text-2xl text-white">
+          {props.children}
+        </p>
       </div>
     </div>
   );
