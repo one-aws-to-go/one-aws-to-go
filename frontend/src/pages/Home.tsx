@@ -4,14 +4,12 @@ import TemplateButton from '../components/TemplateButton';
 
 const Main = () => {
   return (
-    <div className='w-screen h-screen bg-repeat bg-black'>
+    <div className='bg-black h-screen flex flex-col'>
       <NavBar />
-      <div className='flex justify-center mt-52'>
-        <div className='flex'>
-          <Link to='/configurations'>
-            <TemplateButton>AWSome Template</TemplateButton>
-          </Link>
-        </div>
+      <div className='flex flex-1 justify-center items-center mt-10'>
+        <Link to='/configurations'>
+          <TemplateButton>AWS Template</TemplateButton>
+        </Link>
       </div>
     </div>
   );

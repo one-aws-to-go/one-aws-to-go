@@ -30,7 +30,7 @@ const Login = () => {
                 />
                 <button
                   type='submit'
-                  className='text-white bg-primary rounded-r focus:outline-none font-medium text-sm px-5 h-full  text-center inline-flex items-center dark:bg-primary dark:hover:bg-orange-400'
+                  className='text-white bg-primary rounded-r focus:outline-none font-medium text-sm px-5 h-full  text-center inline-flex items-center hover:bg-primary/[.7]'
                 >
                   <svg
                     width='21'

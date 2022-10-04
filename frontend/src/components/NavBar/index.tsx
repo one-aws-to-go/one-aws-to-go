@@ -48,8 +48,8 @@ const NavBar = () => {
                         className={({ isActive }) =>
                           classNames(
                             isActive
-                              ? 'bg-gray-900 text-white'
-                              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                              ? 'bg-primary/[.15] text-white'
+                              : 'text-gray-300 hover:text-primary',
                             'px-3 py-2 rounded-md text-sm font-medium'
                           )
                         }
@@ -79,8 +79,8 @@ const NavBar = () => {
                   className={({ isActive }) =>
                     classNames(
                       isActive
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        ? 'bg-primary/[.15] text-white'
+                        : 'text-gray-300 hover:text-primary',
                       'block px-3 py-2 rounded-md text-base font-medium'
                     )
                   }
