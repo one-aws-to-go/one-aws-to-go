@@ -5,7 +5,7 @@ const Login = () => {
   let navigate = useNavigate();
 
   const submitForm = () => {
-    navigate('/main')
+    navigate('/home')
   }
 
   return (

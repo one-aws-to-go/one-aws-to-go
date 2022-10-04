@@ -1,8 +1,9 @@
-import { useState } from "react";
 import StatusIndicator, { EStatus } from "./components/StatusIndicator";
+
+import NavBar from "./components/NavBar";
 import StatusListItem from "./components/StatusListItem";
 import TemplateButton from "./components/TemplateButton";
-import Menu from "./components/Menu";
+import { useState } from "react";
 
 const Test = () => {
   const [status, setStatus] = useState<EStatus>(EStatus.running);
@@ -28,7 +29,7 @@ const Test = () => {
         <TemplateButton>Very Long Template Name</TemplateButton>
       </div>
       <br></br>
-      <Menu />
+      <NavBar />
       <br></br>
       <StatusListItem status={status}>
         {`Deploy status: ${statusText}`}
