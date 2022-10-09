@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-  
+
 Globals:
   Function:
     Timeout: 30
@@ -16,7 +16,12 @@ Resources:
       Handler: index.backendHandler
       Runtime: nodejs16.x
       Events:
-        ApiGet:
+        UserGet:
+          Type: Api
+          Properties:
+            Path: /user
+            Method: get
+        ForksGet:
           Type: Api
           Properties:
             Path: /forks

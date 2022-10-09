@@ -1,9 +1,13 @@
 import { APIGatewayEvent } from 'aws-lambda';
 import { getForksHandler } from './api/forks/forks.handler';
+import { getUserHandler } from './api/user/user.handler';
 
 export type LambdaHandler = (event: APIGatewayEvent) => Promise<unknown>;
 
 const routes: Record<string, Record<string, LambdaHandler>> = {
+  '/user': {
+    GET: getUserHandler,
+  },
   '/forks': {
     GET: getForksHandler,
   },
