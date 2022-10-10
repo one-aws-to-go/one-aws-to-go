@@ -1,29 +1,30 @@
-import { APIGatewayEvent } from 'aws-lambda';
-import { getForksHandler } from './api/forks/forks.handler';
-import { getUserHandler } from './api/user/user.handler';
+import { APIGatewayEvent } from 'aws-lambda'
+import { getForksHandler, postForkHandler } from './api/forks/forks.handler'
+import { getUserHandler } from './api/user/user.handler'
+import { AuthorizedEventHandler } from './model'
+import { buildJsonResponse } from './util'
 
-export type LambdaHandler = (event: APIGatewayEvent) => Promise<unknown>;
-
-const routes: Record<string, Record<string, LambdaHandler>> = {
+const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
   '/user': {
-    GET: getUserHandler,
+    GET: getUserHandler
   },
   '/forks': {
     GET: getForksHandler,
-  },
-};
-
-export function handleRequest(event: APIGatewayEvent) {
-  const endpointHandler = getHandler(event);
-  return endpointHandler(event);
+    POST: postForkHandler
+  }
 }
 
-function getHandler(event: APIGatewayEvent): Function {
-  const { path, httpMethod } = event;
-  const route = routes[path];
-  if (!route) throw new Error(`Illegal path "${path}"`);
-  const handler = route[httpMethod];
-  if (!handler)
-    throw new Error(`Illegal method "${httpMethod}" for "${route}"`);
-  return handler;
+export const getRouteHandler = (event: APIGatewayEvent): AuthorizedEventHandler => {
+  const { path, httpMethod } = event
+  const route = routes[path]
+  if (!route) {
+    return async _e => buildJsonResponse(404, { message: `Illegal path "${path}"` })
+  }
+
+  const handler = route[httpMethod]
+  if (!handler) {
+    return async _e => buildJsonResponse(404, { message: `Illegal method "${httpMethod}" for "${route}"` })
+  }
+
+  return handler
 }

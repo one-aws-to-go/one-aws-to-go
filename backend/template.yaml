@@ -26,6 +26,11 @@ Resources:
           Properties:
             Path: /forks
             Method: get
+        ForksPost:
+          Type: Api
+          Properties:
+            Path: /forks
+            Method: post
 
 Outputs:
   BackendFunction:
