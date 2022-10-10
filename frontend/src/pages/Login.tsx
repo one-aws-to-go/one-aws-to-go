@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios, { AxiosError, AxiosRequestHeaders } from 'axios';
 
+import { useAlert } from '../hooks/Alert';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { validateGithubUser } from '../models/GithubUser';
@@ -14,7 +15,7 @@ const authHeader = (token: string): AxiosRequestHeaders => ({
 const Login = () => {
   const [token, setToken] = useState<string>('');
   const [cookies, setCookie] = useCookies<string>(['Authorization']);
-  const [error, setError] = useState<string>('');
+  const [alert, displayAlert] = useAlert();
 
   let navigate = useNavigate();
 
@@ -23,13 +24,6 @@ const Login = () => {
       navigate('/home');
     }
   }, [cookies, navigate]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setError('');
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [error]);
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +43,7 @@ const Login = () => {
       }
     } catch (e: unknown | AxiosError) {
       if (axios.isAxiosError(e)) {
-        setError(e.message);
-        console.log(`DEBUG: Axios error ${e}`);
+        displayAlert(e.message)
       } else {
         console.log(`DEBUG: General error ${e}`);
       }
@@ -59,12 +52,12 @@ const Login = () => {
 
   return (
     <div>
-      {error && (
+      {alert && (
         <div
           className='absolute left-0 right-0 z-10 p-4 m-4 text-sm  text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800'
           role='alert'
         >
-          <code>{error}</code>
+          <code>{alert}</code>
         </div>
       )}
       <div className='h-screen bg-office bg-cover'>
