@@ -1,10 +1,17 @@
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 import { Fragment } from 'react';
+import { useCookies } from 'react-cookie';
 
 const NavBar = () => {
+  const [cookies, setCookie, removeCookie] = useCookies<string>([
+    'Authorization',
+  ]);
+
+  const navigate = useNavigate();
+
   const links = [
     { name: 'Home', to: '/home', current: true },
     { name: 'Logs', to: '/logs', current: true },
@@ -13,6 +20,11 @@ const NavBar = () => {
   function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ');
   }
+
+  const handleLogout = () => {
+    removeCookie('Authorization');
+    navigate('/');
+  };
 
   return (
     <Disclosure as='nav' className='bg-black'>
@@ -63,9 +75,12 @@ const NavBar = () => {
               </div>
 
               <div className='absolute inset-y-0 right-0 flex items-center pr-0 sm:static sm:inset-auto'>
-                <Link to={'/'} className='text-sm font-medium text-primary'>
+                <span
+                  className='text-sm font-medium text-primary'
+                  onClick={handleLogout}
+                >
                   Logout
-                </Link>
+                </span>
               </div>
             </div>
           </div>
