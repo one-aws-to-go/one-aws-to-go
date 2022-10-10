@@ -16,6 +16,36 @@ export interface GitHubUser {
   [key: string]: any
 }
 
-export interface GetForksResponse {
-  readonly forks: any[] // TODO
+// TODO
+export interface Fork {
+  readonly id: number
+}
+
+// TODO
+export interface ExtendedFork extends Fork {
+  readonly status: any // TODO: Fork status?
+}
+
+/**
+ * `POST /forks` request body
+ */
+export interface CreateForkArgs {
+  readonly name: string
+}
+
+/**
+ * `PUT /forks/<fork_id>/secrets` request body
+ */
+export interface ForkSecretArgs {
+  readonly appName: string
+  readonly awsAccessKey: string
+  readonly awsSecretKey: string
+  readonly awsDefaultRegion: string
+}
+
+/**
+ * Error message template
+ */
+export interface ErrorMessage {
+  readonly message: string
 }

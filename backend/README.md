@@ -2,18 +2,92 @@
 
 ## REST(-like) API
 
-**Authentication:** GitHub Token
+**Authorization:**
+| **Header** | **Content** | 
+| ----- | ----- |
+| `Authorization` | GitHub Bearer Token |
 
-| **Method** | **Route** | **Description** |
+If the authorization header is missing, the response will automatically be **401**.
+
+| **Route** | **Description** |
+| ----- | ----- |
+| [`GET /user`](#get-user) | Return the user's information
+| [`GET /forks`](#get-forks) | Get all forks associated with the user and the application
+| [`GET /forks/<fork_id>`](#get-forksfork_id) | Get fork information
+| [`POST /forks`](#post-forks) | Create new fork |
+| [`PUT /forks/<fork_id>/secrets`](#put-forksfork_idsecrets) | Set fork secrets for IaC |
+| [`POST /forks/<fork_id>/action/<action_name>`](#post-forksfork_idactionaction_name) | Trigger GitHub IaC Action |
+
+### **`GET /user`**
+
+**Request body:** -
+
+**Responses:**
+| **Status** | **Description** | **Body** |
 | ----- | ----- | ----- |
-| `GET` | `/user` | Return user's information
-| `GET` | `/forks` | Get all forks associated with the user and the application
-| `GET` | `/forks/<fork_id>` | Get fork information
-| `POST` | `/forks` | Create new fork |
-| `PUT` | `/forks/<fork_id>/secrets` | Set fork secrets for IaC |
-| `POST` | `/forks/<fork_id>/action/<action_name>`* | Trigger GitHub IaC Action |
+| **200** | GitHub user was found | [`GitHubUser`](./src/model.ts) |
+| **404** | GitHub user not found | [`ErrorMessage`](./src/model.ts) |
 
-**\* `<action_name>` = `up`|`down`|`setup`**
+### **`GET /forks`**
+
+**Request body:** -
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **200** | Found forks | [`Fork[]`](./src/model.ts) |
+
+### **`GET /forks/<fork_id>`**
+
+**Request body:** -
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **200** | Found fork | [`ExtendedFork`](./src/model.ts) |
+| **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
+
+### **`POST /forks`**
+
+**Request body:** [CreateForkArgs](./src/model.ts)
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **201** | Created fork | [`ExtendedFork`](./src/model.ts) |
+| **400** | Validation failed | [`ErrorMessage`](./src/model.ts) |
+
+### **`PUT /forks/<fork_id>/secrets`**
+
+**Request route params:**
+- `fork_id`: Unique identifier of the fork.
+
+**Request body:** [ForkSecretArgs](./src/model.ts)
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **204** | Secrets set | - |
+| **400** | Validation failed | [`ErrorMessage`](./src/model.ts) |
+
+### **`POST /forks/<fork_id>/action/<action_name>`**
+
+**Request route params:**
+- `fork_id`: Unique identifier of the fork.
+- `action_name`*: Name of the action to be triggered.
+
+\* = `<action_name>` must be one of the following:
+- `up`: Create cloud resources defined in the fork IaC.
+- `down`: Destroy cloud resources created by the fork IaC.
+- `setup`: Setup IaC backend for the fork. **This must be done before any other actions can be triggered!**
+
+**Request body:** -
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **202** | Action triggered | - |
+| **400** | Action could not be triggered | [`ErrorMessage`](./src/model.ts) |
 
 ## Local Development
 
