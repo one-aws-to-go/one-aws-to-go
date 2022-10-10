@@ -5,10 +5,13 @@
   "scripts": {
     "start": "node build/index.js",
     "dev": "npm run build && sam local start-api --env-vars env.json",
-    "build": "npm run clean && tsc",
-    "postbuild": "cp -R node_modules build/node_modules && prisma generate",
+    "build": "npm run clean && tsc && npm prune --production",
+    "prebuild": "npm i",
+    "postbuild": "cp -R node_modules build/node_modules && prisma generate && npm run db:prod",
+    "db:prod": "rm -rf build/node_modules/prisma && rm -rf build/node_modules/@prisma/engines && rm -rf build/node_modules/.bin",
     "clean": "rm -rf build",
     "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {

@@ -7,6 +7,11 @@ resource "aws_lambda_function" "backend" {
   handler          = "index.handler"
   source_code_hash = var.backend_source_hash
   role             = aws_iam_role.backend_role.arn
+  environment {
+    variables = {
+      DATABASE_URL = var.db_url
+    }
+  }
 }
 
 resource "aws_iam_role" "backend_role" {

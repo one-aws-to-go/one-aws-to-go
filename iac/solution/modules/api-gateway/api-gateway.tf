@@ -27,7 +27,7 @@ resource "aws_apigatewayv2_integration" "lambda" {
 resource "aws_apigatewayv2_route" "lambda" {
   api_id = aws_apigatewayv2_api.lambda.id
 
-  route_key = "GET /handler"
+  route_key = "GET /user"
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 

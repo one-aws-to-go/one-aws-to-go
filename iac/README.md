@@ -6,6 +6,8 @@
     - S3 full access
     - IAM full access
     - Lambda full access
+    - RDS full access
+    - VPC full access
     - API Gateway adminstrator
 
 ## Env
