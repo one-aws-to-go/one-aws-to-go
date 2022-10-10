@@ -11,8 +11,14 @@ const createAuthHeader = (token: string): AxiosRequestHeaders => ({
 })
 
 const getUser = async (token: string): Promise<GitHubUser> => {
-  const response = axios.get(`${GITHUB_BASE_URL}/user`, { headers: createAuthHeader(token) })
-  return (await response).data
+  const response = await axios.get(`${GITHUB_BASE_URL}/user`, { headers: createAuthHeader(token) })
+  const user = response.data
+  return {
+    id: user.id,
+    login: user.login,
+    name: user.name,
+    avatar: user.avatar_url
+  }
 }
 
 export default {

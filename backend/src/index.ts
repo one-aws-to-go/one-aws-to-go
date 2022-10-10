@@ -1,27 +1,25 @@
-import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import { getAuthTokenFromEvent } from './github';
-import { handleRequest } from './routes';
-
-const UNAUTHORIZED_RESPONSE: APIGatewayProxyResult = {
-  statusCode: 401,
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ message: 'Invalid token' }),
-};
+import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
+import { getAuthTokenFromEvent } from './github'
+import { AuthorizedEvent } from './model'
+import { getRouteHandler } from './routes'
+import { buildJsonResponse } from './util'
 
 export const backendHandler = async (
   e: APIGatewayEvent,
   ctx: Context
 ): Promise<APIGatewayProxyResult> => {
-  ctx.callbackWaitsForEmptyEventLoop = false;
-  const token = getAuthTokenFromEvent(e);
+  ctx.callbackWaitsForEmptyEventLoop = false
+
+  // Check that GitHub token exists as the first thing
+  const token = getAuthTokenFromEvent(e)
   if (!token) {
-    return UNAUTHORIZED_RESPONSE;
+    return buildJsonResponse(401, { message: 'Invalid GitHub token' })
   }
 
-  const response = await handleRequest(e);
-  return {
-    statusCode: 200,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(response),
-  };
-};
+  // Add GitHub token to the event
+  const authorizedEvent: AuthorizedEvent = { ...e, githubToken: token }
+
+  // Handle the event
+  const routeHandler = getRouteHandler(e)
+  return await routeHandler(authorizedEvent)
+}
