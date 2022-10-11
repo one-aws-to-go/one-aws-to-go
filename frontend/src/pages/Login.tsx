@@ -76,7 +76,7 @@ const Login = () => {
                   <input
                     className='bg-black bg-opacity-50 shadow rounded-l border-2 appearance-none w-full px-3 py-2 h-full text-white focus:outline-none focus:shadow-outline placeholder:align-bottom'
                     id='token'
-                    type='text'
+                    type='password'
                     placeholder='Token'
                     onChange={(event) => setToken(event.target.value)}
                     value={token}
