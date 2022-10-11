@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2020",
+    "experimentalDecorators": true,
     "outDir": "build",
     "strict": true,
     "preserveConstEnums": true,

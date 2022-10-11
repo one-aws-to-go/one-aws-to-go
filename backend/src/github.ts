@@ -1,8 +1,8 @@
 import { APIGatewayEvent } from 'aws-lambda'
 import axios, { AxiosRequestHeaders } from 'axios'
-import { CreateForkArgs, ExtendedFork, GitHubUser } from './model'
+import { ExtendedFork, ForkStatus, ForkTemplate, GitHubUser } from './model'
 
-const GITHUB_BASE_URL = 'https://api.github.com'
+export const GITHUB_BASE_URL = 'https://api.github.com'
 
 // Cloud API Gateway uses "authorization"!
 export const getAuthTokenFromEvent = (
@@ -30,12 +30,13 @@ const getUser = async (token: string): Promise<GitHubUser> => {
 
 const createFork = async (
   token: string,
-  forkArgs: CreateForkArgs
+  newForKName: string,
+  template: ForkTemplate
 ): Promise<ExtendedFork> => {
   const data = (
     await axios.post(
-      `${GITHUB_BASE_URL}/repos/one-aws-to-go/one-aws-to-go/forks`,
-      { name: forkArgs.name },
+      template.url,
+      { name: newForKName },
       {
         headers: {
           ...createAuthHeader(token),
@@ -47,7 +48,7 @@ const createFork = async (
   return {
     id: data.id,
     html_url: data.html_url,
-    status: 'TODO'
+    status: ForkStatus.CREATED
   }
 }
 

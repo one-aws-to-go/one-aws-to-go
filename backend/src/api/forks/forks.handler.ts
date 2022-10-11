@@ -5,6 +5,7 @@ import {
   ExtendedFork
 } from '../../model'
 import prisma from '../../prisma'
+import { getTemplate } from '../../templates'
 import { buildJsonResponse } from '../../util'
 
 export const getForksHandler: AuthorizedEventHandler = async (e) => {
@@ -19,14 +20,7 @@ export const getForksHandler: AuthorizedEventHandler = async (e) => {
 }
 
 export const postForkHandler: AuthorizedEventHandler = async (e) => {
-  if (!e.body) {
-    return buildJsonResponse(400, { message: 'Bad request' })
-  }
-  const forkArgs: CreateForkArgs = JSON.parse(e.body)
-  if (!forkArgs.name) {
-    return buildJsonResponse(400, { message: 'Name is required' })
-  }
-
+  const forkArgs: CreateForkArgs = e.body as CreateForkArgs
   const githubUser = await github.getUser(e.githubToken)
   const userInDb = await prisma.user.findFirst({
     where: { githubId: githubUser.id }
@@ -38,9 +32,11 @@ export const postForkHandler: AuthorizedEventHandler = async (e) => {
       }
     })
   }
+  const templateToUse = await getTemplate(forkArgs.templateId)
   const createdFork: ExtendedFork = await github.createFork(
     e.githubToken,
-    forkArgs
+    forkArgs.name,
+    templateToUse
   )
   await prisma.created_fork.create({
     data: {

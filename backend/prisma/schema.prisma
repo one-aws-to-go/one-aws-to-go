@@ -2,9 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
-  output = "../build/node_modules/.prisma/client"
+  output        = "../build/node_modules/.prisma/client"
 }
 
 datasource db {
@@ -13,19 +13,21 @@ datasource db {
 }
 
 model User {
-  githubId Int @id @map("github_id")
-  forks Created_fork[]
+  githubId Int    @id
+  forks    Fork[]
 }
 
-model Fork_template{
-  id Int @id @map("fork_template_id")
-  owner String
-  repo String
+model ForkTemplate {
+  id    Int    @id @default(autoincrement())
+  url   String
+  forks Fork[]
 }
 
-model Created_fork{
-  id Int @id @default(autoincrement())
-  creator User @relation(fields: [creatorId],references: [githubId]) 
-  creatorId Int @map("creatorId")
-  url String
+model Fork {
+  id         Int          @id @default(autoincrement())
+  url        String
+  userId     Int
+  user       User         @relation(fields: [userId], references: [githubId])
+  templateId Int
+  template   ForkTemplate @relation(fields: [templateId], references: [id])
 }
