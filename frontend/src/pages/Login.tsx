@@ -101,7 +101,7 @@ const Login = () => {
                   </button>
                 </form>
                 <a
-                  className='text-center text-primary text-xs'
+                  className='text-center text-primary text-xs hover:text-primary/[.7]'
                   target='_blank'
                   href='https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
                   rel='noreferrer'

@@ -76,7 +76,7 @@ const NavBar = () => {
 
               <div className='absolute inset-y-0 right-0 flex items-center pr-0 sm:static sm:inset-auto'>
                 <span
-                  className='text-sm font-medium text-primary cursor-pointer'
+                  className='text-sm font-medium text-primary cursor-pointer hover:text-primary/[.7]'
                   onClick={handleLogout}
                 >
                   Logout
