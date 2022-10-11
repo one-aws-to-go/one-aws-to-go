@@ -1,3 +1,7 @@
+locals {
+  db_port = 5432
+}
+
 resource "random_string" "db_username" {
   length = 10
   numeric = false
@@ -12,9 +16,9 @@ resource "random_password" "db_password" {
 resource "aws_security_group" "db_security_group" {
   name = "${var.appName}-db-security-group"
   ingress {
-    protocol = "icmp"
-    from_port = 80
-    to_port = 80
+    protocol = "tcp"
+    from_port = local.db_port
+    to_port = local.db_port
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -27,7 +31,7 @@ resource "aws_db_instance" "db" {
   instance_class = "db.t3.micro"
   username = random_string.db_username.result
   password = random_password.db_password.result
-  port = 5432
+  port = local.db_port
   publicly_accessible = true
   vpc_security_group_ids = [aws_security_group.db_security_group.id]
   apply_immediately = true

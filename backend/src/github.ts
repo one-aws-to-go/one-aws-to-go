@@ -4,7 +4,10 @@ import { GitHubUser } from './model'
 
 const GITHUB_BASE_URL = 'https://api.github.com'
 
-export const getAuthTokenFromEvent = (e: APIGatewayEvent): string | undefined => e.headers.Authorization
+// Cloud API Gateway uses "authorization"!
+export const getAuthTokenFromEvent = (e: APIGatewayEvent): string | undefined => {
+  return e.headers.Authorization || e.headers.authorization
+}
 
 const createAuthHeader = (token: string): AxiosRequestHeaders => ({
   Authorization: token
