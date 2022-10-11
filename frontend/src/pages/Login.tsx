@@ -60,7 +60,7 @@ const Login = () => {
           <code>{alert}</code>
         </div>
       )}
-      <div className='h-screen bg-office bg-cover'>
+      <div className='bg-office bg-cover'>
         <div className='flex flex-col h-screen backdrop-brightness-15 justify-center items-center'>
           <p className='text-6xl text-center text-primary font-bold'>OA2G</p>
           <p className='text-base text-center text-white font-semibold'>
