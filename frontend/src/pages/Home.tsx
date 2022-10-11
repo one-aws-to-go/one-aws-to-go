@@ -6,7 +6,7 @@ const Main = () => {
   return (
     <div className='bg-black h-screen flex flex-col'>
       <NavBar />
-      <div className='flex flex-1 justify-center items-center mt-10'>
+      <div className='flex flex-1 justify-center items-center'>
         <Link to='/configurations'>
           <TemplateButton>AWS Template</TemplateButton>
         </Link>
