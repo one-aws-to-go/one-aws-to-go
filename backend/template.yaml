@@ -17,6 +17,11 @@ Resources:
       Handler: index.backendHandler
       Runtime: nodejs16.x
       Events:
+        Health:
+          Type: Api
+          Properties:
+            Path: /health
+            Method: get
         UserGet:
           Type: Api
           Properties:
