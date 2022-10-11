@@ -15,3 +15,9 @@ datasource db {
 model User {
   githubId Int @id @map("github_id")
 }
+
+model Fork_template{
+  id Int @id @map("fork_id")
+  owner String
+  repo String
+}
