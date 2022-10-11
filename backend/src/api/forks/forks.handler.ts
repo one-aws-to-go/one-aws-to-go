@@ -1,20 +1,21 @@
 import github from '../../github'
-import { AuthorizedEventHandler, CreateForkArgs } from '../../model'
+import {
+  AuthorizedEventHandler,
+  CreateForkArgs,
+  ExtendedFork
+} from '../../model'
 import prisma from '../../prisma'
 import { buildJsonResponse } from '../../util'
 
 export const getForksHandler: AuthorizedEventHandler = async (e) => {
   const githubUser = await github.getUser(e.githubToken)
-
   const user = await prisma.user.findFirst({
-    where: { githubId: githubUser.id }
+    where: { githubId: githubUser.id },
+    include: {
+      forks: true
+    }
   })
-
-  // TODO: Find forks with user's GitHub ID
-  console.log('GitHub ID:', githubUser.id)
-  console.log('User:', user)
-
-  return buildJsonResponse(200, [])
+  return buildJsonResponse(200, { forks: user.forks })
 }
 
 export const postForkHandler: AuthorizedEventHandler = async (e) => {
@@ -25,6 +26,27 @@ export const postForkHandler: AuthorizedEventHandler = async (e) => {
   if (!forkArgs.name) {
     return buildJsonResponse(400, { message: 'Name is required' })
   }
-  const createdFork = await github.createFork(e.githubToken, forkArgs)
-  return buildJsonResponse(201, createdFork)
+
+  const githubUser = await github.getUser(e.githubToken)
+  const userInDb = await prisma.user.findFirst({
+    where: { githubId: githubUser.id }
+  })
+  if (!userInDb) {
+    await prisma.user.create({
+      data: {
+        githubId: githubUser.id
+      }
+    })
+  }
+  const createdFork: ExtendedFork = await github.createFork(
+    e.githubToken,
+    forkArgs
+  )
+  await prisma.created_fork.create({
+    data: {
+      creatorId: githubUser.id,
+      url: createdFork.html_url
+    }
+  })
+  return buildJsonResponse(201)
 }
