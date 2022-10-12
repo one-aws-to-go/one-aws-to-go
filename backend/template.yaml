@@ -7,6 +7,7 @@ Globals:
     Environment:
       Variables:
         DATABASE_URL:
+        NODE_ENV:
 
 Resources:
   BackendFunction:

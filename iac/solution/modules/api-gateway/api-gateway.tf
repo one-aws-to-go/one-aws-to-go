@@ -24,10 +24,17 @@ resource "aws_apigatewayv2_integration" "lambda" {
   integration_method = "POST"
 }
 
-resource "aws_apigatewayv2_route" "lambda" {
+resource "aws_apigatewayv2_route" "lambda_get_user" {
   api_id = aws_apigatewayv2_api.lambda.id
 
-  route_key = "GET /handler"
+  route_key = "GET /user"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+}
+
+resource "aws_apigatewayv2_route" "lambda_get_forks" {
+  api_id = aws_apigatewayv2_api.lambda.id
+
+  route_key = "GET /forks"
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 

@@ -17,8 +17,9 @@ data "archive_file" "backend" {
 resource "aws_s3_object" "backend" {
   bucket = aws_s3_bucket.backend.id
 
-  key    = "backend.zip"
+  key    = "nodejs.zip"
   source = data.archive_file.backend.output_path
+  source_hash = data.archive_file.backend.output_base64sha256
   etag   = filemd5(data.archive_file.backend.output_path)
 }
 
