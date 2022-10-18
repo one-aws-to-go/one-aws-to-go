@@ -11,13 +11,14 @@ export const getAuthTokenFromEvent = (
   return e.headers.Authorization || e.headers.authorization
 }
 
-const createAuthHeader = (token: string): AxiosRequestHeaders => ({
-  Authorization: token
+const createGithubHeaders = (token: string): AxiosRequestHeaders => ({
+  Authorization: token,
+  Accept: 'application/vnd.github+json'
 })
 
 const getUser = async (token: string): Promise<GitHubUser> => {
   const response = await axios.get(`${GITHUB_BASE_URL}/user`, {
-    headers: createAuthHeader(token)
+    headers: createGithubHeaders(token)
   })
   const user = response.data
   return {
@@ -30,24 +31,21 @@ const getUser = async (token: string): Promise<GitHubUser> => {
 
 const createFork = async (
   token: string,
-  newForKName: string,
+  newForkName: string,
   template: ForkTemplate
 ): Promise<ExtendedFork> => {
   const data = (
     await axios.post(
       template.url,
-      { name: newForKName },
+      { name: newForkName },
       {
-        headers: {
-          ...createAuthHeader(token),
-          Accept: 'application/vnd.github+json'
-        }
+        headers: createGithubHeaders(token)
       }
     )
   ).data
   return {
     id: data.id,
-    html_url: data.html_url,
+    htmlUrl: data.html_url,
     status: ForkStatus.CREATED
   }
 }

@@ -25,6 +25,7 @@ model ForkTemplate {
 
 model Fork {
   id         Int          @id @default(autoincrement())
+  appName    String       @unique()
   url        String
   userId     Int
   user       User         @relation(fields: [userId], references: [githubId])

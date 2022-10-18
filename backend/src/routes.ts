@@ -1,8 +1,7 @@
-import { APIGatewayEvent } from 'aws-lambda'
 import { getForksHandler, postForkHandler } from './api/forks/forks.handler'
 import { getHealthHandler } from './api/health/health.handler'
 import { getUserHandler } from './api/user/user.handler'
-import { AuthorizedEventHandler } from './model'
+import { AuthorizedEvent, AuthorizedEventHandler } from './model'
 import { buildJsonResponse } from './util'
 
 const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
@@ -19,7 +18,7 @@ const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
 }
 
 export const getRouteHandler = (
-  event: APIGatewayEvent
+  event: AuthorizedEvent
 ): AuthorizedEventHandler => {
   const { path, httpMethod } = event
   const route = routes[path]

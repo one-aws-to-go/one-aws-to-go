@@ -30,7 +30,7 @@ export interface Fork {
 
 export interface ExtendedFork extends Fork {
   readonly status: ForkStatus
-  readonly html_url: string
+  readonly htmlUrl: string
 }
 
 /**

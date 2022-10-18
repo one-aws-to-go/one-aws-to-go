@@ -16,7 +16,7 @@ export const getForksHandler: AuthorizedEventHandler = async (e) => {
       forks: true
     }
   })
-  return buildJsonResponse(200, { forks: user.forks })
+  return buildJsonResponse(200, { forks: user?.forks })
 }
 
 export const postForkHandler: AuthorizedEventHandler = async (e) => {
@@ -38,10 +38,12 @@ export const postForkHandler: AuthorizedEventHandler = async (e) => {
     forkArgs.name,
     templateToUse
   )
-  const forkInDb = await prisma.created_fork.create({
+  const forkInDb = await prisma.fork.create({
     data: {
-      creatorId: githubUser.id,
-      url: createdFork.html_url
+      appName: forkArgs.name,
+      url: createdFork.htmlUrl,
+      userId: githubUser.id,
+      templateId: templateToUse.id
     }
   })
   return buildJsonResponse(201, forkInDb)
