@@ -1,12 +1,19 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda'
 
-export type AuthorizedEventHandler = (event: AuthorizedEvent) => Promise<APIGatewayProxyResult>
+export type AuthorizedEventHandler = (
+  event: AuthorizedEvent
+) => Promise<APIGatewayProxyResult>
 
 /**
  * Contains the GitHub token in addition to API Gateway properties.
  */
-export interface AuthorizedEvent extends APIGatewayEvent {
+export interface AuthorizedEvent extends Omit<APIGatewayEvent, 'body'> {
   readonly githubToken: string
+  readonly body: JSON | null
+}
+
+type JSON = {
+  [key: string]: any
 }
 
 export interface GitHubUser {
@@ -21,16 +28,18 @@ export interface Fork {
   readonly id: number
 }
 
-// TODO
 export interface ExtendedFork extends Fork {
-  readonly status: any // TODO: Fork status?
+  readonly status: ForkStatus
+  readonly htmlUrl: string
 }
 
 /**
  * `POST /forks` request body
  */
+
 export interface CreateForkArgs {
   readonly name: string
+  readonly templateId: number
 }
 
 /**
@@ -48,4 +57,16 @@ export interface ForkSecretArgs {
  */
 export interface ErrorMessage {
   readonly message: string
+}
+
+export enum ForkStatus {
+  CREATED,
+  INITIALIZED,
+  UP,
+  DOWN
+}
+
+export interface ForkTemplate {
+  readonly id: number
+  readonly url: string
 }

@@ -15,12 +15,23 @@ export const backendHandler = async (
     return buildJsonResponse(401, { message: 'Invalid GitHub token' })
   }
 
+  let body: object | null = null
+  try {
+    if (e.body) {
+      body = JSON.parse(e.body)
+    }
+  } catch (e) {
+    // Do nothing here
+  }
+
+  // Add GitHub token to the event
   const authorizedEvent: AuthorizedEvent = {
     ...e,
     // In production, AWS Lambda name is appended to the path (e.g. "/lambda-name/user")
     path: PROD_ENV ? e.path.substring(e.path.indexOf('/', 1)) : e.path,
     // Add GitHub token to the event
-    githubToken: token
+    githubToken: token,
+    body
   }
 
   // Handle the event
