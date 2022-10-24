@@ -40,7 +40,7 @@ const Login = () => {
       } else {
         console.log(validateGithubUser.errors);
       }
-    } catch (e: unknown | AxiosError) {
+    } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         displayAlert(e.message)
       } else {
