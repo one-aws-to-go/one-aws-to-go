@@ -9,6 +9,8 @@ CREATE TABLE "User" (
 CREATE TABLE "ForkTemplate" (
     "id" SERIAL NOT NULL,
     "url" TEXT NOT NULL,
+    "owner" TEXT NOT NULL,
+    "repo" TEXT NOT NULL,
 
     CONSTRAINT "ForkTemplate_pkey" PRIMARY KEY ("id")
 );
@@ -17,7 +19,7 @@ CREATE TABLE "ForkTemplate" (
 CREATE TABLE "Fork" (
     "id" SERIAL NOT NULL,
     "appName" TEXT NOT NULL,
-    "url" TEXT NOT NULL,
+    "owner" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
     "templateId" INTEGER NOT NULL,
 

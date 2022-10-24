@@ -26,11 +26,13 @@ export interface GitHubUser {
 // TODO
 export interface Fork {
   readonly id: number
+  readonly appName: string
+  readonly owner: string
+  readonly repo: string
 }
 
 export interface ExtendedFork extends Fork {
   readonly status: ForkStatus
-  readonly htmlUrl: string
 }
 
 /**
@@ -69,4 +71,9 @@ export enum ForkStatus {
 export interface ForkTemplate {
   readonly id: number
   readonly url: string
+}
+
+export interface GithubPublicKey {
+  readonly keyId: string
+  readonly key: string
 }

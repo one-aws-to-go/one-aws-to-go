@@ -17,7 +17,9 @@ export async function getTemplate(_templateId: number): Promise<ForkTemplate> {
 async function createDefaultTemplate() {
   return prisma.ForkTemplate.create({
     data: {
-      url: `${GITHUB_BASE_URL}/repos/one-aws-to-go/one-aws-to-go/forks`
+      url: `${GITHUB_BASE_URL}/repos/one-aws-to-go/one-aws-to-go/forks`,
+      owner: 'one-aws-to-go',
+      repo: 'one-aws-to-go'
     }
   })
 }
