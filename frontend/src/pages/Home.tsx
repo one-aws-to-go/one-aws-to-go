@@ -7,7 +7,7 @@ const Main = () => {
     <div className='bg-black h-screen flex flex-col'>
       <NavBar />
       <div className='flex flex-1 justify-center items-center'>
-        <Link to='/configurations'>
+        <Link to='/forks'>
           <TemplateButton>AWS Template</TemplateButton>
         </Link>
       </div>

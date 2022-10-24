@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node build/index.js",
-    "dev": "npm run build && sam local start-api --env-vars env.json",
+    "dev": "npm run build && sam local start-api --env-vars env.json -p 3001",
     "build": "npm run clean && tsc",
     "prebuild": "npm i",
     "postbuild": "npm prune --production && cp -R node_modules build/node_modules && npm run db:generate && npm run clean:build-modules",

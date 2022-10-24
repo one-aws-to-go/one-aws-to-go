@@ -13,3 +13,7 @@ output "backend_source_hash" {
 output "frontend_bucket_id" {
   value = aws_s3_bucket.frontend.id
 }
+
+output "frontend_url" {
+  value = aws_s3_bucket.frontend.bucket_regional_domain_name
+}
