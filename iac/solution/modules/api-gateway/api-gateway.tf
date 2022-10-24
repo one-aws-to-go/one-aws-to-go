@@ -12,7 +12,7 @@ resource "aws_apigatewayv2_api" "lambda" {
 resource "aws_apigatewayv2_stage" "lambda" {
   api_id = aws_apigatewayv2_api.lambda.id
 
-  name        = "${var.appName}-backend"
+  name        = "api"
   auto_deploy = true
 }
 

@@ -5,13 +5,13 @@ import { AuthorizedEvent, AuthorizedEventHandler } from './model'
 import { buildJsonResponse } from './util'
 
 const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
-  '/health': {
+  '/api/health': {
     GET: getHealthHandler
   },
-  '/user': {
+  '/api/user': {
     GET: getUserHandler
   },
-  '/forks': {
+  '/api/forks': {
     GET: getForksHandler,
     POST: postForkHandler
   }

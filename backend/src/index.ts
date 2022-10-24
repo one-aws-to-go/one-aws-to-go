@@ -27,8 +27,6 @@ export const backendHandler = async (
   // Add GitHub token to the event
   const authorizedEvent: AuthorizedEvent = {
     ...e,
-    // In production, AWS Lambda name is appended to the path (e.g. "/lambda-name/user")
-    path: PROD_ENV ? e.path.substring(e.path.indexOf('/', 1)) : e.path,
     // Add GitHub token to the event
     githubToken: token,
     body

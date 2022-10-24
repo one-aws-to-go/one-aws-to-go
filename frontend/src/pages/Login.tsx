@@ -6,9 +6,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { validateGithubUser } from '../models/GithubUser';
 
-const GITHUB_BASE_URL = 'https://api.github.com';
-
-const authHeader = (token: string): AxiosRequestHeaders => ({
+export const authHeader = (token: string): AxiosRequestHeaders => ({
   Authorization: `Bearer ${token}`,
 });
 
@@ -29,7 +27,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios(`${GITHUB_BASE_URL}/user`, {
+      const response = await axios('api/user', {
         headers: authHeader(token),
       });
 
@@ -37,6 +35,7 @@ const Login = () => {
 
       if (validateGithubUser(data)) {
         setCookie('Authorization', token);
+        axios.defaults.headers.common['Authorization'] = `bearer ${token}`
         navigate('/home');
       } else {
         console.log(validateGithubUser.errors);
