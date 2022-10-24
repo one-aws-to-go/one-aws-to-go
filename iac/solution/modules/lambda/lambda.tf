@@ -7,6 +7,7 @@ resource "aws_lambda_function" "backend" {
   handler          = "index.backendHandler"
   source_code_hash = var.backend_source_hash
   role             = aws_iam_role.backend_role.arn
+  timeout = 30
   environment {
     variables = {
       DATABASE_URL = var.db_url

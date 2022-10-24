@@ -20,23 +20,8 @@ Resources:
         Health:
           Type: Api
           Properties:
-            Path: /health
-            Method: get
-        UserGet:
-          Type: Api
-          Properties:
-            Path: /user
-            Method: get
-        ForksGet:
-          Type: Api
-          Properties:
-            Path: /forks
-            Method: get
-        ForksPost:
-          Type: Api
-          Properties:
-            Path: /forks
-            Method: post
+            Path: /{all+}
+            Method: any
 
 Outputs:
   BackendFunction:
