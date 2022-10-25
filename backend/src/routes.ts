@@ -1,7 +1,9 @@
 import { pathToRegexp } from 'path-to-regexp'
 import {
+  getForkHandler,
   getForksHandler,
   getSecretsHandler,
+  postActionHandler,
   postForkHandler,
   putSecretsHandler
 } from './api/forks/forks.handler'
@@ -21,15 +23,19 @@ const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
     GET: getForksHandler,
     POST: postForkHandler
   },
+  '/api/forks/:id': {
+    GET: getForkHandler
+  },
   '/api/forks/:id/secrets': {
     GET: getSecretsHandler,
     PUT: putSecretsHandler
+  },
+  '/api/forks/:id/actions/:actionName': {
+    POST: postActionHandler
   }
 }
 
-export const getRouteHandler = (
-  event: AuthorizedEvent
-): AuthorizedEventHandler => {
+export const getRouteHandler = (event: AuthorizedEvent): AuthorizedEventHandler => {
   const path = event.path
   const method = event.httpMethod
   for (const route of Object.keys(routes)) {
@@ -41,6 +47,6 @@ export const getRouteHandler = (
 
   return async (_e) =>
     buildJsonResponse(404, {
-      message: `Illegal  "${method}"  "${path}"`
+      message: `Illegal "${method}" - "${path}"`
     })
 }

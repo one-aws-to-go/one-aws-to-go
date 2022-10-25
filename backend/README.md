@@ -79,7 +79,7 @@ If the authorization header is missing, the response will automatically be **401
 \* = `<action_name>` must be one of the following:
 - `up`: Create cloud resources defined in the fork IaC.
 - `down`: Destroy cloud resources created by the fork IaC.
-- `setup`: Setup IaC backend for the fork. **This must be done before any other actions can be triggered!**
+- `init`: Initialize IaC backend for the fork. **This must be done before any other actions can be triggered!**
 
 **Request body:** -
 
@@ -109,7 +109,7 @@ If the authorization header is missing, the response will automatically be **401
 
 3. Set database connection string to `.env` (for Prisma migration script):
     ```
-    DATABASE_URL=postgres://root:root@host.docker.internal:5432
+    DATABASE_URL=postgres://root:root@localhost:5432
     ```
 
 4. Run Prisma migrations:

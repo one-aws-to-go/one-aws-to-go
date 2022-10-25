@@ -19,16 +19,30 @@ model User {
 
 model ForkTemplate {
   id    Int    @id @default(autoincrement())
-  url   String
   owner String
-  repo String
-  forks Fork[]
+  repo  String
+
+  forks   Fork[]
+  actions ForkAction[]
+}
+
+model ForkAction {
+  key              String
+  githubActionName String
+
+  templateId Int
+  template   ForkTemplate @relation(fields: [templateId], references: [id])
+
+  @@unique([key, templateId])
 }
 
 model Fork {
-  id         Int          @id @default(autoincrement())
-  appName    String       @unique()
-  owner      String
+  id      Int    @id @default(autoincrement())
+  appName String @unique()
+  owner   String
+  status  String
+  ref     String @default("master")
+
   userId     Int
   user       User         @relation(fields: [userId], references: [githubId])
   templateId Int
