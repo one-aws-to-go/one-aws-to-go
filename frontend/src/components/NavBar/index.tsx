@@ -1,7 +1,7 @@
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Disclosure } from '@headlessui/react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
+import { Disclosure } from '@headlessui/react';
 import { Fragment } from 'react';
 import { useCookies } from 'react-cookie';
 
@@ -27,7 +27,7 @@ const NavBar = () => {
   };
 
   return (
-    <Disclosure as='nav' className='bg-black'>
+    <Disclosure as='nav' className='bg-primaryContainer'>
       {({ open }) => (
         <>
           <div className='mx-auto max-w-7xl px-6'>
@@ -60,7 +60,7 @@ const NavBar = () => {
                         className={({ isActive }) =>
                           classNames(
                             isActive
-                              ? 'bg-primary/[.15] text-white'
+                              ? ' text-white bg-surface/[.30]'
                               : 'text-gray-300 hover:text-primary',
                             'px-3 py-2 rounded-md text-sm font-medium'
                           )
@@ -94,7 +94,7 @@ const NavBar = () => {
                   className={({ isActive }) =>
                     classNames(
                       isActive
-                        ? 'bg-primary/[.15] text-white'
+                        ? 'text-white bg-surface/[.30]'
                         : 'text-gray-300 hover:text-primary',
                       'block px-3 py-2 rounded-md text-base font-medium'
                     )
@@ -113,27 +113,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-
-/*
-<div className='flex flex-wrap gap-10 justify-center font-bold text-4xl'>
-      <div>
-        {links.map((link) => {
-          return (
-            <NavLink to={link.to} className='px-16 align-text-bottom'>
-              {({ isActive }) => (
-                <span
-                  className={
-                    isActive
-                      ? 'text-primary hover:text-primary-variant'
-                      : 'text-white hover:text-primary'
-                  }
-                >
-                  {link.text}
-                </span>
-              )}
-            </NavLink>
-          );
-        })}
-      </div>
-    </div>
-            */
