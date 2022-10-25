@@ -22,6 +22,11 @@ Resources:
           Properties:
             Path: /{all+}
             Method: any
+        Secrets:
+          Type: Api
+          Properties:
+            Path: /api/forks/{id}/secrets 
+            Method: any
 
 Outputs:
   BackendFunction:

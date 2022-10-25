@@ -1,5 +1,3 @@
-import { ReactComponent as Clouds } from './Clouds.svg';
-
 const TemplateButton = (props: { children: string }) => {
   return (
     <div className='rounded-3xl bg-primary-container border-4 hover:border-primary/[.7] border-primary w-auto text-white'>

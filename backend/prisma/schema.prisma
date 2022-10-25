@@ -20,13 +20,15 @@ model User {
 model ForkTemplate {
   id    Int    @id @default(autoincrement())
   url   String
+  owner String
+  repo String
   forks Fork[]
 }
 
 model Fork {
   id         Int          @id @default(autoincrement())
   appName    String       @unique()
-  url        String
+  owner      String
   userId     Int
   user       User         @relation(fields: [userId], references: [githubId])
   templateId Int

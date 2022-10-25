@@ -2,7 +2,7 @@ import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
 import { getAuthTokenFromEvent } from './github'
 import { AuthorizedEvent } from './model'
 import { getRouteHandler } from './routes'
-import { buildJsonResponse, PROD_ENV } from './util'
+import { buildJsonResponse } from './util'
 
 export const backendHandler = async (
   e: APIGatewayEvent,

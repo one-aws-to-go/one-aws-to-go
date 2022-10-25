@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios, { AxiosError, AxiosRequestHeaders } from 'axios';
+import axios, { AxiosRequestHeaders } from 'axios';
 
 import { useAlert } from '../hooks/Alert';
 import { useCookies } from 'react-cookie';
@@ -40,7 +40,7 @@ const Login = () => {
       } else {
         console.log(validateGithubUser.errors);
       }
-    } catch (e: unknown | AxiosError) {
+    } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         displayAlert(e.message)
       } else {
