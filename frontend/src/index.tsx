@@ -1,43 +1,55 @@
 import './index.css';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import Forks from './pages/Forks';
 import { CookiesProvider } from 'react-cookie';
+import { ErrorPage } from './pages/ErrorPage';
+import Forks from './pages/Forks';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Logs from './pages/Logs';
+import { ProtectedRoute } from './utils/ProtectedRoute';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from 'react-query';
-
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Login />,
-    errorElement: <div>Error page</div>,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'home',
-    element: <Home />,
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    )
   },
   {
     path: 'logs',
-    element: <Logs />,
+    element: (
+      <ProtectedRoute>
+        <Logs />
+      </ProtectedRoute>
+    ),
   },
   {
     path: 'forks',
-    element: <Forks />,
+    element: (
+      <ProtectedRoute>
+        <Forks />
+      </ProtectedRoute>
+    ),
   },
 ]);
 
 const queryClient = new QueryClient();
 
-root.render(
+ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+).render(
   <React.StrictMode>
     <CookiesProvider>
       <QueryClientProvider client={queryClient}>

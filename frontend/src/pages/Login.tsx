@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios, { AxiosRequestHeaders } from 'axios';
 
-import { useAlert } from '../hooks/Alert';
+import { useAlert } from '../hooks/useAlert';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { validateGithubUser } from '../models/GithubUser';
