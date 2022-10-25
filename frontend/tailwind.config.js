@@ -23,6 +23,7 @@ module.exports = {
         white: "#ffffff",
         divider: "#c2c2c2",
         primary: "#f39c12",
+        primaryContainer: "#310000",
         surface: "#0d0d0d",
         success: "#388E3C",
         error: "#b00d20",

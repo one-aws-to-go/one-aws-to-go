@@ -27,7 +27,7 @@ const NavBar = () => {
   };
 
   return (
-    <Disclosure as='nav' className='bg-black'>
+    <Disclosure as='nav' className='bg-primaryContainer'>
       {({ open }) => (
         <>
           <div className='mx-auto max-w-7xl px-6'>
