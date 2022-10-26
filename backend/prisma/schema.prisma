@@ -18,9 +18,10 @@ model User {
 }
 
 model ForkTemplate {
-  id    Int    @id @default(autoincrement())
-  owner String
-  repo  String
+  id       Int    @id @default(autoincrement())
+  owner    String
+  repo     String
+  provider String
 
   forks   Fork[]
   actions ForkAction[]
@@ -29,6 +30,7 @@ model ForkTemplate {
 model ForkAction {
   key              String
   githubActionName String
+  toState          String
 
   templateId Int
   template   ForkTemplate @relation(fields: [templateId], references: [id])
@@ -37,11 +39,13 @@ model ForkAction {
 }
 
 model Fork {
-  id      Int    @id @default(autoincrement())
-  appName String @unique()
-  owner   String
-  status  String
-  ref     String @default("master")
+  id             Int     @id @default(autoincrement())
+  appName        String  @unique()
+  owner          String
+  state          String
+  actionsEnabled Boolean @default(false)
+  secretsSet     Boolean @default(false)
+  ref            String  @default("master")
 
   userId     Int
   user       User         @relation(fields: [userId], references: [githubId])

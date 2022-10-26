@@ -2,7 +2,7 @@ import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
 import { getAuthTokenFromEvent } from './github'
 import { AuthorizedEvent } from './model'
 import { getRouteHandler } from './routes'
-import { buildJsonResponse } from './util'
+import { buildJsonResponse } from './utils'
 
 export const backendHandler = async (
   e: APIGatewayEvent,
@@ -34,5 +34,9 @@ export const backendHandler = async (
 
   // Handle the event
   const routeHandler = getRouteHandler(authorizedEvent)
-  return await routeHandler(authorizedEvent)
+  try {
+    return await routeHandler(authorizedEvent)
+  } catch (err) {
+    return buildJsonResponse(500, { message: `Unexpecter error: ${err}` })
+  }
 }

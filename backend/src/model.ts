@@ -29,7 +29,9 @@ export interface Fork {
 }
 
 export interface ExtendedFork extends Fork {
-  readonly status: ForkStatus
+  readonly state: ForkState
+  readonly secretsSet: boolean
+  // readonly actionsEnabled: boolean
 }
 
 /**
@@ -44,11 +46,10 @@ export interface CreateForkArgs {
 /**
  * `PUT /forks/<fork_id>/secrets` request body
  */
-export interface ForkSecretArgs {
-  readonly appName: string
+export interface ForkAwsSecretArgs {
+  readonly awsDefaultRegion: string
   readonly awsAccessKey: string
   readonly awsSecretKey: string
-  readonly awsDefaultRegion: string
 }
 
 /**
@@ -58,16 +59,17 @@ export interface ErrorMessage {
   readonly message: string
 }
 
-export enum ForkStatus {
+export enum ForkState {
   CREATED = 'created',
   INITIALIZED = 'initialized',
   UP = 'up',
   DOWN = 'down'
 }
 
-export interface ForkTemplate {
-  readonly id: number
-  readonly url: string
+export enum ForkTemplateProvider {
+  AWS = 'aws',
+  AZURE = 'azure', // TODO: Not used!
+  GCP = 'gcp'      // TODO: Not used!
 }
 
 // INTERNAL DATA MODELS

@@ -10,7 +10,7 @@ import {
 import { getHealthHandler } from './api/health/health.handler'
 import { getUserHandler } from './api/user/user.handler'
 import { AuthorizedEvent, AuthorizedEventHandler } from './model'
-import { buildJsonResponse } from './util'
+import { buildJsonResponse } from './utils'
 
 const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
   '/api/health': {

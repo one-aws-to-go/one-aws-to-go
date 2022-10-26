@@ -62,7 +62,7 @@ If the authorization header is missing, the response will automatically be **401
 **Request route params:**
 - `fork_id`: Unique identifier of the fork.
 
-**Request body:** [ForkSecretArgs](./src/model.ts)
+**Request body:** [ForkAwsSecretArgs](./src/model.ts)
 
 **Responses:**
 | **Status** | **Description** | **Body** |
@@ -87,7 +87,7 @@ If the authorization header is missing, the response will automatically be **401
 | **Status** | **Description** | **Body** |
 | ----- | ----- | ----- |
 | **202** | Action triggered | - |
-| **400** | Action could not be triggered | [`ErrorMessage`](./src/model.ts) |
+| **503** | Action could not be triggered | [`ErrorMessage`](./src/model.ts) |
 
 ## Local Development
 

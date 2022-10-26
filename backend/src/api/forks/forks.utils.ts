@@ -1,14 +1,34 @@
 import github from '../../github'
-import { ForkSecretArgs } from '../../model'
+import { ForkAwsSecretArgs, ForkTemplateProvider } from '../../model'
 
-type DefaultAWSSecrets = Omit<ForkSecretArgs, 'appName'>
+export const createProviderSecrets = (
+  provider: ForkTemplateProvider,
+  appName: string,
+  secrets: ForkAwsSecretArgs
+): object | null => {
+  switch (provider) {
+    case ForkTemplateProvider.AWS:
+      const { awsDefaultRegion, awsAccessKey, awsSecretKey } = secrets
+      return awsDefaultRegion && awsAccessKey && awsSecretKey
+        ? {
+          'APP_NAME': appName,
+          'AWS_DEFAULT_REGION': awsDefaultRegion,
+          'AWS_ACCESS_KEY_ID': awsAccessKey,
+          'AWS_SECRET_ACCESS_KEY': awsSecretKey
+        }
+        : null
+    default:
+      throw new Error(`Provider not supported: ${provider}`)
+  }
+}
+
 export const createSecrets = async (
-  secretsToPlace: DefaultAWSSecrets,
   token: string,
-  login: string,
-  appName: string
+  owner: string,
+  repo: string,
+  secrets: object
 ): Promise<void> => {
-  for (const [key, value] of Object.entries(secretsToPlace)) {
-    await github.createSecret(token, login, appName, key, value as string)
+  for (const [key, value] of Object.entries(secrets)) {
+    await github.createSecret(token, owner, repo, key, value as string)
   }
 }

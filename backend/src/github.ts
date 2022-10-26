@@ -3,8 +3,6 @@ import { APIGatewayEvent } from 'aws-lambda'
 import axios, { AxiosRequestHeaders } from 'axios'
 import sodium from 'libsodium-wrappers'
 import {
-  ExtendedFork,
-  ForkStatus,
   GitHubAction,
   GithubPublicKey,
   GitHubUser
@@ -50,27 +48,26 @@ const getRepoSecrets = async (token: string, repoOwner: string, repoName: string
     `${GITHUB_BASE_URL}/repos/${repoOwner}/${repoName}/actions/secrets`,
     { headers: createGithubHeaders(token) }
   )
+
   return response.data
 }
 
 const createSecret = async (
   token: string,
-  repoOwner: string,
-  repoName: string,
+  owner: string,
+  name: string,
   secretName: string,
   secretValue: string
 ) => {
-  const key = await getRepoPublicKey(token, repoOwner, repoName)
+  const key = await getRepoPublicKey(token, owner, name)
   const crypted = await encrypt(secretValue, key)
-  return (
-    await axios.put(
-      `${GITHUB_BASE_URL}/repos/${repoOwner}/${repoName}/actions/secrets/${secretName}`,
-      { encrypted_value: crypted, key_id: key.keyId },
-      {
-        headers: createGithubHeaders(token)
-      }
-    )
-  ).data
+  const { data } = await axios.put(
+    `${toGithubRepoUrl(owner, name)}/actions/secrets/${secretName}`,
+    { encrypted_value: crypted, key_id: key.keyId },
+    { headers: createGithubHeaders(token) }
+  )
+
+  return data
 }
 
 const getActions = async (token: string, owner: string, repo: string): Promise<GitHubAction[]> => {
@@ -90,17 +87,19 @@ const dispatchAction = async (
   await axios.post(url, { ref }, { headers: createGithubHeaders(token) })
 }
 
+const enableActions = async (token: string, owner: string, repo: string) => {
+  // TODO: Find out why this does not work?
+  const url = `${toGithubRepoUrl(owner, repo)}/actions/permissions`
+  await axios.put(url, { enabled: true }, { headers: createGithubHeaders(token)})
+}
+
 const getRepoPublicKey = async (
   token: string,
   repoOwner: string,
   repoName: string
 ): Promise<GithubPublicKey> => {
   const url = `${GITHUB_BASE_URL}/repos/${repoOwner}/${repoName}/actions/secrets/public-key`
-  const data = (
-    await axios.get(url, {
-      headers: createGithubHeaders(token)
-    })
-  ).data
+  const { data } = await axios.get(url, { headers: createGithubHeaders(token) })
   return {
     key: data.key,
     keyId: data.key_id
@@ -122,5 +121,6 @@ export default {
   createSecret,
   getRepoSecrets,
   getActions,
-  dispatchAction
+  dispatchAction,
+  enableActions
 }
