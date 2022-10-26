@@ -186,6 +186,6 @@ export const postActionHandler: AuthorizedEventHandler = async (e) => {
 
     return buildJsonResponse(202)
   } catch (err) {
-    return buildJsonResponse(500, { message: 'Could not trigger GitHub Action' })
+    return buildJsonResponse(503, { message: 'Could not trigger GitHub Action' })
   }
 }
