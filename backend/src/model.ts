@@ -84,3 +84,13 @@ export interface GitHubAction {
   readonly name: string
   readonly [key: string]: any
 }
+
+export interface CommonActionSecrets {
+  readonly APP_NAME: string
+}
+
+export interface AwsActionSecrets extends CommonActionSecrets {
+  readonly AWS_DEFAULT_REGION: string
+  readonly AWS_ACCESS_KEY_ID: string
+  readonly AWS_SECRET_ACCESS_KEY: string
+}

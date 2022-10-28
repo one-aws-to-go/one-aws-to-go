@@ -1,20 +1,20 @@
 import github from '../../github'
-import { ForkAwsSecretArgs, ForkTemplateProvider } from '../../model'
+import { AwsActionSecrets, ForkAwsSecretArgs, ForkTemplateProvider } from '../../model'
 
 export const createProviderSecrets = (
   provider: ForkTemplateProvider,
   appName: string,
   secrets: ForkAwsSecretArgs
-): object | null => {
+): AwsActionSecrets | null => {
   switch (provider) {
     case ForkTemplateProvider.AWS:
       const { awsDefaultRegion, awsAccessKey, awsSecretKey } = secrets
       return awsDefaultRegion && awsAccessKey && awsSecretKey
         ? {
-          'APP_NAME': appName,
-          'AWS_DEFAULT_REGION': awsDefaultRegion,
-          'AWS_ACCESS_KEY_ID': awsAccessKey,
-          'AWS_SECRET_ACCESS_KEY': awsSecretKey
+          APP_NAME: appName,
+          AWS_DEFAULT_REGION: awsDefaultRegion,
+          AWS_ACCESS_KEY_ID: awsAccessKey,
+          AWS_SECRET_ACCESS_KEY: awsSecretKey
         }
         : null
     default:

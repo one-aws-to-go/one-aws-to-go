@@ -154,3 +154,10 @@ Resources:
 ```
 
 **NOTE!** This only affects the local API Gateway created with SAM, which is why the events should also be added to the [API Gateway created with IaC](../iac/solution/modules/api-gateway/api-gateway.tf).
+
+### Database Deed
+
+Seed values can be inserted into the database with the following command:
+```
+npm run db:seed
+```
