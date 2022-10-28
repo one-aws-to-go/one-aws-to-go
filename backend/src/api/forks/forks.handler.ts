@@ -1,28 +1,46 @@
+import { Fork } from '@prisma/client'
 import github from '../../github'
-import {
-  AuthorizedEventHandler,
-  CreateForkArgs,
-  ExtendedFork,
-  ForkSecretArgs
-} from '../../model'
+import { AuthorizedEventHandler, CreateForkArgs, ExtendedFork, Fork as ApiFork, ForkAwsSecretArgs, ForkState, ForkTemplateProvider } from '../../model'
 import prisma from '../../prisma'
-import { getTemplate } from '../../templates'
-import { buildJsonResponse } from '../../util'
-import { createSecrets } from './forks.utils'
+import { buildJsonResponse } from '../../utils'
+import { createProviderSecrets, createSecrets } from './forks.utils'
+
+const toApiFork = (f: Fork): ApiFork => ({
+  id: f.id,
+  appName: f.appName,
+  owner: f.owner,
+  repo: f.appName
+})
+
+const toExtendedFork = (f: Fork): ExtendedFork => ({
+  id: f.id,
+  appName: f.appName,
+  owner: f.owner,
+  repo: f.appName,
+  state: f.state as ForkState,
+  secretsSet: f.secretsSet
+})
 
 export const getForksHandler: AuthorizedEventHandler = async (e) => {
   const githubUser = await github.getUser(e.githubToken)
-  const user = await prisma.user.findFirst({
-    where: { githubId: githubUser.id },
-    include: {
-      forks: true
-    }
+  const forks = await prisma.fork.findMany({ where: { userId: githubUser.id } })
+  return buildJsonResponse(200, forks.map(toApiFork))
+}
+
+export const getForkHandler: AuthorizedEventHandler = async (e) => {
+  const forkId = Number(e.pathParameters!.id)
+  const githubUser = await github.getUser(e.githubToken)
+  const fork = await prisma.fork.findFirst({
+    where: { id: forkId, userId: githubUser.id }
   })
-  return buildJsonResponse(200, { forks: user?.forks })
+
+  return fork
+    ? buildJsonResponse(200, toExtendedFork(fork))
+    : buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
 }
 
 export const postForkHandler: AuthorizedEventHandler = async (e) => {
-  const forkArgs: CreateForkArgs = e.body as CreateForkArgs
+  const { name, templateId } = e.body as CreateForkArgs
   const githubUser = await github.getUser(e.githubToken)
   const userInDb = await prisma.user.findFirst({
     where: { githubId: githubUser.id }
@@ -34,53 +52,140 @@ export const postForkHandler: AuthorizedEventHandler = async (e) => {
       }
     })
   }
-  const templateToUse = await getTemplate(forkArgs.templateId)
-  await github.createFork(e.githubToken, forkArgs.name, templateToUse)
-  const forkInDb = await prisma.fork.create({
+  const template = await prisma.forkTemplate.findUnique({ where: { id: templateId } })
+  if (!template) {
+    return buildJsonResponse(404, { message: `Template not found with ID: ${templateId}` })
+  }
+
+  const existing = await prisma.fork.findFirst({ where: { userId: githubUser.id, templateId } })
+  if (existing) {
+    return buildJsonResponse(400, { message: `Fork already exists with template ID: ${templateId}` })
+  }
+
+  await github.createFork(e.githubToken, name, template)
+  const fork = await prisma.fork.create({
     data: {
-      appName: forkArgs.name,
+      appName: name,
       owner: githubUser.login,
       userId: githubUser.id,
-      templateId: templateToUse.id
+      state: ForkState.CREATED,
+      templateId: template.id
     }
   })
-  return buildJsonResponse(201, forkInDb)
+  return buildJsonResponse(201, toExtendedFork(fork))
 }
 
 export const putSecretsHandler: AuthorizedEventHandler = async (e) => {
-  const secretArgs: ForkSecretArgs = e.body as ForkSecretArgs
+  const secretArgs: ForkAwsSecretArgs = e.body as ForkAwsSecretArgs
   const forkId = Number(e.pathParameters!.id)
   const githubUser = await github.getUser(e.githubToken)
-  const fork: ExtendedFork = await prisma.fork.findFirst({
-    where: { userId: githubUser.id, id: forkId }
+  const fork = await prisma.fork.findFirst({
+    where: { userId: githubUser.id, id: forkId },
+    include: { template: true }
   })
+
   if (!fork) {
-    return buildJsonResponse(404, { message: 'No such repo' })
+    return buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
   }
+
+  const secrets = createProviderSecrets(
+    fork.template.provider as ForkTemplateProvider,
+    fork.appName,
+    secretArgs
+  )
+
+  if (!secrets) {
+    return buildJsonResponse(400, { message: `Invalid secrets` })
+  }
+
   await createSecrets(
-    {
-      awsAccessKey: secretArgs.awsAccessKey,
-      awsDefaultRegion: secretArgs.awsDefaultRegion,
-      awsSecretKey: secretArgs.awsSecretKey
-    },
     e.githubToken,
     githubUser.login,
-    fork.appName
+    fork.appName,
+    secrets
   )
-  return { statusCode: 201, body: '' }
+
+  await prisma.fork.update({
+    where: { id: forkId },
+    data: { secretsSet: true }
+  })
+
+  return buildJsonResponse(204)
 }
 
 export const getSecretsHandler: AuthorizedEventHandler = async (e) => {
   const forkId = Number(e.pathParameters!.id)
   const githubUser = await github.getUser(e.githubToken)
-  const fork: ExtendedFork = await prisma.fork.findFirst({
+  const fork = await prisma.fork.findFirst({
     where: { userId: githubUser.id, id: forkId }
   })
+
   if (!fork) {
-    return buildJsonResponse(404, { message: 'No such repo' })
+    return buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
   }
+
   return buildJsonResponse(
     200,
     await github.getRepoSecrets(e.githubToken, githubUser.login, fork.appName)
   )
+}
+
+export const postActionHandler: AuthorizedEventHandler = async (e) => {
+  const forkId = Number(e.pathParameters?.id)
+  const actionName = e.pathParameters?.actionName
+  const githubUser = await github.getUser(e.githubToken)
+  const fork = await prisma.fork.findFirst({
+    where: { userId: githubUser.id, id: forkId },
+    include: {
+      template: {
+        include: { actions: true }
+      }
+    }
+  })
+
+  if (!fork) {
+    return buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
+  }
+
+  if (!fork.secretsSet) {
+    return buildJsonResponse(400, { message: 'Fork secrets must first be set!' })
+  }
+
+  const forkAction = fork.template.actions.find((a) => a.key === actionName)
+  if (!forkAction) {
+    return buildJsonResponse(404, { message: `Fork action not found with name: ${actionName}` })
+  }
+
+  if (fork.state === ForkState.CREATED && forkAction.toState !== ForkState.INITIALIZED) {
+    return buildJsonResponse(400, { messsage: 'Fork must first be initialized!' })
+  }
+
+  if (!fork.actionsEnabled) {
+    // TODO
+    // await github.enableActions(e.githubToken, fork.owner, fork.appName)
+    // await prisma.fork.update({
+    //   where: { id: forkId },
+    //   data: { actionsEnabled: true }
+    // })
+
+    // console.log(`Enabled GitHub Actions for Fork with ID: ${forkId}`)
+  }
+
+  const actions = await github.getActions(e.githubToken, fork.owner, fork.appName)
+  const actionId = actions.find((a) => a.name === forkAction.githubActionName)?.id
+  if (!actionId) {
+    return buildJsonResponse(404, { message: `GitHub Action not found with name: ${forkAction.githubActionName}` })
+  }
+
+  try {
+    await github.dispatchAction(e.githubToken, fork.owner, fork.appName, actionId, fork.ref)
+    await prisma.fork.update({
+      where: { id: forkId },
+      data: { state: forkAction.toState }
+    })
+
+    return buildJsonResponse(202)
+  } catch (err) {
+    return buildJsonResponse(503, { message: 'Could not trigger GitHub Action' })
+  }
 }

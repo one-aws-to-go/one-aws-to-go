@@ -3,7 +3,6 @@ Transform: AWS::Serverless-2016-10-31
 
 Globals:
   Function:
-    Timeout: 30
     Environment:
       Variables:
         DATABASE_URL:
@@ -16,17 +15,29 @@ Resources:
       CodeUri: build/
       Handler: index.backendHandler
       Runtime: nodejs16.x
+      Timeout: 60
+      MemorySize: 1024
       Events:
-        Health:
+        Any:
           Type: Api
           Properties:
             Path: /{all+}
             Method: any
+        GetFork:
+          Type: Api
+          Properties:
+            Path: /api/forks/{id}
+            Method: GET
         Secrets:
           Type: Api
           Properties:
             Path: /api/forks/{id}/secrets 
             Method: any
+        PostAction:
+          Type: Api
+          Properties:
+            Path: /api/forks/{id}/actions/{actionName} 
+            Method: POST
 
 Outputs:
   BackendFunction:

@@ -62,7 +62,7 @@ If the authorization header is missing, the response will automatically be **401
 **Request route params:**
 - `fork_id`: Unique identifier of the fork.
 
-**Request body:** [ForkSecretArgs](./src/model.ts)
+**Request body:** [ForkAwsSecretArgs](./src/model.ts)
 
 **Responses:**
 | **Status** | **Description** | **Body** |
@@ -79,7 +79,7 @@ If the authorization header is missing, the response will automatically be **401
 \* = `<action_name>` must be one of the following:
 - `up`: Create cloud resources defined in the fork IaC.
 - `down`: Destroy cloud resources created by the fork IaC.
-- `setup`: Setup IaC backend for the fork. **This must be done before any other actions can be triggered!**
+- `init`: Initialize IaC backend for the fork. **This must be done before any other actions can be triggered!**
 
 **Request body:** -
 
@@ -87,7 +87,7 @@ If the authorization header is missing, the response will automatically be **401
 | **Status** | **Description** | **Body** |
 | ----- | ----- | ----- |
 | **202** | Action triggered | - |
-| **400** | Action could not be triggered | [`ErrorMessage`](./src/model.ts) |
+| **503** | Action could not be triggered | [`ErrorMessage`](./src/model.ts) |
 
 ## Local Development
 
@@ -109,7 +109,7 @@ If the authorization header is missing, the response will automatically be **401
 
 3. Set database connection string to `.env` (for Prisma migration script):
     ```
-    DATABASE_URL=postgres://root:root@host.docker.internal:5432
+    DATABASE_URL=postgres://root:root@localhost:5432
     ```
 
 4. Run Prisma migrations:
@@ -154,3 +154,10 @@ Resources:
 ```
 
 **NOTE!** This only affects the local API Gateway created with SAM, which is why the events should also be added to the [API Gateway created with IaC](../iac/solution/modules/api-gateway/api-gateway.tf).
+
+### Database Deed
+
+Seed values can be inserted into the database with the following command:
+```
+npm run db:seed
+```

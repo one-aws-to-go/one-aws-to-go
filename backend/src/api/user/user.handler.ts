@@ -1,6 +1,6 @@
 import github from '../../github'
 import { AuthorizedEventHandler } from '../../model'
-import { buildJsonResponse } from '../../util'
+import { buildJsonResponse } from '../../utils'
 
 export const getUserHandler: AuthorizedEventHandler = async (e) => {
   try {

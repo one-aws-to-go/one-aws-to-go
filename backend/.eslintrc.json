@@ -35,6 +35,12 @@
           "caseInsensitive": true
         }
       }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 100
+      }
     ]
   }
 }
