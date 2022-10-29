@@ -25,8 +25,8 @@ module.exports = {
         white: "#ffffff",
         divider: "#c2c2c2",
         primary: "#f39c12",
-        primaryContainer: "#310000",
-        surface: "#0d0d0d",
+        primaryContainer: "#333333",
+        surface: "#0F0F0F",
         success: "#388E3C",
         error: "#b00d20",
         disabled: "#2E2E2E"
@@ -35,5 +35,6 @@ module.exports = {
   },
   plugins: [
     require('tailwind-scrollbar'),
+    require('@tailwindcss/forms'),
   ],
 };
