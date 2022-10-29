@@ -42,21 +42,21 @@ const Main = () => {
   ];
 
   return (
-    <div className='bg-surface h-screen flex flex-col'>
+    <div className='flex flex-col bg-surface h-screen'>
       <NavBar />
       <div className="flex flex-col space-y-2 mx-auto max-w-7xl w-full">
         <h1 className="w-full px-6 pt-4 sm:text-xl text-lg font-bold max-w-7xl mx-auto text-primary">
           Templates
         </h1>
 
-        <div className="flex flex-wrap mx-6 overflow-x-scroll scroll-py-4 snap-x xs:scrollbar-thin scrollbar-thumb-primary scrollbar-track-primaryContainer">
-          <div className="flex space-x-4 pb-4">
+        <div className="flex flex-row mx-6 overflow-x-auto scroll-py-4 scrollbar-thin scrollbar-thumb-primary scrollbar-track-primaryContainer">
+          <div className="flex flex-row space-x-4 pb-4">
             {
               templateItems.map((item, index) => {
                 return (
                   <button
                     key={index}
-                    className="flex flex-col items-center justify-center w-32 h-32 sm:w-48 sm:h-48 max-w-xs overflow-hidden rounded-lg shadow-md text-white bg-primaryContainer hover:shadow-xl transition-shadow duration-300 ease-in-out hover:bg-primary/[.10] cursor-pointer"
+                    className="flex flex-col items-center justify-center w-32 h-32 sm:w-48 sm:h-48 max-w-xs overflow-hidden rounded-lg shadow-md text-white bg-primaryContainer hover:shadow-xl transition-shadow duration-300 ease-in-out hover:bg-primary/[.60] cursor-pointer"
                     disabled={item.disabled}
                   >
                     <img
@@ -80,7 +80,7 @@ const Main = () => {
               return (
                 <div
                   key={index}
-                  className='flex flex-row justify-between items-center bg-primaryContainer w-full h-14 rounded-lg hover:bg-primary/[.10] cursor-pointer'
+                  className='flex flex-row justify-between items-center bg-primaryContainer w-full h-14 rounded-lg hover:bg-primary/[.60] cursor-pointer'
                 >
                   <p className='text-white ml-4 font-bold'>{item.title}</p>
                   <img

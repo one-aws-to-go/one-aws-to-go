@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { CookiesProvider } from 'react-cookie';
+import EditPage from './pages/EditPage';
 import { ErrorPage } from './pages/ErrorPage';
 import Forks from './pages/Forks';
 import Home from './pages/Home';
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Forks />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'edit',
+    element: (
+      <ProtectedRoute>
+        <EditPage />
       </ProtectedRoute>
     ),
   },
