@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { CookiesProvider } from 'react-cookie';
+import CreateForkPage from './pages/CreateForkPage';
 import EditPage from './pages/EditPage';
 import { ErrorPage } from './pages/ErrorPage';
 import Forks from './pages/Forks';
@@ -13,6 +14,7 @@ import Logs from './pages/Logs';
 import { ProtectedRoute } from './utils/ProtectedRoute';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import SetSecretsPage from './pages/SetSecretsPage';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Home />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: 'create_fork',
+    element: (
+      <ProtectedRoute>
+        <CreateForkPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: 'set_secrets/:id',
+    element: (
+      <ProtectedRoute>
+        <SetSecretsPage />
       </ProtectedRoute>
     )
   },
@@ -45,7 +63,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     element: (
       <ProtectedRoute>
         <EditPage />
