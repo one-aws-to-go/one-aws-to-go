@@ -41,7 +41,7 @@ const Main = () => {
                 return (
                   <button
                     key={index}
-                    className="flex flex-col items-center justify-center w-32 h-32 sm:w-48 sm:h-48 max-w-xs overflow-hidden rounded-lg shadow-md text-white bg-primaryContainer hover:shadow-xl transition-shadow duration-300 ease-in-out hover:bg-primary/[.60] cursor-pointer"
+                    className="flex flex-col items-center justify-center w-32 h-32 sm:w-48 sm:h-48 max-w-xs overflow-hidden rounded-lg shadow-md text-white bg-primaryContainer transition-shadow duration-300 ease-in-out hover:bg-primaryContainer/[.60] cursor-pointer"
                     disabled={item.disabled}
                     onClick={() => {
                       if (item.title === 'AWS') {
@@ -76,16 +76,16 @@ const Main = () => {
               </div>
             )
               : query.isError ? (
-                <div className='text-white'>
-                  Something strange happened
+                <div className='text-white text-sm'>
+                  Error occurred, please try again
                 </div>
               )
                 : query.data ? (
                   query.data.map((item, index) => {
                     return (
                       <Link to={'/details/' + item.id} key={index}>
-                        <div className='flex flex-row justify-between items-center bg-primaryContainer w-full h-14 rounded-lg hover:bg-primary/[.60] cursor-pointer'>
-                          <p className='text-white ml-4 font-bold'>{item.appName}</p>
+                        <div className='flex flex-row justify-between items-center shadow-md bg-primaryContainer w-full h-14 rounded-lg hover:bg-primaryContainer/[.60] cursor-pointer text-white hover:text-primary'>
+                          <p className='ml-4 font-bold'>{item.appName}</p>
                           <img
                             className='h-10 px-2'
                             src={require('../assets/aws.png')}

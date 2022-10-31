@@ -105,7 +105,7 @@ const SetSecretsPage = () => {
             <div className="grid grid-flow-row-dense grid-cols-2 grid-rows-1 gap-2">
               <button
                 onClick={submitForm}
-                className="bg-black text-white p-2 hover:bg-black/60">
+                className="bg-primaryContainer text-white p-2 hover:bg-primaryContainer/60 hover:text-primary">
                 <div className="flex flex-row space-x-2 justify-center items-center">
                   {isLoading ? (
                     <div role="status">
@@ -127,13 +127,13 @@ const SetSecretsPage = () => {
 
               <button onClick={() => {
                 navigate(-1)
-              }} className="bg-black  p-2 hover:bg-black/60">
+              }} className="bg-primaryContainer  p-2 hover:bg-primaryContainer/60 text-white hover:text-primary">
                 <div className="flex flex-row space-x-2 justify-center items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 fill-error">
                     <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clipRule="evenodd" />
                   </svg>
 
-                  <div className="text-sm text-white font-bold">Back</div>
+                  <div className="text-sm  font-bold">Back</div>
                 </div>
               </button>
             </div>

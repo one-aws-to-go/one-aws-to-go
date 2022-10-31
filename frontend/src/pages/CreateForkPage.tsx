@@ -65,7 +65,7 @@ const CreateForkPage = () => {
                     />
                 </div>
                 <div className='mt-2'>
-                    <button className="bg-black text-white p-2 hover:text-primary">
+                    <button className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white p-2 hover:text-primary">
                         <div className="flex flex-row space-x-2 justify-center items-center">
                             {isLoading ? (
                                 <div role="status">
