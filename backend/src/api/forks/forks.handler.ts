@@ -1,29 +1,42 @@
-import { Fork } from '@prisma/client'
+import { Fork, ForkAction, ForkTemplate } from '@prisma/client'
 import github from '../../github'
 import { AuthorizedEventHandler, CreateForkArgs, ExtendedFork, Fork as ApiFork, ForkAwsSecretArgs, ForkState, ForkTemplateProvider } from '../../model'
 import prisma from '../../prisma'
 import { buildJsonResponse } from '../../utils'
 import { createProviderSecrets, createSecrets } from './forks.utils'
 
-const toApiFork = (f: Fork): ApiFork => ({
-  id: f.id,
-  appName: f.appName,
-  owner: f.owner,
-  repo: f.appName
-})
+type ForkWithTemplate = Fork & { template: ForkTemplate }
 
-const toExtendedFork = (f: Fork): ExtendedFork => ({
+const toApiFork = (f: ForkWithTemplate): ApiFork => ({
   id: f.id,
   appName: f.appName,
   owner: f.owner,
   repo: f.appName,
+  provider: f.template.provider as ForkTemplateProvider
+})
+
+const toExtendedFork = (f: ForkWithTemplate, actions: ForkAction[]): ExtendedFork => ({
+  id: f.id,
+  appName: f.appName,
+  owner: f.owner,
+  repo: f.appName,
+  provider: f.template.provider as ForkTemplateProvider,
   state: f.state as ForkState,
-  secretsSet: f.secretsSet
+  secretsSet: f.secretsSet,
+  actions: actions.map((a) => ({
+    key: a.key,
+    name: a.key,      // TODO
+    description: null // TODO
+  }))
 })
 
 export const getForksHandler: AuthorizedEventHandler = async (e) => {
   const githubUser = await github.getUser(e.githubToken)
-  const forks = await prisma.fork.findMany({ where: { userId: githubUser.id } })
+  const forks = await prisma.fork.findMany({
+    where: { userId: githubUser.id },
+    include: { template: true }
+  })
+
   return buildJsonResponse(200, forks.map(toApiFork))
 }
 
@@ -31,11 +44,14 @@ export const getForkHandler: AuthorizedEventHandler = async (e) => {
   const forkId = Number(e.pathParameters!.id)
   const githubUser = await github.getUser(e.githubToken)
   const fork = await prisma.fork.findFirst({
-    where: { id: forkId, userId: githubUser.id }
+    where: { id: forkId, userId: githubUser.id },
+    include: { template: {
+      include: { actions: true }
+    }}
   })
 
   return fork
-    ? buildJsonResponse(200, toExtendedFork(fork))
+    ? buildJsonResponse(200, toExtendedFork(fork, fork.template.actions))
     : buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
 }
 
@@ -70,9 +86,13 @@ export const postForkHandler: AuthorizedEventHandler = async (e) => {
       userId: githubUser.id,
       state: ForkState.CREATED,
       templateId: template.id
-    }
+    },
+    include: { template: {
+      include: { actions: true }
+    } }
   })
-  return buildJsonResponse(201, toExtendedFork(fork))
+
+  return buildJsonResponse(201, toExtendedFork(fork, fork.template.actions))
 }
 
 export const putSecretsHandler: AuthorizedEventHandler = async (e) => {
