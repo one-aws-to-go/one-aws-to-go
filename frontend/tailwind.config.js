@@ -26,7 +26,7 @@ module.exports = {
         divider: "#c2c2c2",
         primary: "#f39c12",
         primaryContainer: "#333333",
-        surface: "#0F0F0F",
+        surface: "#212121",
         success: "#388E3C",
         error: "#b00d20",
         disabled: "#2E2E2E"
