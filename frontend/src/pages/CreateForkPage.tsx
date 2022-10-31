@@ -20,7 +20,7 @@ const CreateForkPage = () => {
                 templateId: 1,
             });
             setLoading(false)
-            navigate('/set_secrets')
+            navigate(`/set_secrets/1`, { replace: true })
         } catch (e) {
             if (axios.isAxiosError(e)) {
                 displayAlert(e.message)
@@ -65,7 +65,7 @@ const CreateForkPage = () => {
                     />
                 </div>
                 <div className='mt-2'>
-                    <button className="bg-black text-white p-2 hover:bg-black/60">
+                    <button className="bg-black text-white p-2 hover:text-primary">
                         <div className="flex flex-row space-x-2 justify-center items-center">
                             {isLoading ? (
                                 <div role="status">
