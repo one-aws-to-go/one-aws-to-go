@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios, { AxiosRequestHeaders } from 'axios';
 
+import axios from 'axios';
 import { useAlert } from '../hooks/useAlert';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { validateGithubUser } from '../models/GithubUser';
-
-export const authHeader = (token: string): AxiosRequestHeaders => ({
-  Authorization: `Bearer ${token}`,
-});
 
 const Login = () => {
   const [token, setToken] = useState<string>('');
@@ -22,7 +18,7 @@ const Login = () => {
     if (cookies.Authorization) {
       navigate('/home');
     }
-  }, [cookies, navigate]);
+  }, [cookies, navigate, token]);
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,16 +26,14 @@ const Login = () => {
     try {
       setLoading(true)
 
-      const response = await axios('api/user', {
-        headers: authHeader(token),
-      });
+      axios.defaults.headers.common['Authorization'] = `bearer ${token}`
 
+      const response = await axios('api/user');
       const data = response.data;
 
       if (validateGithubUser(data)) {
         setCookie('Authorization', token);
         setLoading(false)
-        axios.defaults.headers.common['Authorization'] = `bearer ${token}`
         navigate('/home');
       } else {
         console.log(validateGithubUser.errors);
@@ -49,6 +43,7 @@ const Login = () => {
         displayAlert(e.message)
       } else {
         console.log(`DEBUG: General error ${e}`);
+        displayAlert('Unknown error occurred')
       }
       setLoading(false)
     }
@@ -56,12 +51,12 @@ const Login = () => {
 
   return (
     <div>
-      {alert && (
+      {alert.message && (
         <div
           className='absolute left-0 right-0 z-10 p-4 m-4 text-sm rounded-lg bg-red-200 text-error'
           role='alert'
         >
-          <p>{alert}</p>
+          <p>{alert.message}</p>
         </div>
       )}
       <div className='bg-office bg-cover'>
@@ -87,7 +82,7 @@ const Login = () => {
                   />
                   <button
                     type='submit'
-                    className='text-white bg-primary rounded-r focus:outline-none font-medium text-sm px-5 h-full  text-center inline-flex items-center hover:bg-primary/[.7]'
+                    className='text-white bg-primary/[.70] rounded-r focus:outline-none font-medium text-sm px-5 h-full  text-center inline-flex items-center hover:bg-primary/[.60]'
                   >
                     {isLoading ?
                       (
