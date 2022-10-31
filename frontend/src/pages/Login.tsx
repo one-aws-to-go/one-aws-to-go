@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import axios from 'axios';
-import toast from 'react-hot-toast';
 import { useCookies } from 'react-cookie';
+import { useLogin } from '../hooks/useLogin';
 import { useNavigate } from 'react-router-dom';
-import { validateGithubUser } from '../models/GithubUser';
 
 const Login = () => {
-  const [token, setToken] = useState<string>('');
-  const [cookies, setCookie] = useCookies<string>(['Authorization']);
-  const [isLoading, setLoading] = useState<boolean>(false)
-
   let navigate = useNavigate();
+  const [token, setToken] = useState<string>('');
+  const [cookies,] = useCookies<string>(['Authorization']);
+  const { isLoading, refetch } = useLogin(token)
 
   useEffect(() => {
     if (cookies.Authorization) {
@@ -21,30 +18,7 @@ const Login = () => {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    try {
-      setLoading(true)
-
-      axios.defaults.headers.common['Authorization'] = `bearer ${token}`
-      const response = await axios('api/user');
-      const data = response.data;
-
-      if (validateGithubUser(data)) {
-        toast.success('Authenticated succesfully!')
-        setCookie('Authorization', token);
-        setLoading(false)
-        navigate('/home');
-      } else {
-        console.log(validateGithubUser.errors);
-      }
-    } catch (e: unknown) {
-      if (axios.isAxiosError(e)) {
-        toast.error('Error occurred, please try again')
-      } else {
-        console.log(`DEBUG: General error ${e}`);
-      }
-      setLoading(false)
-    }
+    refetch()
   };
 
   return (

@@ -1,16 +1,14 @@
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { NavLink, useNavigate } from 'react-router-dom';
 
 import { Disclosure } from '@headlessui/react';
 import { Fragment } from 'react';
+import { NavLink } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 const NavBar = () => {
   const [, , removeCookie] = useCookies<string>([
     'Authorization',
   ]);
-
-  const navigate = useNavigate();
 
   const links = [
     { name: 'Home', to: '/home', current: true },
@@ -23,7 +21,6 @@ const NavBar = () => {
 
   const handleLogout = () => {
     removeCookie('Authorization');
-    navigate('/');
   };
 
   return (
