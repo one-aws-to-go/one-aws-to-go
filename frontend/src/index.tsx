@@ -5,7 +5,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { CookiesProvider } from 'react-cookie';
 import CreateForkPage from './pages/CreateForkPage';
-import EditPage from './pages/EditPage';
+import DetailPage from './pages/DetailPage';
+import EditPage from './pages/DetailPage';
 import { ErrorPage } from './pages/ErrorPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -54,10 +55,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: 'edit/:id',
+    path: 'details/:id',
     element: (
       <ProtectedRoute>
-        <EditPage />
+        <DetailPage />
       </ProtectedRoute>
     ),
   },

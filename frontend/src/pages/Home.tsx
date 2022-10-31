@@ -83,7 +83,7 @@ const Main = () => {
                 : query.data ? (
                   query.data.map((item, index) => {
                     return (
-                      <Link to={'/edit/' + item.id} key={index}>
+                      <Link to={'/details/' + item.id} key={index}>
                         <div className='flex flex-row justify-between items-center bg-primaryContainer w-full h-14 rounded-lg hover:bg-primary/[.60] cursor-pointer'>
                           <p className='text-white ml-4 font-bold'>{item.appName}</p>
                           <img

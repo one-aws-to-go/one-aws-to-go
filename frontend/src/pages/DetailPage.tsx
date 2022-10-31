@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { useGetExtendedFork } from "../hooks/useGetExtendedFork";
 
-const EditPage = () => {
+const DetailPage = () => {
   let { id } = useParams()
   let query = useGetExtendedFork(id)
   let navigate = useNavigate()
@@ -192,4 +192,4 @@ const EditPage = () => {
   )
 };
 
-export default EditPage;
+export default DetailPage;
