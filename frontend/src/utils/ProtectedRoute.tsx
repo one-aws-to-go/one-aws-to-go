@@ -1,4 +1,5 @@
 import { Navigate } from "react-router-dom";
+import axios from "axios";
 import { useCookies } from "react-cookie";
 
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -6,6 +7,9 @@ export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
   if (!cookies.Authorization) {
     return <Navigate to="/" />
+  }
+  else {
+    axios.defaults.headers.common['Authorization'] = `bearer ${cookies.Authorization}`
   }
 
   return children
