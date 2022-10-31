@@ -1,13 +1,22 @@
 import { useEffect, useState } from 'react';
 
+interface AlertState {
+  message: string
+  success: boolean
+}
+
 export const useAlert = (initialState = '') => {
-  const [alert, setAlert] = useState<string>(initialState);
+  const [alert, setAlert] = useState<AlertState>({
+    message: initialState,
+    success: false
+  });
 
-  const displayAlert = (message: string) => setAlert(message)
-
+  const displayAlert = (message: string, success: boolean = false) => {
+    setAlert({ message, success })
+  }
   useEffect(() => {
     const timer = setTimeout(() => {
-      setAlert('');
+      setAlert({ message: '', success: false })
     }, 5000);
     return () => clearTimeout(timer);
   }, [alert]);
