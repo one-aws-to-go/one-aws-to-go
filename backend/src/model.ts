@@ -1,8 +1,6 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda'
 
-export type AuthorizedEventHandler = (
-  event: AuthorizedEvent
-) => Promise<APIGatewayProxyResult>
+export type AuthorizedEventHandler = (event: AuthorizedEvent) => Promise<APIGatewayProxyResult>
 
 /**
  * Contains the GitHub token in addition to API Gateway properties.
@@ -23,7 +21,6 @@ export interface GitHubUser {
   [key: string]: any
 }
 
-// TODO
 export interface Fork {
   readonly id: number
   readonly appName: string
@@ -32,7 +29,9 @@ export interface Fork {
 }
 
 export interface ExtendedFork extends Fork {
-  readonly status: ForkStatus
+  readonly state: ForkState
+  readonly secretsSet: boolean
+  // readonly actionsEnabled: boolean
 }
 
 /**
@@ -47,11 +46,10 @@ export interface CreateForkArgs {
 /**
  * `PUT /forks/<fork_id>/secrets` request body
  */
-export interface ForkSecretArgs {
-  readonly appName: string
+export interface ForkAwsSecretArgs {
+  readonly awsDefaultRegion: string
   readonly awsAccessKey: string
   readonly awsSecretKey: string
-  readonly awsDefaultRegion: string
 }
 
 /**
@@ -61,19 +59,38 @@ export interface ErrorMessage {
   readonly message: string
 }
 
-export enum ForkStatus {
-  CREATED,
-  INITIALIZED,
-  UP,
-  DOWN
+export enum ForkState {
+  CREATED = 'created',
+  INITIALIZED = 'initialized',
+  UP = 'up',
+  DOWN = 'down'
 }
 
-export interface ForkTemplate {
-  readonly id: number
-  readonly url: string
+export enum ForkTemplateProvider {
+  AWS = 'aws',
+  AZURE = 'azure', // TODO: Not used!
+  GCP = 'gcp'      // TODO: Not used!
 }
+
+// INTERNAL DATA MODELS
 
 export interface GithubPublicKey {
   readonly keyId: string
   readonly key: string
+}
+
+export interface GitHubAction {
+  readonly id: number
+  readonly name: string
+  readonly [key: string]: any
+}
+
+export interface CommonActionSecrets {
+  readonly APP_NAME: string
+}
+
+export interface AwsActionSecrets extends CommonActionSecrets {
+  readonly AWS_DEFAULT_REGION: string
+  readonly AWS_ACCESS_KEY_ID: string
+  readonly AWS_SECRET_ACCESS_KEY: string
 }

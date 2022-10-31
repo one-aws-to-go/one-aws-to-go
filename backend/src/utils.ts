@@ -1,4 +1,5 @@
 import { APIGatewayProxyResult } from 'aws-lambda'
+import { ForkAwsSecretArgs, ForkTemplateProvider } from './model'
 
 export const PROD_ENV = process.env.NODE_ENV === 'production'
 
@@ -10,5 +11,5 @@ export const buildJsonResponse = (
 ): APIGatewayProxyResult => ({
   statusCode: status,
   headers: JSON_CONTENT_TYPE_HEADER,
-  body: JSON.stringify(body)
+  body: body ? JSON.stringify(body) : ''
 })
