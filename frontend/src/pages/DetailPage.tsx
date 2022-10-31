@@ -23,8 +23,8 @@ const DetailPage = () => {
           </div>
         )
           : query.isError ? (
-            <div className='text-white'>
-              'error'
+            <div className='text-white text-sm'>
+              Error occurred, please try again
             </div>
           )
             : query.data ?

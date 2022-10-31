@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { ForkAwsSecretArgs } from "../models/ForkAwsSecretArgs"
 import NavBar from "../components/NavBar"
 import axios from "axios"
-import { useAlert } from "../hooks/useAlert"
+import toast from "react-hot-toast"
 import { useState } from "react"
 
 const SetSecretsPage = () => {
@@ -12,7 +12,6 @@ const SetSecretsPage = () => {
 
   const [accessKey, setAccessKey] = useState<string>('')
   const [secretKey, setSecretKey] = useState<string>('')
-  const [alert, displayAlert] = useAlert();
   const [defaultRegion, setDefaultRegion] = useState<string>('us-west')
   const [isLoading, setLoading] = useState<boolean>(false)
 
@@ -27,13 +26,12 @@ const SetSecretsPage = () => {
         awsSecretKey: secretKey,
       });
       setLoading(false)
-      displayAlert('Secrets set succesfully!', true)
+      toast.success('Secrets updated succesfully!')
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
-        displayAlert(e.message)
+        toast.error('Error occurred, please try again')
       } else {
         console.log(`DEBUG: General error ${e}`);
-        displayAlert('Unknown error occurred')
       }
       setLoading(false)
     }
@@ -42,14 +40,6 @@ const SetSecretsPage = () => {
   return (
     <div className='flex flex-col bg-surface h-screen'>
       <NavBar />
-      {alert.message && (
-        <div
-          className={`p-4 m-4 text-sm rounded-lg ${alert.success ? 'bg-green-200 text-success' : 'bg-red-200 text-error'} `}
-          role='alert'
-        >
-          <p>{alert.message}</p>
-        </div>
-      )}
       <div className="flex flex-col  h-screen justify-center">
         <div className="flex flex-col space-y-2 items-center mx-auto max-w-7xl w-full">
 

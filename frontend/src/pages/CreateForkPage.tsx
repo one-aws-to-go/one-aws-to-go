@@ -1,6 +1,6 @@
 import NavBar from '../components/NavBar';
 import axios from 'axios';
-import { useAlert } from '../hooks/useAlert';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -8,7 +8,6 @@ const CreateForkPage = () => {
     const navigate = useNavigate()
 
     const [forkName, setForkName] = useState<string>('')
-    const [alert, displayAlert] = useAlert();
     const [isLoading, setLoading] = useState<boolean>(false)
 
     const onForkClicked = async (e: React.FormEvent) => {
@@ -21,12 +20,13 @@ const CreateForkPage = () => {
             });
             setLoading(false)
             navigate(`/set_secrets/1`, { replace: true })
+            toast.success('Fork created succesfully!')
         } catch (e) {
+            toast.error('Error occurred, please try again!')
             if (axios.isAxiosError(e)) {
-                displayAlert(e.message)
+                console.log(`DEBUG: Axios error ${e}`);
             } else {
                 console.log(`DEBUG: General error ${e}`);
-                displayAlert('Unknown error occurred')
             }
             setLoading(false)
         }
@@ -35,14 +35,6 @@ const CreateForkPage = () => {
     return (
         <div className='w-screen h-screen bg-repeat bg-surface flex flex-col '>
             <NavBar />
-            {alert.message && (
-                <div
-                    className=' p-4 m-4 text-sm rounded-lg bg-red-200 text-error'
-                    role='alert'
-                >
-                    <p>{alert.message}</p>
-                </div>
-            )}
             <form
                 onSubmit={onForkClicked}
                 className='flex flex-1 flex-col items-center justify-center'>

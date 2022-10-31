@@ -6,7 +6,6 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import CreateForkPage from './pages/CreateForkPage';
 import DetailPage from './pages/DetailPage';
-import EditPage from './pages/DetailPage';
 import { ErrorPage } from './pages/ErrorPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -15,6 +14,7 @@ import { ProtectedRoute } from './utils/ProtectedRoute';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import SetSecretsPage from './pages/SetSecretsPage';
+import { Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter([
   {
@@ -72,6 +72,7 @@ ReactDOM.createRoot(
   <React.StrictMode>
     <CookiesProvider>
       <QueryClientProvider client={queryClient}>
+        <Toaster />
         <RouterProvider router={router} />
       </QueryClientProvider>
     </CookiesProvider>

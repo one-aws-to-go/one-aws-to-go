@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import axios from 'axios';
-import { useAlert } from '../hooks/useAlert';
+import toast from 'react-hot-toast';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { validateGithubUser } from '../models/GithubUser';
@@ -9,7 +9,6 @@ import { validateGithubUser } from '../models/GithubUser';
 const Login = () => {
   const [token, setToken] = useState<string>('');
   const [cookies, setCookie] = useCookies<string>(['Authorization']);
-  const [alert, displayAlert] = useAlert();
   const [isLoading, setLoading] = useState<boolean>(false)
 
   let navigate = useNavigate();
@@ -27,11 +26,11 @@ const Login = () => {
       setLoading(true)
 
       axios.defaults.headers.common['Authorization'] = `bearer ${token}`
-
       const response = await axios('api/user');
       const data = response.data;
 
       if (validateGithubUser(data)) {
+        toast.success('Authenticated succesfully!')
         setCookie('Authorization', token);
         setLoading(false)
         navigate('/home');
@@ -40,10 +39,9 @@ const Login = () => {
       }
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
-        displayAlert(e.message)
+        toast.error('Error occurred, please try again')
       } else {
         console.log(`DEBUG: General error ${e}`);
-        displayAlert('Unknown error occurred')
       }
       setLoading(false)
     }
@@ -51,14 +49,6 @@ const Login = () => {
 
   return (
     <div>
-      {alert.message && (
-        <div
-          className='absolute left-0 right-0 z-10 p-4 m-4 text-sm rounded-lg bg-red-200 text-error'
-          role='alert'
-        >
-          <p>{alert.message}</p>
-        </div>
-      )}
       <div className='bg-office bg-cover'>
         <div className='flex flex-col h-screen backdrop-brightness-15 justify-center items-center'>
           <p className='text-6xl text-center text-primary font-bold'>OA2G</p>
