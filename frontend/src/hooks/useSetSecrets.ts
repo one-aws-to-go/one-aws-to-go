@@ -1,22 +1,16 @@
+import { ForkAwsSecretArgs } from "../models/ForkAwsSecretArgs";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useQuery } from "react-query";
 import { validateErrorMessage } from "../models/ErrorMessage";
-import { validateForks } from "../models/Fork";
 
-export const useGetForks = () => {
-  return useQuery(["forks"], async () => {
-    const response = await axios.get('/api/forks');
-
-    if (validateForks(response.data)) {
-      return response.data
-    }
-    else {
-      console.log(validateForks.errors);
-      toast.error('Unknown error occurred, please contact administrator [SCHEMA]')
-    }
+export const useSetSecrets = (id: string | undefined, secrets: ForkAwsSecretArgs) => {
+  const login = useQuery(["secrets"], async () => {
+    await axios.put(`/api/forks/${id}/secrets`, secrets);
+    toast.success('Secrets updated succesfully!')
   }, {
-    refetchOnWindowFocus: false,
+    enabled: false,
+    retry: false,
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         let data = error.response?.data
@@ -32,4 +26,6 @@ export const useGetForks = () => {
       }
     }
   });
+
+  return login
 }

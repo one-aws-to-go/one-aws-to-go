@@ -14,4 +14,3 @@ const schema: JTDSchemaType<GithubUser> = {
 };
 
 export const validateGithubUser = ajv.compile(schema)
-export const parseGithubUser = ajv.compileParser(schema);

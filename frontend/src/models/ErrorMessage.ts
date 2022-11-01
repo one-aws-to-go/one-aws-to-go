@@ -12,4 +12,3 @@ const schema: JTDSchemaType<ErrorMessage> = {
 };
 
 export const validateErrorMessage = ajv.compile(schema)
-export const parseErrorMessage = ajv.compileParser(schema);

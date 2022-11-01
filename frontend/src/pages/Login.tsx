@@ -8,8 +8,9 @@ const Login = () => {
   let navigate = useNavigate();
   const [token, setToken] = useState<string>('');
   const [cookies,] = useCookies<string>(['Authorization']);
-  const { isLoading, refetch } = useLogin(token)
+  const { isFetching, refetch } = useLogin(token)
 
+  // We want to always navigate to home page if there is a cookie available
   useEffect(() => {
     if (cookies.Authorization) {
       navigate('/home');
@@ -48,7 +49,7 @@ const Login = () => {
                     type='submit'
                     className='text-white bg-primary/[.70] rounded-r focus:outline-none font-medium text-sm px-5 h-full  text-center inline-flex items-center hover:bg-primary/[.60]'
                   >
-                    {isLoading ?
+                    {isFetching ?
                       (
                         <div role="status">
                           <svg aria-hidden="true" className="w-8 h-8 text-primaryContainer animate-spin fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

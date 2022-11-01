@@ -1,35 +1,14 @@
 import NavBar from '../components/NavBar';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useCreateFork } from '../hooks/useCreateFork';
 import { useState } from 'react';
 
 const CreateForkPage = () => {
-    const navigate = useNavigate()
-
     const [forkName, setForkName] = useState<string>('')
-    const [isLoading, setLoading] = useState<boolean>(false)
+    const { isFetching, refetch } = useCreateFork({ name: forkName, templateId: 1 })
 
     const onForkClicked = async (e: React.FormEvent) => {
         e.preventDefault();
-        try {
-            setLoading(true)
-            await axios.post('/api/forks', {
-                name: forkName,
-                templateId: 1,
-            });
-            setLoading(false)
-            navigate(`/set_secrets/1`, { replace: true })
-            toast.success('Fork created succesfully!')
-        } catch (e) {
-            toast.error('Error occurred, please try again!')
-            if (axios.isAxiosError(e)) {
-                console.log(`DEBUG: Axios error ${e}`);
-            } else {
-                console.log(`DEBUG: General error ${e}`);
-            }
-            setLoading(false)
-        }
+        refetch()
     }
 
     return (
@@ -59,7 +38,7 @@ const CreateForkPage = () => {
                 <div className='mt-2'>
                     <button className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white p-2 hover:text-primary">
                         <div className="flex flex-row space-x-2 justify-center items-center">
-                            {isLoading ? (
+                            {isFetching ? (
                                 <div role="status">
                                     <svg aria-hidden="true" className="w-6 h-6 text-primaryContainer animate-spin fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"></path>
