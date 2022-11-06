@@ -2,6 +2,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import NavBar from '../components/NavBar';
 import { TemplateItem } from '../models/TemplateItem';
+import aws from '../assets/aws.png'
+import azure from '../assets/azure.png'
+import gcp from '../assets/gcp.png'
 import { useGetForks } from '../hooks/useGetForks';
 
 const Main = () => {
@@ -10,17 +13,17 @@ const Main = () => {
 
   let templateItems: TemplateItem[] = [
     {
-      img: require('../assets/aws.png'),
+      img: aws,
       title: 'AWS',
       disabled: false,
     },
     {
-      img: require('../assets/gcp.png'),
+      img: gcp,
       title: 'GCP',
       disabled: true,
     },
     {
-      img: require('../assets/azure.png'),
+      img: azure,
       title: 'Azure',
       disabled: true,
     },
@@ -31,7 +34,7 @@ const Main = () => {
       <NavBar />
       <div className="flex flex-col space-y-2 mx-auto max-w-7xl w-full">
         <h1 className="w-full px-6 pt-4 sm:text-xl text-lg font-bold max-w-7xl mx-auto text-primary">
-          Templates
+          Template
         </h1>
 
         <div className="flex flex-row mx-6 overflow-x-auto scroll-py-4 scrollbar-thin scrollbar-thumb-primary scrollbar-track-primaryContainer">
@@ -88,7 +91,7 @@ const Main = () => {
                           <p className='ml-4 font-bold'>{item.appName}</p>
                           <img
                             className='h-10 px-2'
-                            src={require('../assets/aws.png')}
+                            src={aws}
                             alt={'logoImage'}
                           />
                         </div>

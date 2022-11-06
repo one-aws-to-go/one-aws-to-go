@@ -26,7 +26,7 @@ export const useCreateFork = (fork: CreateForkRequest) => {
           toast.error(data.message)
         }
         else {
-          toast.error('Unknown error occurred, please contact administrator [SCHEMA]')
+          toast.error(`Unknown error occurred [${error.response?.status}]`)
         }
       }
     }

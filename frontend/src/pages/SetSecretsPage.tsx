@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom"
 
 import { ForkAwsSecretArgs } from "../models/ForkAwsSecretArgs"
 import NavBar from "../components/NavBar"
+import aws from '../assets/aws.png'
 import { useSetSecrets } from "../hooks/useSetSecrets"
 import { useState } from "react"
 
@@ -32,7 +33,7 @@ const SetSecretsPage = () => {
           <div className="flex flex-row items-center">
             <img
               className='h-16 px-2'
-              src={require('../assets/aws.png')}
+              src={aws}
               alt={'logoImage'}
             />
             <div className="text-xl font-bold text-primary">Secrets</div>

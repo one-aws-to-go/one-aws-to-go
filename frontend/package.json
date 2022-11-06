@@ -3,10 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.3",
@@ -50,6 +49,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:3001"
+  }
 }

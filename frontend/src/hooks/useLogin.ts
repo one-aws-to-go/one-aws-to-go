@@ -11,7 +11,7 @@ export const useLogin = (token: string) => {
   const login = useQuery(["login"], async () => {
     axios.defaults.headers.common['Authorization'] = `bearer ${token}`
 
-    const response = await axios('api/user');
+    const response = await axios('/api/user');
 
     if (validateGithubUser(response.data)) {
       toast.success('Authenticated succesfully!')
@@ -32,7 +32,7 @@ export const useLogin = (token: string) => {
           toast.error(data.message)
         }
         else {
-          toast.error('Unknown error occurred, please contact administrator [SCHEMA]')
+          toast.error(`Unknown error occurred [${error.response?.status}]`)
         }
       }
       else {

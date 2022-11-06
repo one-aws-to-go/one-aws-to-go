@@ -24,7 +24,7 @@ export const useGetForks = () => {
           toast.error(data.message)
         }
         else {
-          toast.error('Unknown error occurred, please contact administrator [SCHEMA]')
+          toast.error(`Unknown error occurred [${error.response?.status}]`)
         }
       }
       else {

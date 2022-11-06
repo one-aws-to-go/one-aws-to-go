@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 
 import NavBar from "../components/NavBar";
+import aws from '../assets/aws.png'
 import { useGetExtendedFork } from "../hooks/useGetExtendedFork";
 
 const DetailPage = () => {
@@ -35,7 +36,7 @@ const DetailPage = () => {
                   <div className="flex flex-row items-center">
                     <img
                       className='h-16 px-2'
-                      src={require('../assets/aws.png')}
+                      src={aws}
                       alt={'logoImage'}
                     />
                     <div className="text-xl font-bold text-primary">{query.data.appName}</div>
