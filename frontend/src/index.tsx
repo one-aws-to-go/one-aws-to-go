@@ -1,43 +1,80 @@
 import './index.css';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import Forks from './pages/Forks';
 import { CookiesProvider } from 'react-cookie';
+import CreateForkPage from './pages/CreateForkPage';
+import DetailPage from './pages/DetailPage';
+import { ErrorPage } from './pages/ErrorPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Logs from './pages/Logs';
+import { ProtectedRoute } from './utils/ProtectedRoute';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+import SetSecretsPage from './pages/SetSecretsPage';
+import { Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Login />,
-    errorElement: <div>Error page</div>,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'home',
-    element: <Home />,
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: 'create_fork',
+    element: (
+      <ProtectedRoute>
+        <CreateForkPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: 'set_secrets/:id',
+    element: (
+      <ProtectedRoute>
+        <SetSecretsPage />
+      </ProtectedRoute>
+    )
   },
   {
     path: 'logs',
-    element: <Logs />,
+    element: (
+      <ProtectedRoute>
+        <Logs />
+      </ProtectedRoute>
+    ),
   },
   {
-    path: 'forks',
-    element: <Forks />,
+    path: 'details/:id',
+    element: (
+      <ProtectedRoute>
+        <DetailPage />
+      </ProtectedRoute>
+    ),
   },
 ]);
 
-root.render(
+const queryClient = new QueryClient();
+
+ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+).render(
   <React.StrictMode>
     <CookiesProvider>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </CookiesProvider>
   </React.StrictMode>
 );

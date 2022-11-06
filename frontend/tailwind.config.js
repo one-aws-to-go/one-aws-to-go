@@ -3,7 +3,9 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     fontFamily: {
-      sans: ["Khula", "Graphik", "sans-serif"],
+      'sans': ['ui-sans-serif', 'system-ui'],
+      'serif': ['ui-serif', 'Georgia'],
+      'mono': ['ui-monospace', 'SFMono-Regular'],
     },
     screens: {
       xs: '480px',
@@ -23,11 +25,16 @@ module.exports = {
         white: "#ffffff",
         divider: "#c2c2c2",
         primary: "#f39c12",
-        surface: "#0d0d0d",
+        primaryContainer: "#333333",
+        surface: "#212121",
         success: "#388E3C",
         error: "#b00d20",
+        disabled: "#2E2E2E"
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+    require('@tailwindcss/forms'),
+  ],
 };
