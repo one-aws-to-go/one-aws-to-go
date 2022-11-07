@@ -30,6 +30,7 @@ export interface ForkTemplate extends ForkCommon {
 
 export interface Fork extends ForkCommon {
   readonly appName: string
+  readonly templateId: number
 }
 
 export interface ExtendedFork extends Fork {
