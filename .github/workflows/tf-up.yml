@@ -33,12 +33,13 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         AWS_DEFAULT_OUTPUT: 'json'
         TF_VAR_appName: ${{ secrets.APP_NAME }}
-      run: |
+      run: >
         ./tf-up.sh
         echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_OUTPUT
+        echo "TEST: $TEST"
     # DATABASE_URL env variable should already be populated!
     - name: 'Apply DB Migrations'
       working-directory: './backend'
-      run: |
+      run: >
         export DATABASE_URL=${{ steps.tf-up.outputs.DATABASE_URL }}
         npm run db:deploy
