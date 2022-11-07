@@ -38,4 +38,6 @@ jobs:
     # DATABASE_URL env variable should already be populated!
     - name: 'Apply DB Migrations'
       working-directory: './backend'
-      run: npm run db:deploy
+      run: |
+        export DATABASE_URL=${{ env.DATABASE_URL }}
+        npm run db:deploy
