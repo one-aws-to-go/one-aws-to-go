@@ -24,6 +24,7 @@ jobs:
       run: |
         npm i && npm run build
     - name: 'Terraform Up'
+      id: tf-up
       working-directory: ./iac
       timeout-minutes: 20
       env:
@@ -34,10 +35,10 @@ jobs:
         TF_VAR_appName: ${{ secrets.APP_NAME }}
       run: |
         ./tf-up.sh
-        echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
+        echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_OUTPUT
     # DATABASE_URL env variable should already be populated!
     - name: 'Apply DB Migrations'
       working-directory: './backend'
       run: |
-        export DATABASE_URL=${{ env.DATABASE_URL }}
+        export DATABASE_URL=${{ steps.tf-up.outputs.DATABASE_URL }}
         npm run db:deploy
