@@ -158,7 +158,7 @@ const DetailPage = () => {
                         </div>
                       </button>
 
-                      <div id="dropdownDivider" className={`absolute mt-11 z-10 w-44 rounded divide-y divide-gray-500 shadow bg-dropdown  ${!areActionsVisible && 'hidden'} `}>
+                      <div id="dropdownDivider" className={`absolute mt-11 z-10 w-44 rounded divide-y divide-gray-500 shadow-xl bg-dropdown ${!areActionsVisible && 'hidden'} `}>
                         <ul className="py-1 text-sm text-gray-200">
                           {extendedFork.data.actions.map((action) =>
                             <li>
