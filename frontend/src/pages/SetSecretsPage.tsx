@@ -70,7 +70,7 @@ const SetSecretsPage = () => {
                 <input
                   className="mt-1 block w-full bg-primaryContainer text-white focus:border-primary focus:ring-0 placeholder:text-sm"
                   id='token'
-                  type='text'
+                  type='password'
                   placeholder='Secret key'
                   onChange={(event) => setSecrets({ ...secrets, awsSecretKey: event.target.value })}
                   value={secrets.awsSecretKey} />
