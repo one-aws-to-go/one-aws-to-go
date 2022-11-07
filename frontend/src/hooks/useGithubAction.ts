@@ -12,8 +12,8 @@ export interface GithubActionRequest {
 export const useGithubAction = () => {
   return useMutation({
     mutationFn: async (request: GithubActionRequest) => {
-      await axios.post(`/api/forks/${request.forkId}/actions/${request.action.name}`);
-      toast.success(`Action (${request.action.name}) executed succesfully!`)
+      await axios.post(`/api/forks/${request.forkId}/actions/${request.action.key}`);
+      toast.success(`Action (${request.action.key}) executed succesfully!`)
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {

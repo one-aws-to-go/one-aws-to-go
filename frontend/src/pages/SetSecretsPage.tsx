@@ -13,7 +13,7 @@ const SetSecretsPage = () => {
   const [secrets, setSecrets] = useState<ForkAwsSecretArgs>({
     awsAccessKey: '',
     awsSecretKey: '',
-    awsDefaultRegion: 'us-west'
+    awsDefaultRegion: 'eu-west-1'
   })
 
   const mutation = useSetSecrets()
@@ -52,8 +52,12 @@ const SetSecretsPage = () => {
                   value={secrets.awsDefaultRegion}
                   onChange={(event) => setSecrets({ ...secrets, awsDefaultRegion: event.target.value })}
                   className="form-select mt-1  w-full bg-primaryContainer text-white   focus:border-primary focus:ring-0 placeholder:text-sm">
-                  <option value="us-west">us-west</option>
-                  <option value="us-east">us-east</option>
+                  <option value="eu-west-1">eu-west-1</option>
+                  <option value="eu-west-2">eu-west-2</option>
+                  <option value="us-west-1">us-west-1</option>
+                  <option value="us-west-2">us-west-2</option>
+                  <option value="us-east-1">us-east-1</option>
+                  <option value="us-east-2">us-east-2</option>
                 </select>
               </div>
 
