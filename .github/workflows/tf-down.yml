@@ -18,8 +18,7 @@ jobs:
         ./print-dependencies.sh
     - name: 'Build Backend'
       working-directory: './backend'
-      run: |
-        npm i && npm run build
+      run: npm run build
     - name: 'Build Frontend'
       working-directory: './frontend'
       run: |
