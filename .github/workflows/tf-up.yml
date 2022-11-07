@@ -34,3 +34,7 @@ jobs:
         TF_VAR_appName: ${{ secrets.APP_NAME }}
       run: |
         ./tf-up.sh
+    # DATABASE_URL env variable should already be populated!
+    - name: 'Apply DB Migrations'
+      working-directory: './backend'
+      run: npm run db:deploy

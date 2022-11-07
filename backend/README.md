@@ -13,7 +13,7 @@ If the authorization header is missing, the response will automatically be **401
 | ----- | ----- |
 | [`GET /user`](#get-user) | Return the user's information
 | [`GET /templates`](#get-template) | Return all fork templates
-| [`GET /templates/<template_id>`](#get-templatestemplate_id) | Get a single fork
+| [`GET /templates/<template_id>`](#get-templatestemplate_id) | Get a single fork template
 | [`GET /forks`](#get-forks) | Get all forks associated with the user and the application
 | [`GET /forks/<fork_id>`](#get-forksfork_id) | Get fork information
 | [`POST /forks`](#post-forks) | Create new fork |

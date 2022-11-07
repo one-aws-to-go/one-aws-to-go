@@ -1,6 +1,14 @@
 import { Fork, ForkAction, ForkTemplate } from '@prisma/client'
 import github from '../../github'
-import { AuthorizedEventHandler, CreateForkArgs, ExtendedFork, Fork as ApiFork, ForkAwsSecretArgs, ForkState, ForkTemplateProvider } from '../../model'
+import {
+  AuthorizedEventHandler,
+  CreateForkArgs,
+  ExtendedFork,
+  Fork as ApiFork,
+  ForkAwsSecretArgs,
+  ForkState,
+  ForkTemplateProvider
+} from '../../model'
 import prisma from '../../prisma'
 import { buildJsonResponse } from '../../utils'
 import { createProviderSecrets, createSecrets } from './forks.utils'
