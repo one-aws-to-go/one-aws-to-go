@@ -10,6 +10,7 @@ import {
 import { getHealthHandler } from './api/health/health.handler'
 import { getUserHandler } from './api/user/user.handler'
 import { AuthorizedEvent, AuthorizedEventHandler } from './model'
+import { getTemplateHandler, getTemplatesHandler } from './templates/templates.handler'
 import { buildJsonResponse } from './utils'
 
 const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
@@ -18,6 +19,12 @@ const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
   },
   '/api/user': {
     GET: getUserHandler
+  },
+  '/api/templates': {
+    GET: getTemplatesHandler
+  },
+  '/api/templates/:id': {
+    GET: getTemplateHandler
   },
   '/api/forks': {
     GET: getForksHandler,

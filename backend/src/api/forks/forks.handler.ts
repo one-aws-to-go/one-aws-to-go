@@ -12,21 +12,18 @@ const toApiFork = (f: ForkWithTemplate): ApiFork => ({
   appName: f.appName,
   owner: f.owner,
   repo: f.appName,
-  provider: f.template.provider as ForkTemplateProvider
+  provider: f.template.provider as ForkTemplateProvider,
+  templateId: f.templateId
 })
 
 const toExtendedFork = (f: ForkWithTemplate, actions: ForkAction[]): ExtendedFork => ({
-  id: f.id,
-  appName: f.appName,
-  owner: f.owner,
-  repo: f.appName,
-  provider: f.template.provider as ForkTemplateProvider,
+  ...toApiFork(f),
   state: f.state as ForkState,
   secretsSet: f.secretsSet,
   actions: actions.map((a) => ({
     key: a.key,
-    name: a.key,      // TODO
-    description: null // TODO
+    name: a.name,
+    description: a.description
   }))
 })
 
