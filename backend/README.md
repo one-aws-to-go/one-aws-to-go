@@ -12,12 +12,13 @@ If the authorization header is missing, the response will automatically be **401
 | **Route** | **Description** |
 | ----- | ----- |
 | [`GET /user`](#get-user) | Return the user's information
-| [`GET /templates`](#get-templates) | Return all fork templates
+| [`GET /templates`](#get-template) | Return all fork templates
+| [`GET /templates/<template_id>`](#get-templatestemplate_id) | Get a single fork
 | [`GET /forks`](#get-forks) | Get all forks associated with the user and the application
 | [`GET /forks/<fork_id>`](#get-forksfork_id) | Get fork information
 | [`POST /forks`](#post-forks) | Create new fork |
 | [`PUT /forks/<fork_id>/secrets`](#put-forksfork_idsecrets) | Set fork secrets for IaC |
-| [`POST /forks/<fork_id>/action/<action_name>`](#post-forksfork_idactionaction_name) | Trigger GitHub IaC Action |
+| [`POST /forks/<fork_id>/actions/<action_name>`](#post-forksfork_idactionaction_name) | Trigger GitHub IaC Action |
 
 ### **`GET /user`**
 
@@ -29,7 +30,7 @@ If the authorization header is missing, the response will automatically be **401
 | **200** | GitHub user was found | [`GitHubUser`](./src/model.ts) |
 | **404** | GitHub user not found | [`ErrorMessage`](./src/model.ts) |
 
-### **`GET /templates`** TODO
+### **`GET /templates`**
 
 **Request body:** -
 
@@ -37,6 +38,18 @@ If the authorization header is missing, the response will automatically be **401
 | **Status** | **Description** | **Body** |
 | ----- | ----- | ----- |
 | **200** | Found templates | [`ForkTemplate[]`](./src/model.ts) |
+
+### **`GET /templates/<template_id>`**
+
+**Request route params:**
+- `template_id`: Unique identifier of the template.
+
+**Request body:** -
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **200** | Found template | [`ForkTemplate`](./src/model.ts) |
 
 ### **`GET /forks`**
 
@@ -80,13 +93,15 @@ If the authorization header is missing, the response will automatically be **401
 | **204** | Secrets set | - |
 | **400** | Validation failed | [`ErrorMessage`](./src/model.ts) |
 
-### **`POST /forks/<fork_id>/action/<action_name>`**
+### **`POST /forks/<fork_id>/actions/<action_name>`**
 
 **Request route params:**
 - `fork_id`: Unique identifier of the fork.
 - `action_name`*: Name of the action to be triggered.
 
-\* = `<action_name>` must be one of the following:
+**\* Action names can differ between the templates!**
+
+The default template contains the following actions:
 - `up`: Create cloud resources defined in the fork IaC.
 - `down`: Destroy cloud resources created by the fork IaC.
 - `init`: Initialize IaC backend for the fork. **This must be done before any other actions can be triggered!**
