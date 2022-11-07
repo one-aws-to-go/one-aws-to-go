@@ -12,6 +12,7 @@ If the authorization header is missing, the response will automatically be **401
 | **Route** | **Description** |
 | ----- | ----- |
 | [`GET /user`](#get-user) | Return the user's information
+| [`GET /templates`](#get-templates) | Return all fork templates
 | [`GET /forks`](#get-forks) | Get all forks associated with the user and the application
 | [`GET /forks/<fork_id>`](#get-forksfork_id) | Get fork information
 | [`POST /forks`](#post-forks) | Create new fork |
@@ -27,6 +28,15 @@ If the authorization header is missing, the response will automatically be **401
 | ----- | ----- | ----- |
 | **200** | GitHub user was found | [`GitHubUser`](./src/model.ts) |
 | **404** | GitHub user not found | [`ErrorMessage`](./src/model.ts) |
+
+### **`GET /templates`** TODO
+
+**Request body:** -
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **200** | Found templates | [`ForkTemplate[]`](./src/model.ts) |
 
 ### **`GET /forks`**
 

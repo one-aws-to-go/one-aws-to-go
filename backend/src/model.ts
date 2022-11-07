@@ -21,23 +21,35 @@ export interface GitHubUser {
   [key: string]: any
 }
 
-export interface Fork {
+export interface ForkCommon {
   readonly id: number
-  readonly appName: string
   readonly owner: string
   readonly repo: string
+  readonly provider: ForkTemplateProvider
+}
+
+export interface ForkTemplate extends ForkCommon {
+  readonly description: string | null
+}
+
+export interface Fork extends ForkCommon {
+  readonly appName: string
 }
 
 export interface ExtendedFork extends Fork {
   readonly state: ForkState
   readonly secretsSet: boolean
+  readonly actions: {
+    readonly key: string
+    readonly name: string
+    readonly description: string | null
+  }[]
   // readonly actionsEnabled: boolean
 }
 
 /**
  * `POST /forks` request body
  */
-
 export interface CreateForkArgs {
   readonly name: string
   readonly templateId: number
