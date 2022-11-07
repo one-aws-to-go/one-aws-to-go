@@ -21,10 +21,10 @@ export interface Fork extends ForkCommon {
 export interface ExtendedFork extends Fork {
   readonly state: ForkState
   readonly secretsSet: boolean
-  readonly actions: Action[]
+  readonly actions: GithubAction[]
 }
 
-export interface Action {
+export interface GithubAction {
   readonly key: string
   readonly name: string
   readonly description: string | null
@@ -37,7 +37,7 @@ export enum ForkState {
   DOWN = 'down'
 }
 
-const actionSchema: JTDSchemaType<Action> = {
+const GithubActionSchema: JTDSchemaType<GithubAction> = {
   properties: {
     key: { type: 'string' },
     name: { type: 'string' },
@@ -83,7 +83,7 @@ const extendedForkSchema: JTDSchemaType<ExtendedFork> = {
       ]
     },
     secretsSet: { type: 'boolean' },
-    actions: { elements: actionSchema }
+    actions: { elements: GithubActionSchema }
   },
 };
 

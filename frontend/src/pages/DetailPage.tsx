@@ -1,29 +1,43 @@
+import { GithubActionRequest, useGithubAction } from "../hooks/useGithubAction";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRef, useState } from "react";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { GithubAction } from "../models/Fork";
 import NavBar from "../components/NavBar";
 import aws from '../assets/aws.png'
 import { useGetExtendedFork } from "../hooks/useGetExtendedFork";
+import { useMutation } from "react-query";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const DetailPage = () => {
-  const ref = useRef(null)
   let { id } = useParams()
-  let query = useGetExtendedFork(id)
   let navigate = useNavigate()
 
+  const extendedFork = useGetExtendedFork(id)
+  const mutation = useGithubAction()
+  
+  const ref = useRef(null)
+  const [areActionsVisible, setActionsVisible] = useState(false)
+
   useOutsideClick(ref, () => {
-    setVisible(false)
+    setActionsVisible(false)
   })
 
-  const [isVisible, setVisible] = useState(false)
+  const handleActionButtonClicked = (action: GithubAction) => {
+    setActionsVisible(!areActionsVisible)
+    mutation.mutate({
+      forkId: id,
+      action: action
+    })
+  }
+
 
   return (
     <div className='flex flex-col bg-surface h-screen'>
       <NavBar />
       <div className="flex flex-col h-screen justify-center items-center">
-        {query.isLoading ? (
+        {extendedFork.isLoading ? (
           <div role="status">
             <svg aria-hidden="true" className="w-8 h-8 text-primaryContainer animate-spin fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"></path>
@@ -32,12 +46,12 @@ const DetailPage = () => {
             <span className="sr-only">Loading...</span>
           </div>
         )
-          : query.isError ? (
+          : extendedFork.isError ? (
             <div className='text-white text-sm'>
               Error occurred, please try again
             </div>
           )
-            : query.data ?
+            : extendedFork.data ?
               (
                 <div className="flex flex-col space-y-2 items-center mx-auto max-w-7xl w-full">
 
@@ -48,7 +62,7 @@ const DetailPage = () => {
                       src={aws}
                       alt={'logoImage'}
                     />
-                    <div className="text-xl font-bold text-primary">{query.data.appName}</div>
+                    <div className="text-xl font-bold text-primary">{extendedFork.data.appName}</div>
                   </div>
 
                   {/* Details block */}
@@ -65,7 +79,7 @@ const DetailPage = () => {
                           id='token'
                           type='text'
                           placeholder='Project name'
-                          value={query.data.appName}
+                          value={extendedFork.data.appName}
                           disabled={true}
                         />
                       </div>
@@ -74,7 +88,7 @@ const DetailPage = () => {
                         <div className="text-white text-xs font-bold">Default region</div>
                         <select
                           disabled={true}
-                          defaultValue={query.data.secretsSet ? 'set' : 'not-set'}
+                          defaultValue={extendedFork.data.secretsSet ? 'set' : 'not-set'}
                           className="form-select mt-1  w-full bg-primaryContainer text-white   focus:border-primary focus:ring-0 placeholder:text-sm">
                           <option value="not-set">Not set</option>
                           <option value="set">********</option>
@@ -90,7 +104,7 @@ const DetailPage = () => {
                           id='token'
                           type='text'
                           placeholder='Status'
-                          value={query.data.state.toLocaleUpperCase()}
+                          value={extendedFork.data.state.toLocaleUpperCase()}
                           disabled />
                       </div>
 
@@ -102,7 +116,7 @@ const DetailPage = () => {
                           disabled={true}
                           type='text'
                           placeholder='Secret key'
-                          value={query.data.secretsSet ? '********' : 'Not set'} />
+                          value={extendedFork.data.secretsSet ? '********' : 'Not set'} />
                       </div>
 
                       <div>
@@ -113,7 +127,7 @@ const DetailPage = () => {
                           disabled={true}
                           type='text'
                           placeholder='Access key'
-                          value={query.data.secretsSet ? '********' : 'Not set'} />
+                          value={extendedFork.data.secretsSet ? '********' : 'Not set'} />
                       </div>
 
                     </form>
@@ -121,25 +135,34 @@ const DetailPage = () => {
                     {/* Button grid */}
                     <div ref={ref} className="grid grid-rows-2 grid-cols-4 gap-2">
                       <button
+                        disabled={mutation.isLoading}
                         onClick={() => {
-                          setVisible(!isVisible)
+                          setActionsVisible(!areActionsVisible)
                         }}
                         className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary">
                         <div className="flex flex-row space-x-2 justify-center items-center">
                           <div className="text-sm font-bold">Actions</div>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                          </svg>
+                          {mutation.isLoading ? (
+                            <div role="status">
+                              <svg aria-hidden="true" className="w-5 h-5 text-primaryContainer animate-spin fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"></path>
+                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"></path>
+                              </svg>
+                              <span className="sr-only">Loading...</span>
+                            </div>
+                          ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                          )}
                         </div>
                       </button>
 
-                      <div id="dropdownDivider" className={`absolute mt-11 z-10 w-44 rounded divide-y divide-gray-500 shadow bg-dropdown  ${!isVisible && 'hidden'} `}>
+                      <div id="dropdownDivider" className={`absolute mt-11 z-10 w-44 rounded divide-y divide-gray-500 shadow bg-dropdown  ${!areActionsVisible && 'hidden'} `}>
                         <ul className="py-1 text-sm text-gray-200">
-                          {query.data.actions.map((action) =>
+                          {extendedFork.data.actions.map((action) =>
                             <li>
-                              <button onClick={() => {
-                                setVisible(!isVisible)
-                              }}
+                              <button onClick={() => handleActionButtonClicked(action)}
                                 className="block py-2 px-4 w-full text-start hover:bg-primaryContainer/[.60] text-white hover:text-primary"
                               >
                                 {action.name}
@@ -160,8 +183,8 @@ const DetailPage = () => {
 
                       <button
                         onClick={() => {
-                          if (query.data?.id) {
-                            navigate('/set_secrets/' + query.data?.id)
+                          if (extendedFork.data?.id) {
+                            navigate('/set_secrets/' + extendedFork.data?.id)
                           }
                         }}
                         className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary col-span-1"
@@ -185,7 +208,7 @@ const DetailPage = () => {
 
                       <a
                         target='_blank'
-                        href={`https://github.com/${query.data.owner}/${query.data.appName}`}
+                        href={`https://github.com/${extendedFork.data.owner}/${extendedFork.data.appName}`}
                         rel='noreferrer'
                         className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary col-span-4">
                         <div className="flex flex-row space-x-2 justify-center items-center">
