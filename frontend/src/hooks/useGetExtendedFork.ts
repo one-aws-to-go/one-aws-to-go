@@ -5,7 +5,7 @@ import { validateErrorMessage } from "../models/ErrorMessage";
 import { validateExtendedFork } from "../models/Fork";
 
 export const useGetExtendedFork = (id: string | undefined) => {
-  return useQuery(["extendedFork"], async () => {
+  return useQuery([`extendedFork/${id}`], async () => {
     const response = await axios.get(`/api/forks/${id}`);
 
     if (validateExtendedFork(response.data)) {

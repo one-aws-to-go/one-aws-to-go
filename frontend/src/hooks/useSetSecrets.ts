@@ -1,20 +1,33 @@
+import { useMutation, useQuery, useQueryClient } from "react-query";
+
+import { ExtendedFork } from "../models/Fork";
 import { ForkAwsSecretArgs } from "../models/ForkAwsSecretArgs";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "react-query";
 import { validateErrorMessage } from "../models/ErrorMessage";
 
-export const useSetSecrets = (id: string | undefined, secrets: ForkAwsSecretArgs) => {
+export interface SetSecretsRequest {
+  forkId: string | undefined,
+  secrets: ForkAwsSecretArgs
+}
+
+export const useSetSecrets = () => {
   let navigate = useNavigate()
-  
-  const login = useQuery(["secrets"], async () => {
-    await axios.put(`/api/forks/${id}/secrets`, secrets);
-    toast.success('Secrets updated succesfully!')
-    navigate(`/details/${id}`)
-  }, {
-    enabled: false,
-    retry: false,
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (request: SetSecretsRequest) => {
+      await axios.put(`/api/forks/${request.forkId}/secrets`, request.secrets);
+      toast.success('Secrets updated succesfully!')
+      navigate(`/details/${request.forkId}`)
+
+      // Update secrets value to cache
+      queryClient.setQueryData<ExtendedFork | undefined>(`extendedFork/${request.forkId}`, (oldFork: ExtendedFork | undefined) => oldFork && {
+        ...oldFork,
+        secretsSet: true
+      })
+    },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         let data = error.response?.data
@@ -30,6 +43,4 @@ export const useSetSecrets = (id: string | undefined, secrets: ForkAwsSecretArgs
       }
     }
   });
-
-  return login
 }
