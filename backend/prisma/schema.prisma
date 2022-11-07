@@ -18,10 +18,11 @@ model User {
 }
 
 model ForkTemplate {
-  id       Int    @id @default(autoincrement())
-  owner    String
-  repo     String
-  provider String
+  id          Int     @id @default(autoincrement())
+  owner       String
+  repo        String
+  provider    String
+  description String?
 
   forks   Fork[]
   actions ForkAction[]
@@ -31,6 +32,8 @@ model ForkAction {
   key              String
   githubActionName String
   toState          String
+  name             String
+  description      String?
 
   templateId Int
   template   ForkTemplate @relation(fields: [templateId], references: [id])
