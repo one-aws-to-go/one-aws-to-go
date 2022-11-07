@@ -90,7 +90,9 @@ const Main = () => {
                     return (
                       <Link to={'/details/' + item.id} key={index}>
                         <div className='flex flex-row justify-between items-center shadow-md bg-primaryContainer w-full h-14 rounded-lg hover:bg-primaryContainer/[.60] cursor-pointer text-white hover:text-primary'>
-                          <p className='ml-4 font-bold'>{item.appName}</p>
+                          <div className='flex flex-col'>
+                            <p className='ml-4 font-bold'>{item.provider} - {item.id}</p>
+                          </div>
                           <img
                             className='h-10 px-2'
                             src={aws}

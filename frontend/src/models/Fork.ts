@@ -1,16 +1,33 @@
 import Ajv, { JTDSchemaType } from 'ajv/dist/jtd';
 const ajv = new Ajv({ removeAdditional: 'all' });
 
-export interface Fork {
+export interface ForkCommon {
   readonly id: number
-  readonly appName: string
   readonly owner: string
   readonly repo: string
+  readonly provider: ForkTemplateProvider
+}
+
+export enum ForkTemplateProvider {
+  AWS = 'aws',
+  AZURE = 'azure', // TODO: Not used!
+  GCP = 'gcp'      // TODO: Not used!
+}
+
+export interface Fork extends ForkCommon {
+  readonly appName: string
 }
 
 export interface ExtendedFork extends Fork {
   readonly state: ForkState
   readonly secretsSet: boolean
+  readonly actions: Action[]
+}
+
+export interface Action {
+  readonly key: string
+  readonly name: string
+  readonly description: string | null
 }
 
 export enum ForkState {
@@ -20,12 +37,27 @@ export enum ForkState {
   DOWN = 'down'
 }
 
+const actionSchema: JTDSchemaType<Action> = {
+  properties: {
+    key: { type: 'string' },
+    name: { type: 'string' },
+    description: { type: 'string', nullable: true },
+  }
+}
+
 const forkSchema: JTDSchemaType<Fork> = {
   properties: {
     id: { type: 'int32' },
     appName: { type: 'string' },
     owner: { type: 'string' },
     repo: { type: 'string' },
+    provider: {
+      enum: [
+        ForkTemplateProvider.AWS,
+        ForkTemplateProvider.AZURE,
+        ForkTemplateProvider.GCP
+      ]
+    }
   },
 };
 
@@ -43,14 +75,22 @@ const extendedForkSchema: JTDSchemaType<ExtendedFork> = {
         ForkState.DOWN
       ]
     },
-    secretsSet: { type: 'boolean' }
+    provider: {
+      enum: [
+        ForkTemplateProvider.AWS,
+        ForkTemplateProvider.AZURE,
+        ForkTemplateProvider.GCP
+      ]
+    },
+    secretsSet: { type: 'boolean' },
+    actions: { elements: actionSchema }
   },
 };
 
-const innerArraySchema: JTDSchemaType<Fork[]> = {
+const forksArraySchema: JTDSchemaType<Fork[]> = {
   elements: forkSchema
 }
 
 export const validateFork = ajv.compile(forkSchema)
 export const validateExtendedFork = ajv.compile(extendedForkSchema)
-export const validateForks = ajv.compile(innerArraySchema)
+export const validateForks = ajv.compile(forksArraySchema)
