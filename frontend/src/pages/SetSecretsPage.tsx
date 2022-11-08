@@ -1,14 +1,20 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 
 import { ForkAwsSecretArgs } from "../models/ForkAwsSecretArgs"
 import NavBar from "../components/NavBar"
-import aws from '../assets/aws.png'
+import aws from '../../img/aws.png'
 import { useSetSecrets } from "../hooks/useSetSecrets"
 import { useState } from "react"
 
+export interface SetSecretsPageProps {
+  provider: string
+}
+
 const SetSecretsPage = () => {
-  let { id } = useParams()
-  let navigate = useNavigate()
+  const { id } = useParams()
+  const { provider } = useLocation().state as SetSecretsPageProps
+
+  const navigate = useNavigate()
 
   const [secrets, setSecrets] = useState<ForkAwsSecretArgs>({
     awsAccessKey: '',
@@ -36,7 +42,7 @@ const SetSecretsPage = () => {
           <div className="flex flex-row items-center">
             <img
               className='h-16 px-2'
-              src={aws}
+              src={`../../assets/${provider}.png`}
               alt={'logoImage'}
             />
             <div className="text-xl font-bold text-primary">Secrets</div>
@@ -65,7 +71,6 @@ const SetSecretsPage = () => {
                 <div className="text-white text-xs font-bold">Access key (*)</div>
                 <input
                   className="mt-1 block w-full bg-primaryContainer text-white focus:border-primary focus:ring-0 placeholder:text-sm"
-                  id='token'
                   type='text'
                   placeholder='Access key'
                   onChange={(event) => setSecrets({ ...secrets, awsAccessKey: event.target.value })}
@@ -76,7 +81,6 @@ const SetSecretsPage = () => {
                 <div className="text-white text-xs font-bold">Secret key (*)</div>
                 <input
                   className="mt-1 block w-full bg-primaryContainer text-white focus:border-primary focus:ring-0 placeholder:text-sm"
-                  id='token'
                   type='password'
                   placeholder='Secret key'
                   onChange={(event) => setSecrets({ ...secrets, awsSecretKey: event.target.value })}

@@ -22,11 +22,14 @@ export const useSetSecrets = () => {
       toast.success('Secrets updated succesfully!')
       navigate(`/details/${request.forkId}`)
 
-      // Update secrets value to cache
-      queryClient.setQueryData<ExtendedFork | undefined>(`extendedFork/${request.forkId}`, (oldFork: ExtendedFork | undefined) => oldFork && {
-        ...oldFork,
-        secretsSet: true
-      })
+      // Update extended fork secrets in cache
+      const extendedFork = queryClient.getQueryData<ExtendedFork>(`extendedFork/${request.forkId}`)
+      if (extendedFork) {
+        queryClient.setQueryData(`extendedFork/${request.forkId}`, {
+          ...extendedFork,
+          secretsSet: true
+        })
+      }
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {

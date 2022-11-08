@@ -1,7 +1,8 @@
-import { GithubAction } from "../models/Fork";
+import { ExtendedFork, ForkState, GithubAction } from "../models/Fork";
+import { useMutation, useQueryClient } from "react-query";
+
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useMutation } from "react-query";
 import { validateErrorMessage } from "../models/ErrorMessage";
 
 export interface GithubActionRequest {
@@ -9,11 +10,34 @@ export interface GithubActionRequest {
   action: GithubAction
 }
 
+const getForkStateFromAction = (action: GithubAction): ForkState => {
+  switch (action.key) {
+    case 'init':
+      return ForkState.INITIALIZED
+    case 'up':
+      return ForkState.UP
+    case 'down':
+      return ForkState.DOWN
+    default:
+      return ForkState.INITIALIZED
+  }
+}
+
 export const useGithubAction = () => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (request: GithubActionRequest) => {
       await axios.post(`/api/forks/${request.forkId}/actions/${request.action.key}`);
       toast.success(`Action (${request.action.key}) executed succesfully!`)
+
+      // Update extended fork state
+      const extendedFork = queryClient.getQueryData<ExtendedFork>(`extendedFork/${request.forkId}`)
+      if (extendedFork) {
+        queryClient.setQueryData(`extendedFork/${request.forkId}`, {
+          ...extendedFork,
+          state: getForkStateFromAction(request.action)
+        })
+      }
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {

@@ -1,9 +1,9 @@
 import { Fork, validateFork } from "../models/Fork";
 import { useMutation, useQueryClient } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
 
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { validateErrorMessage } from "../models/ErrorMessage";
 
 export interface CreateForkRequest {
@@ -11,7 +11,7 @@ export interface CreateForkRequest {
   templateId: number,
 }
 
-export const useCreateFork = () => {
+export const useCreateFork = (provider: string) => {
   let navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -22,14 +22,25 @@ export const useCreateFork = () => {
       const createdFork = response.data
 
       if (validateFork(createdFork)) {
-        navigate(`/set_secrets/1`, { replace: true })
+        navigate(`/set_secrets/${fork.templateId}`,
+          {
+            replace: true,
+            state: {
+              provider: provider
+            }
+
+          }
+        )
         toast.success('Fork created succesfully!')
 
         // Add created fork to cache
-        queryClient.setQueryData<Fork[] | undefined>('forks', (oldForks: Fork[] | undefined) => oldForks && [
-          ...oldForks,
-          createdFork
-        ])
+        const oldForks = queryClient.getQueryData<Fork[]>(`forks`)
+        if (oldForks) {
+          queryClient.setQueryData(`forks`, [
+            ...oldForks,
+            createdFork
+          ])
+        }
       }
       else {
         toast.error(`Unknown error occurred [SCHEMA]`)

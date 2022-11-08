@@ -14,16 +14,6 @@ export enum ForkTemplateProvider {
   GCP = 'gcp'      // TODO: Not used!
 }
 
-export interface Fork extends ForkCommon {
-  readonly appName: string
-}
-
-export interface ExtendedFork extends Fork {
-  readonly state: ForkState
-  readonly secretsSet: boolean
-  readonly actions: GithubAction[]
-}
-
 export interface GithubAction {
   readonly key: string
   readonly name: string
@@ -35,6 +25,20 @@ export enum ForkState {
   INITIALIZED = 'initialized',
   UP = 'up',
   DOWN = 'down'
+}
+
+export interface Fork extends ForkCommon {
+  readonly appName: string
+}
+
+export interface ExtendedFork extends Fork {
+  readonly state: ForkState
+  readonly secretsSet: boolean
+  readonly actions: GithubAction[]
+}
+
+export interface ForkTemplate extends ForkCommon {
+  readonly description: string | null
 }
 
 const GithubActionSchema: JTDSchemaType<GithubAction> = {
@@ -59,6 +63,29 @@ const forkSchema: JTDSchemaType<Fork> = {
       ]
     }
   },
+};
+
+const forksSchema: JTDSchemaType<Fork[]> = {
+  elements: forkSchema
+};
+
+
+const forkTemplatesSchema: JTDSchemaType<ForkTemplate[]> = {
+  elements: {
+    properties: {
+      id: { type: 'int32' },
+      owner: { type: 'string' },
+      repo: { type: 'string' },
+      provider: {
+        enum: [
+          ForkTemplateProvider.AWS,
+          ForkTemplateProvider.AZURE,
+          ForkTemplateProvider.GCP
+        ]
+      },
+      description: { type: 'string', nullable: true }
+    },
+  }
 };
 
 const extendedForkSchema: JTDSchemaType<ExtendedFork> = {
@@ -87,10 +114,8 @@ const extendedForkSchema: JTDSchemaType<ExtendedFork> = {
   },
 };
 
-const forksArraySchema: JTDSchemaType<Fork[]> = {
-  elements: forkSchema
-}
 
 export const validateFork = ajv.compile(forkSchema)
+export const validateForks = ajv.compile(forksSchema)
 export const validateExtendedFork = ajv.compile(extendedForkSchema)
-export const validateForks = ajv.compile(forksArraySchema)
+export const validateForkTemplates = ajv.compile(forkTemplatesSchema)

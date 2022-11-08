@@ -19,8 +19,9 @@ module.exports = {
         15: '.15'
       },
       backgroundImage: {
-        'office': "url('/img/background_image.jpg')",
+        'office': "url('/assets/background_image.jpg')",
       },
+      
       colors: {
         white: "#ffffff",
         divider: "#c2c2c2",

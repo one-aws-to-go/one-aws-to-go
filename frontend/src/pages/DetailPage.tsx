@@ -1,22 +1,20 @@
-import { GithubActionRequest, useGithubAction } from "../hooks/useGithubAction";
+import { ForkState, GithubAction } from "../models/Fork";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRef, useState } from "react";
 
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { GithubAction } from "../models/Fork";
 import NavBar from "../components/NavBar";
-import aws from '../assets/aws.png'
+import aws from '../../assets/aws.png'
 import { useGetExtendedFork } from "../hooks/useGetExtendedFork";
-import { useMutation } from "react-query";
+import { useGithubAction } from "../hooks/useGithubAction";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const DetailPage = () => {
-  let { id } = useParams()
-  let navigate = useNavigate()
+  const { id } = useParams()
+  const navigate = useNavigate()
 
   const extendedFork = useGetExtendedFork(id)
   const mutation = useGithubAction()
-  
+
   const ref = useRef(null)
   const [areActionsVisible, setActionsVisible] = useState(false)
 
@@ -59,7 +57,7 @@ const DetailPage = () => {
                   <div className="flex flex-row items-center">
                     <img
                       className='h-16 px-2'
-                      src={aws}
+                      src={`../../assets/${extendedFork.data.provider}.png`}
                       alt={'logoImage'}
                     />
                     <div className="text-xl font-bold text-primary">{extendedFork.data.appName}</div>
@@ -161,9 +159,15 @@ const DetailPage = () => {
                       <div id="dropdownDivider" className={`absolute mt-11 z-10 w-44 rounded divide-y divide-gray-500 shadow-xl bg-dropdown ${!areActionsVisible && 'hidden'} `}>
                         <ul className="py-1 text-sm text-gray-200">
                           {extendedFork.data.actions.map((action) =>
-                            <li>
-                              <button onClick={() => handleActionButtonClicked(action)}
-                                className="block py-2 px-4 w-full text-start hover:bg-primaryContainer/[.60] text-white hover:text-primary"
+                            <li key={action.key}>
+                              <button
+                                disabled={
+                                  action.key == 'up' && extendedFork.data?.state == (ForkState.CREATED) ||
+                                  action.key == 'down' && extendedFork.data?.state == (ForkState.CREATED) ||
+                                  action.key == 'init' && extendedFork.data?.state != (ForkState.CREATED)
+                                }
+                                onClick={() => handleActionButtonClicked(action)}
+                                className="block py-2 px-4 w-full text-start hover:bg-primaryContainer/[.60] text-white hover:text-primary disabled:text-disabled"
                               >
                                 {action.name}
                               </button>
@@ -183,8 +187,14 @@ const DetailPage = () => {
 
                       <button
                         onClick={() => {
-                          if (extendedFork.data?.id) {
-                            navigate('/set_secrets/' + extendedFork.data?.id)
+                          if (extendedFork.data) {
+                            navigate(`/set_secrets/${extendedFork.data.id}`,
+                              {
+                                state: {
+                                  provider: extendedFork.data.provider
+                                }
+                              }
+                            )
                           }
                         }}
                         className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary col-span-1"
