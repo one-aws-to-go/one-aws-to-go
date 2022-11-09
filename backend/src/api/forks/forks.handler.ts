@@ -11,7 +11,7 @@ import {
 } from '../../model'
 import prisma from '../../prisma'
 import { buildJsonResponse } from '../../utils'
-import { createProviderSecrets, createSecrets } from './forks.utils'
+import { createProviderSecrets, createSecrets, isValidForkName } from './forks.utils'
 
 type ForkWithTemplate = Fork & { template: ForkTemplate }
 
@@ -73,6 +73,7 @@ export const postForkHandler: AuthorizedEventHandler = async (e) => {
       }
     })
   }
+
   const template = await prisma.forkTemplate.findUnique({ where: { id: templateId } })
   if (!template) {
     return buildJsonResponse(404, { message: `Template not found with ID: ${templateId}` })
@@ -80,7 +81,13 @@ export const postForkHandler: AuthorizedEventHandler = async (e) => {
 
   const existing = await prisma.fork.findFirst({ where: { userId: githubUser.id, templateId } })
   if (existing) {
-    return buildJsonResponse(400, { message: `Fork already exists with template ID: ${templateId}` })
+    return buildJsonResponse(400, { message: `The user already has a fork with template ID: ${templateId}` })
+  }
+
+  if (!isValidForkName(name)) {
+    return buildJsonResponse(400, {
+      message: `Invalid fork name: ${name} (the name must be lower-case, alphanumeric and between 3-10 characters)`
+    })
   }
 
   await github.createFork(e.githubToken, name, template)
