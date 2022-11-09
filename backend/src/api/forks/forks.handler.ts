@@ -81,7 +81,7 @@ export const postForkHandler: AuthorizedEventHandler = async (e) => {
 
   const existing = await prisma.fork.findFirst({ where: { userId: githubUser.id, templateId } })
   if (existing) {
-    return buildJsonResponse(400, { message: `Fork already exists with template ID: ${templateId}` })
+    return buildJsonResponse(400, { message: `The user already has a fork with template ID: ${templateId}` })
   }
 
   if (!isValidForkName(name)) {

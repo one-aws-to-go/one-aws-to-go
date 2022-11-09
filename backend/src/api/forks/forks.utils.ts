@@ -1,7 +1,7 @@
 import github from '../../github'
 import { AwsActionSecrets, ForkAwsSecretArgs, ForkTemplateProvider } from '../../model'
 
-const FORK_NAME_REGEX = /^[a-z0-9]+$/i
+const FORK_NAME_REGEX = /^[a-z0-9]+$/
 
 /**
  * Fork name must be lower-case, alphanumeric and between 3-10 characters.
