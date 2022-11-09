@@ -1,6 +1,19 @@
 import github from '../../github'
 import { AwsActionSecrets, ForkAwsSecretArgs, ForkTemplateProvider } from '../../model'
 
+const FORK_NAME_REGEX = /^[a-z0-9]+$/i
+
+/**
+ * Fork name must be lower-case, alphanumeric and between 3-10 characters.
+ */
+export const isValidForkName = (name: string): boolean => {
+  if (name.length < 3 || name.length > 10) {
+    return false
+  }
+
+  return FORK_NAME_REGEX.test(name)
+}
+
 export const createProviderSecrets = (
   provider: ForkTemplateProvider,
   appName: string,
