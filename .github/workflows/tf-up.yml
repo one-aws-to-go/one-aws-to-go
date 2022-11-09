@@ -24,6 +24,7 @@ jobs:
       run: |
         npm i && npm run build
     - name: 'Terraform Up'
+      id: tf-up
       working-directory: ./iac
       timeout-minutes: 20
       env:
@@ -32,5 +33,13 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         AWS_DEFAULT_OUTPUT: 'json'
         TF_VAR_appName: ${{ secrets.APP_NAME }}
-      run: |
-        ./tf-up.sh
+      run: >
+        ./tf-up.sh &&
+        DATABASE_URL=$(terraform -chdir=solution output db_url) &&
+        echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_OUTPUT &&
+    # DATABASE_URL env variable should already be populated!
+    - name: 'Apply DB Migrations'
+      working-directory: './backend'
+      run: >
+        export DATABASE_URL=${{ steps.tf-up.outputs.DATABASE_URL }} &&
+        npm run db:deploy
