@@ -16,6 +16,9 @@ import { createProviderSecrets, createSecrets, isValidForkName } from './forks.u
 
 type ForkWithTemplate = Fork & { template: ForkTemplate }
 
+// GitHub Action name -> Fork action information
+type GitHubForkActionMap = Map<string, { readonly key: string, readonly name: string }>
+
 const toApiFork = (f: ForkWithTemplate): ApiFork => ({
   id: f.id,
   appName: f.appName,
@@ -242,10 +245,13 @@ export const getForkHistoryHandler: AuthorizedEventHandler = async (e) => {
   }
 
   const runs = await github.getActionRuns(e.githubToken, fork.owner, fork.appName)
-  const actionNameMap = new Map<string, string>(fork.template.actions.map((a) => [a.githubActionName, a.name]))
+  const githubActionMap: GitHubForkActionMap = new Map(
+    fork.template.actions.map((a) => [a.githubActionName, { key: a.key, name: a.name }])
+  )
 
   const history: ForkActionRun[] = runs.map((r) => ({
-    name: actionNameMap.get(r.name) || 'unknown',
+    key: githubActionMap.get(r.name)?.key || 'unknown',
+    name: githubActionMap.get(r.name)?.name || 'Unknown',
     logsId: r.id,
     running: r.status !== 'completed',
     success: r.conclusion ? r.conclusion === 'success' : null,

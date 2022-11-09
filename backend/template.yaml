@@ -51,7 +51,7 @@ Resources:
         GetForkHistoryLogs:
           Type: Api
           Properties:
-            Path: /api/forks/{forkId}/history/logs/{logsId}
+            Path: /api/forks/{id}/history/logs/{logsId}
             Method: GET
 
 Outputs:

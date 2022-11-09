@@ -1,6 +1,7 @@
 import { pathToRegexp } from 'path-to-regexp'
 import {
   getForkHandler,
+  getForkHistoryHandler,
   getForksHandler,
   getSecretsHandler,
   postActionHandler,
@@ -39,7 +40,11 @@ const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
   },
   '/api/forks/:id/actions/:actionName': {
     POST: postActionHandler
+  },
+  '/api/forks/:id/history': {
+    GET: getForkHistoryHandler
   }
+  // TODO: Logs
 }
 
 export const getRouteHandler = (event: AuthorizedEvent): AuthorizedEventHandler => {
