@@ -8,8 +8,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:@typescript-eslint/recommended"
+    // "plugin:prettier/recommended"
   ],
   "rules": {
     "@typescript-eslint/quotes": ["warn", "single"], 
@@ -19,6 +19,7 @@
     "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "no-case-declarations": "off",
     "import/order": [
       "warn",
       {
@@ -35,12 +36,12 @@
           "caseInsensitive": true
         }
       }
-    ],
-    "prettier/prettier": [
-      "error",
-      {
-        "printWidth": 100
-      }
     ]
+    // "prettier/prettier": [
+    //   "error",
+    //   {
+    //     "printWidth": 120
+    //   }
+    // ]
   }
 }
