@@ -37,6 +37,6 @@ export const backendHandler = async (
   try {
     return await routeHandler(authorizedEvent)
   } catch (err) {
-    return buildJsonResponse(500, { message: `Unexpecter error: ${err}` })
+    return buildJsonResponse(500, { message: `${err}` })
   }
 }

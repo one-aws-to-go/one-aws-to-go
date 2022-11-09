@@ -43,6 +43,16 @@ Resources:
           Properties:
             Path: /api/forks/{id}/actions/{actionName} 
             Method: POST
+        GetForkHistory:
+          Type: Api
+          Properties:
+            Path: /api/forks/{id}/history
+            Method: GET
+        GetForkHistoryLogs:
+          Type: Api
+          Properties:
+            Path: /api/forks/{id}/history/logs/{logsId}
+            Method: GET
 
 Outputs:
   BackendFunction:

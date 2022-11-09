@@ -36,7 +36,7 @@ jobs:
       run: >
         ./tf-up.sh &&
         DATABASE_URL=$(terraform -chdir=solution output db_url) &&
-        echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_OUTPUT &&
+        echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_OUTPUT
     # DATABASE_URL env variable should already be populated!
     - name: 'Apply DB Migrations'
       working-directory: './backend'
