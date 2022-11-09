@@ -5,6 +5,7 @@ import {
   CreateForkArgs,
   ExtendedFork,
   Fork as ApiFork,
+  ForkActionRun,
   ForkAwsSecretArgs,
   ForkState,
   ForkTemplateProvider
@@ -222,4 +223,35 @@ export const postActionHandler: AuthorizedEventHandler = async (e) => {
   } catch (err) {
     return buildJsonResponse(503, { message: 'Could not trigger GitHub Action' })
   }
+}
+
+export const getForkHistoryHandler: AuthorizedEventHandler = async (e) => {
+  const forkId = Number(e.pathParameters?.id)
+  const githubUser = await github.getUser(e.githubToken)
+  const fork = await prisma.fork.findFirst({
+    where: { userId: githubUser.id, id: forkId },
+    include: {
+      template: {
+        include: { actions: true }
+      }
+    }
+  })
+
+  if (!fork) {
+    return buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
+  }
+
+  const runs = await github.getActionRuns(e.githubToken, fork.owner, fork.appName)
+  const actionNameMap = new Map<string, string>(fork.template.actions.map((a) => [a.githubActionName, a.name]))
+
+  const history: ForkActionRun[] = runs.map((r) => ({
+    name: actionNameMap.get(r.name) || 'unknown',
+    logsId: r.id,
+    running: r.status !== 'completed',
+    success: r.conclusion ? r.conclusion === 'success' : null,
+    startedAt: r.created_at,
+    updatedAt: r.updated_at
+  }))
+
+  return buildJsonResponse(200, history)
 }

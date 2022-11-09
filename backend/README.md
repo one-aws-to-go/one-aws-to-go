@@ -15,10 +15,12 @@ If the authorization header is missing, the response will automatically be **401
 | [`GET /templates`](#get-template) | Return all fork templates
 | [`GET /templates/<template_id>`](#get-templatestemplate_id) | Get a single fork template
 | [`GET /forks`](#get-forks) | Get all forks associated with the user and the application
-| [`GET /forks/<fork_id>`](#get-forksfork_id) | Get fork information
 | [`POST /forks`](#post-forks) | Create new fork |
+| [`GET /forks/<fork_id>`](#get-forksfork_id) | Get fork information
 | [`PUT /forks/<fork_id>/secrets`](#put-forksfork_idsecrets) | Set fork secrets for IaC |
 | [`POST /forks/<fork_id>/actions/<action_name>`](#post-forksfork_idactionaction_name) | Trigger GitHub IaC Action |
+| [`GET /forks/<fork_id>/history`](#get-forksfork_idhistory) | Get fork's GitHub IaC Action history |
+| [`GET /forks/<fork_id>/history/logs/<logs_id>`](#get-forksfork_idhistorylogslogs_id-todo) (TODO) | Get fork's GitHub IaC Action logs |
 
 ### **`GET /user`**
 
@@ -60,7 +62,22 @@ If the authorization header is missing, the response will automatically be **401
 | ----- | ----- | ----- |
 | **200** | Found forks | [`Fork[]`](./src/model.ts) |
 
+### **`POST /forks`**
+
+**Request body:** [CreateForkArgs](./src/model.ts)
+
+**NOTE:** Fork name must be must be lower-case, alphanumeric and between 3-10 characters!
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **201** | Created fork | [`ExtendedFork`](./src/model.ts) |
+| **400** | Validation failed | [`ErrorMessage`](./src/model.ts) |
+
 ### **`GET /forks/<fork_id>`**
+
+**Request route params:**
+- `fork_id`: Unique identifier of the fork.
 
 **Request body:** -
 
@@ -69,16 +86,6 @@ If the authorization header is missing, the response will automatically be **401
 | ----- | ----- | ----- |
 | **200** | Found fork | [`ExtendedFork`](./src/model.ts) |
 | **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
-
-### **`POST /forks`**
-
-**Request body:** [CreateForkArgs](./src/model.ts)
-
-**Responses:**
-| **Status** | **Description** | **Body** |
-| ----- | ----- | ----- |
-| **201** | Created fork | [`ExtendedFork`](./src/model.ts) |
-| **400** | Validation failed | [`ErrorMessage`](./src/model.ts) |
 
 ### **`PUT /forks/<fork_id>/secrets`**
 
@@ -113,6 +120,28 @@ The default template contains the following actions:
 | ----- | ----- | ----- |
 | **202** | Action triggered | - |
 | **503** | Action could not be triggered | [`ErrorMessage`](./src/model.ts) |
+
+### `GET /forks/<fork_id>/history`
+
+**Request route params:**
+- `fork_id`: Unique identifier of the fork.
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **200** | Found action history | [`ForkActionRun`](./src/model.ts) |
+
+### `GET /forks/<fork_id>/history/logs/<logs_id>` (TODO)
+
+**Request route params:**
+- `fork_id`: Unique identifier of the fork.
+- `logs_id`: Logs ID (see [`ForkActionRun.logsId`](./src/model.ts)).
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **200** | Action logs | TODO |
+
 
 ## Local Development
 

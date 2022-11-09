@@ -4,6 +4,7 @@ import axios, { AxiosRequestHeaders } from 'axios'
 import sodium from 'libsodium-wrappers'
 import {
   GitHubAction,
+  GitHubActionRun,
   GithubPublicKey,
   GitHubUser
 } from './model'
@@ -93,6 +94,12 @@ const enableActions = async (token: string, owner: string, repo: string) => {
   await axios.put(url, { enabled: true }, { headers: createGithubHeaders(token)})
 }
 
+const getActionRuns = async (token: string, owner: string, repo: string): Promise<GitHubActionRun[]> => {
+  const url = `${toGithubRepoUrl(owner, repo)}/actions/runs`
+  const response = await axios.get(url, { headers: createGithubHeaders(token) })
+  return response.data.workflow_runs || []
+}
+
 const getRepoPublicKey = async (
   token: string,
   repoOwner: string,
@@ -122,5 +129,6 @@ export default {
   getRepoSecrets,
   getActions,
   dispatchAction,
-  enableActions
+  enableActions,
+  getActionRuns
 }

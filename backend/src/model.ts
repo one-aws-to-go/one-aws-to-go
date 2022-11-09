@@ -44,6 +44,15 @@ export interface ExtendedFork extends Fork {
   // readonly actionsEnabled: boolean
 }
 
+export interface ForkActionRun {
+  readonly name: string
+  readonly logsId: number
+  readonly running: boolean
+  readonly success: boolean | null
+  readonly startedAt: string
+  readonly updatedAt: string
+}
+
 /**
  * `POST /forks` request body
  */
@@ -92,6 +101,15 @@ export interface GitHubAction {
   readonly id: number
   readonly name: string
   readonly [key: string]: any
+}
+
+export interface GitHubActionRun {
+  readonly id: number
+  readonly name: string
+  readonly status: 'completed' | 'in_progress'
+  readonly conclusion: 'success' | 'failure' | null
+  readonly created_at: string
+  readonly updated_at: string
 }
 
 export interface CommonActionSecrets {
