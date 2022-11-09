@@ -11,7 +11,3 @@ terraform -chdir=solution init \
 
 terraform -chdir=solution plan -input=false
 terraform -chdir=solution apply -auto-approve
-
-# For database migrations
-export DATABASE_URL=$(terraform -chdir=solution output db_url)
-export TEST="TEST"

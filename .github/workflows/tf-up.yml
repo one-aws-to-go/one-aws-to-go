@@ -35,6 +35,8 @@ jobs:
         TF_VAR_appName: ${{ secrets.APP_NAME }}
       run: >
         ./tf-up.sh &&
+        DATABASE_URL=$(terraform -chdir=solution output db_url) &&
+        TEST="qwerty" &&
         echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_OUTPUT &&
         echo "TEST: $TEST"
     # DATABASE_URL env variable should already be populated!
