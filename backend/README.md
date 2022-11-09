@@ -99,6 +99,7 @@ If the authorization header is missing, the response will automatically be **401
 | ----- | ----- | ----- |
 | **204** | Secrets set | - |
 | **400** | Validation failed | [`ErrorMessage`](./src/model.ts) |
+| **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
 
 ### **`POST /forks/<fork_id>/actions/<action_name>`**
 
@@ -119,6 +120,7 @@ The default template contains the following actions:
 | **Status** | **Description** | **Body** |
 | ----- | ----- | ----- |
 | **202** | Action triggered | - |
+| **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
 | **503** | Action could not be triggered | [`ErrorMessage`](./src/model.ts) |
 
 ### `GET /forks/<fork_id>/history`
@@ -129,7 +131,8 @@ The default template contains the following actions:
 **Responses:**
 | **Status** | **Description** | **Body** |
 | ----- | ----- | ----- |
-| **200** | Found action history | [`ForkActionRun`](./src/model.ts) |
+| **200** | Found action history | [`ForkActionRun[]`](./src/model.ts) |
+| **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
 
 ### `GET /forks/<fork_id>/history/logs/<logs_id>` (TODO)
 
@@ -141,7 +144,7 @@ The default template contains the following actions:
 | **Status** | **Description** | **Body** |
 | ----- | ----- | ----- |
 | **200** | Action logs | TODO |
-
+| **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
 
 ## Local Development
 
