@@ -120,7 +120,7 @@ export const putSecretsHandler: AuthorizedEventHandler = async (e) => {
   )
 
   if (!secrets) {
-    return buildJsonResponse(400, { message: `Invalid secrets` })
+    return buildJsonResponse(400, { message: 'Invalid secrets' })
   }
 
   await createSecrets(
@@ -183,6 +183,8 @@ export const postActionHandler: AuthorizedEventHandler = async (e) => {
 
   if (fork.state === ForkState.CREATED && forkAction.toState !== ForkState.INITIALIZED) {
     return buildJsonResponse(400, { messsage: 'Fork must first be initialized!' })
+  } else if (fork.state !== ForkState.CREATED && forkAction.toState === ForkState.INITIALIZED) {
+    return buildJsonResponse(400, { message: 'Fork has already been initialized!' })
   }
 
   if (!fork.actionsEnabled) {
