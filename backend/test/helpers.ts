@@ -1,9 +1,11 @@
 import { ForkState, ForkTemplateProvider } from '../src/model'
 import prisma from '../src/prisma'
 
-const seed = async () => {
+async function testSeed() {
+  console.log('Seeding db for tests...')
   const { id } = await prisma.forkTemplate.create({
     data: {
+      id: 1,
       owner: 'one-aws-to-go',
       repo: 'one-aws-to-go',
       provider: ForkTemplateProvider.AWS,
@@ -41,4 +43,11 @@ const seed = async () => {
   })
 }
 
-seed()
+export async function resetDb() {
+  console.log('Clearing database...')
+  await prisma.fork.deleteMany({})
+  await prisma.user.deleteMany({})
+  await prisma.forkAction.deleteMany({})
+  await prisma.forkTemplate.deleteMany({})
+  await testSeed()
+}
