@@ -1,26 +1,35 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 
 import { ForkAwsSecretArgs } from "../models/ForkAwsSecretArgs"
 import NavBar from "../components/NavBar"
-import aws from '../assets/aws.png'
+import aws from '../../img/aws.png'
 import { useSetSecrets } from "../hooks/useSetSecrets"
 import { useState } from "react"
 
+export interface SetSecretsPageProps {
+  provider: string
+}
+
 const SetSecretsPage = () => {
-  let { id } = useParams()
-  let navigate = useNavigate()
+  const { id } = useParams()
+  const { provider } = useLocation().state as SetSecretsPageProps
+
+  const navigate = useNavigate()
 
   const [secrets, setSecrets] = useState<ForkAwsSecretArgs>({
     awsAccessKey: '',
     awsSecretKey: '',
-    awsDefaultRegion: 'us-west'
+    awsDefaultRegion: 'eu-west-1'
   })
 
-  const { isFetching, refetch } = useSetSecrets(id, secrets)
+  const mutation = useSetSecrets()
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    refetch()
+    mutation.mutate({
+      forkId: id,
+      secrets: secrets
+    })
   };
 
   return (
@@ -33,7 +42,7 @@ const SetSecretsPage = () => {
           <div className="flex flex-row items-center">
             <img
               className='h-16 px-2'
-              src={aws}
+              src={`../../assets/${provider}.png`}
               alt={'logoImage'}
             />
             <div className="text-xl font-bold text-primary">Secrets</div>
@@ -49,8 +58,12 @@ const SetSecretsPage = () => {
                   value={secrets.awsDefaultRegion}
                   onChange={(event) => setSecrets({ ...secrets, awsDefaultRegion: event.target.value })}
                   className="form-select mt-1  w-full bg-primaryContainer text-white   focus:border-primary focus:ring-0 placeholder:text-sm">
-                  <option value="us-west">us-west</option>
-                  <option value="us-east">us-east</option>
+                  <option value="eu-west-1">eu-west-1</option>
+                  <option value="eu-west-2">eu-west-2</option>
+                  <option value="us-west-1">us-west-1</option>
+                  <option value="us-west-2">us-west-2</option>
+                  <option value="us-east-1">us-east-1</option>
+                  <option value="us-east-2">us-east-2</option>
                 </select>
               </div>
 
@@ -58,7 +71,6 @@ const SetSecretsPage = () => {
                 <div className="text-white text-xs font-bold">Access key (*)</div>
                 <input
                   className="mt-1 block w-full bg-primaryContainer text-white focus:border-primary focus:ring-0 placeholder:text-sm"
-                  id='token'
                   type='text'
                   placeholder='Access key'
                   onChange={(event) => setSecrets({ ...secrets, awsAccessKey: event.target.value })}
@@ -69,8 +81,7 @@ const SetSecretsPage = () => {
                 <div className="text-white text-xs font-bold">Secret key (*)</div>
                 <input
                   className="mt-1 block w-full bg-primaryContainer text-white focus:border-primary focus:ring-0 placeholder:text-sm"
-                  id='token'
-                  type='text'
+                  type='password'
                   placeholder='Secret key'
                   onChange={(event) => setSecrets({ ...secrets, awsSecretKey: event.target.value })}
                   value={secrets.awsSecretKey} />
@@ -83,7 +94,7 @@ const SetSecretsPage = () => {
                 onClick={submitForm}
                 className="bg-primaryContainer text-white p-2 hover:bg-primaryContainer/60 hover:text-primary">
                 <div className="flex flex-row space-x-2 justify-center items-center">
-                  {isFetching ? (
+                  {mutation.isLoading ? (
                     <div role="status">
                       <svg aria-hidden="true" className="w-6 h-6 text-primaryContainer animate-spin fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"></path>

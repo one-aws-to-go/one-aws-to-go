@@ -4,11 +4,14 @@ import { Disclosure } from '@headlessui/react';
 import { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useQueryClient } from 'react-query';
 
 const NavBar = () => {
   const [, , removeCookie] = useCookies<string>([
     'Authorization',
   ]);
+
+  const queryClient = useQueryClient()
 
   const links = [
     { name: 'Home', to: '/home', current: true },
@@ -21,6 +24,7 @@ const NavBar = () => {
 
   const handleLogout = () => {
     removeCookie('Authorization');
+    queryClient.removeQueries()
   };
 
   return (

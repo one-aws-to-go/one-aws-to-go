@@ -1,18 +1,19 @@
+import { validateForkTemplates, validateForks } from "../models/Fork";
+
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useQuery } from "react-query";
 import { validateErrorMessage } from "../models/ErrorMessage";
-import { validateExtendedFork } from "../models/Fork";
 
-export const useGetExtendedFork = (id: string | undefined) => {
-  return useQuery([`extendedFork/${id}`], async () => {
-    const response = await axios.get(`/api/forks/${id}`);
+export const useGetForkTemplates = () => {
+  return useQuery(["forkTemplates"], async () => {
+    const response = await axios.get('/api/templates');
 
-    if (validateExtendedFork(response.data)) {
+    if (validateForkTemplates(response.data)) {
       return response.data
     }
     else {
-      console.log(validateExtendedFork.errors);
+      console.log(validateForks.errors);
       toast.error('Unknown error occurred, please contact administrator [SCHEMA]')
     }
   }, {

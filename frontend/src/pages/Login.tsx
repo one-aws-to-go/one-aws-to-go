@@ -5,7 +5,7 @@ import { useLogin } from '../hooks/useLogin';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [token, setToken] = useState<string>('');
   const [cookies,] = useCookies<string>(['Authorization']);
   const { isFetching, refetch } = useLogin(token)

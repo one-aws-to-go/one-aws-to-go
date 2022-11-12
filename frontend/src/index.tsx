@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: 'create_fork',
+    path: 'create_fork/:id',
     element: (
       <ProtectedRoute>
         <CreateForkPage />

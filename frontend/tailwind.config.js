@@ -19,13 +19,15 @@ module.exports = {
         15: '.15'
       },
       backgroundImage: {
-        'office': "url('/img/background_image.jpg')",
+        'office': "url('/assets/background_image.jpg')",
       },
+      
       colors: {
         white: "#ffffff",
         divider: "#c2c2c2",
         primary: "#f39c12",
         primaryContainer: "#333333",
+        dropdown: '#414141',
         surface: "#212121",
         success: "#388E3C",
         error: "#b00d20",
