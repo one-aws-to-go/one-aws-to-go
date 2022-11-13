@@ -1,4 +1,4 @@
-import { ForkState, ForkTemplateProvider } from '../src/model'
+import { AuthorizedEvent, ForkState, ForkTemplateProvider } from '../src/model'
 import prisma from '../src/prisma'
 
 async function testSeed() {
@@ -50,4 +50,59 @@ export async function resetDb() {
   await prisma.forkAction.deleteMany({})
   await prisma.forkTemplate.deleteMany({})
   await testSeed()
+}
+
+export function getMockAuthorizedEvent(
+  body?: any,
+  pathParameters?: any
+): AuthorizedEvent {
+  return {
+    body,
+    pathParameters,
+    githubToken: 'OsaipaKoodata'
+  } as AuthorizedEvent
+}
+
+export function getMockGithubUserFields(id = 1) {
+  return {
+    id,
+    login: 'test',
+    name: 'test',
+    avatarUrl: 'test'
+  }
+}
+
+export async function createMockFork(
+  userId = 1,
+  templateId = 1,
+  names: {
+    appName: string
+    owner: string
+  } = {
+    appName: 'test',
+    owner: 'test'
+  }
+) {
+  return prisma.fork.create({
+    data: {
+      appName: names.appName,
+      owner: names.owner,
+      userId,
+      state: ForkState.CREATED,
+      templateId
+    },
+    include: {
+      template: {
+        include: { actions: true }
+      }
+    }
+  })
+}
+
+export async function createMockUser(githubId = 1) {
+  return prisma.user.create({
+    data: {
+      githubId
+    }
+  })
 }
