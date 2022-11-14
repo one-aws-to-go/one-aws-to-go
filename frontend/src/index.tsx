@@ -3,6 +3,7 @@ import './index.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+import ActionPage from './pages/ActionPage';
 import { CookiesProvider } from 'react-cookie';
 import CreateForkPage from './pages/CreateForkPage';
 import DetailPage from './pages/DetailPage';
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <SetSecretsPage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: 'actions/:id',
+    element: (
+      <ProtectedRoute>
+        <ActionPage />
       </ProtectedRoute>
     )
   },
