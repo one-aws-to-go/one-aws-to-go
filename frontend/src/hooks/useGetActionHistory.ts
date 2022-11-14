@@ -6,7 +6,7 @@ import { validateExtendedFork } from "../models/Fork";
 import { validateForkActionsHistory } from "../models/ForkActionRun";
 
 export const useGetActionHistory = (id: string | undefined) => {
-  return useQuery([`forkAction/${id}`], async () => {
+  return useQuery([`forks/${id}/history`], async () => {
     const response = await axios.get(`/api/forks/${id}/history`);
 
     if (validateForkActionsHistory(response.data)) {

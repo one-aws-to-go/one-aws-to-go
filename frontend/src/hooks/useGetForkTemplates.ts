@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import { validateErrorMessage } from "../models/ErrorMessage";
 
 export const useGetForkTemplates = () => {
-  return useQuery(["forkTemplates"], async () => {
+  return useQuery(["templates"], async () => {
     const response = await axios.get('/api/templates');
 
     if (validateForkTemplates(response.data)) {

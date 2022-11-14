@@ -8,7 +8,7 @@ import { validateGithubUser } from "../models/GithubUser";
 export const useLogin = (token: string) => {
   const [, setCookie] = useCookies<string>(['Authorization']);
 
-  const login = useQuery(["login"], async () => {
+  const login = useQuery(["user"], async () => {
     axios.defaults.headers.common['Authorization'] = `bearer ${token}`
 
     const response = await axios('/api/user');

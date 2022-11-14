@@ -23,9 +23,9 @@ export const useSetSecrets = () => {
       navigate(`/details/${request.forkId}`)
 
       // Update extended fork secrets in cache
-      const extendedFork = queryClient.getQueryData<ExtendedFork>(`extendedFork/${request.forkId}`)
+      const extendedFork = queryClient.getQueryData<ExtendedFork>(`forks/${request.forkId}`)
       if (extendedFork) {
-        queryClient.setQueryData(`extendedFork/${request.forkId}`, {
+        queryClient.setQueryData(`forks/${request.forkId}`, {
           ...extendedFork,
           secretsSet: true
         })
