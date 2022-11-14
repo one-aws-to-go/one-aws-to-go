@@ -106,3 +106,12 @@ export async function createMockUser(githubId = 1) {
     }
   })
 }
+
+export async function setForkSecrets(forkId: number) {
+  return prisma.fork.update({
+    where: { id: forkId },
+    data: {
+      secretsSet: true
+    }
+  })
+}
