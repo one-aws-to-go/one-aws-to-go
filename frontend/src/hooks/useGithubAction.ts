@@ -39,6 +39,9 @@ export const useGithubAction = () => {
         })
       }
     },
+    onSuccess: (data, variables) => {
+      queryClient.refetchQueries(`forkAction/${variables.forkId}`)
+    },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         let data = error.response?.data
