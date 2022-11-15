@@ -31,13 +31,16 @@ export const useGithubAction = () => {
       toast.success(`Action (${request.action.key}) executed succesfully!`)
 
       // Update extended fork state
-      const extendedFork = queryClient.getQueryData<ExtendedFork>(`extendedFork/${request.forkId}`)
+      const extendedFork = queryClient.getQueryData<ExtendedFork>(`forks/${request.forkId}`)
       if (extendedFork) {
         queryClient.setQueryData(`extendedFork/${request.forkId}`, {
           ...extendedFork,
           state: getForkStateFromAction(request.action)
         })
       }
+    },
+    onSuccess: (data, variables) => {
+      queryClient.refetchQueries(`forks/${variables.forkId}/history`)
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {

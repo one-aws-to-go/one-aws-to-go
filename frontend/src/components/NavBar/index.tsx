@@ -15,7 +15,6 @@ const NavBar = () => {
 
   const links = [
     { name: 'Home', to: '/home', current: true },
-    { name: 'Logs', to: '/logs', current: true },
   ];
 
   function classNames(...classes: any[]) {
