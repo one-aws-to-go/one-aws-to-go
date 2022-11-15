@@ -1,6 +1,7 @@
 import { useLocation, useParams } from 'react-router-dom';
 
 import NavBar from '../components/NavBar';
+import NavBarWrapper from '../components/NavBarWrapper';
 import { useCreateFork } from '../hooks/useCreateFork';
 import { useState } from 'react';
 import { validateExtendedFork } from '../models/Fork';
@@ -27,11 +28,10 @@ const CreateForkPage = () => {
     }
 
     return (
-        <div className='w-screen h-screen bg-repeat bg-surface flex flex-col '>
-            <NavBar />
+        <NavBarWrapper>
             <form
                 onSubmit={onForkClicked}
-                className='flex flex-1 flex-col items-center justify-center'>
+                className='flex flex-col h-full justify-center items-center'>
                 <div className='flex items-center'>
                     <img className='w-32' src={`../../assets/${provider}.png`} />
                     <p className='text-primary font-bold'>Create a project</p>
@@ -47,7 +47,7 @@ const CreateForkPage = () => {
                     />
                 </div>
                 <div className='mt-2'>
-                    <button className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white p-2 hover:text-primary rounded-lg">
+                    <button className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white p-2 hover:text-primary rounded-md">
                         <div className="flex flex-row space-x-2 justify-center items-center">
                             {mutation.isLoading ? (
                                 <div role="status">
@@ -71,7 +71,7 @@ const CreateForkPage = () => {
                     </button>
                 </div>
             </form >
-        </div >
+        </NavBarWrapper>
     );
 };
 

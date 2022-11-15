@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useRef, useState } from "react";
 
 import NavBar from "../components/NavBar";
+import NavBarWrapper from "../components/NavBarWrapper";
 import aws from '../../assets/aws.png'
 import { useGetExtendedFork } from "../hooks/useGetExtendedFork";
 import { useGithubAction } from "../hooks/useGithubAction";
@@ -31,9 +32,8 @@ const DetailPage = () => {
   }
 
   return (
-    <div className='flex flex-col bg-surface h-screen'>
-      <NavBar />
-      <div className="flex flex-col h-screen justify-center items-center">
+    <NavBarWrapper>
+      <div className="flex flex-col h-full justify-center items-center">
         {extendedFork.isLoading ? (
           <div role="status">
             <svg aria-hidden="true" className="w-8 h-8 text-primaryContainer animate-spin fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -136,7 +136,7 @@ const DetailPage = () => {
                         onClick={() => {
                           navigate(`/actions/${id}`)
                         }}
-                        className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary rounded-lg">
+                        className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary rounded-md">
                         <div className="flex flex-row space-x-2 justify-center items-center">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -158,7 +158,7 @@ const DetailPage = () => {
                             )
                           }
                         }}
-                        className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary col-span-1 rounded-lg"
+                        className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary col-span-1 rounded-md"
                       >
                         <div className="flex flex-row space-x-2 justify-center items-center">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 fill-white">
@@ -168,7 +168,7 @@ const DetailPage = () => {
                         </div>
                       </button>
 
-                      <button className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary col-span-1 rounded-lg">
+                      <button className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary col-span-1 rounded-md">
                         <div className="flex flex-row space-x-2 justify-center items-center">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 fill-error">
                             <path fillRule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clipRule="evenodd" />
@@ -181,7 +181,7 @@ const DetailPage = () => {
                         target='_blank'
                         href={`https://github.com/${extendedFork.data.owner}/${extendedFork.data.appName}`}
                         rel='noreferrer'
-                        className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary col-span-3 rounded-lg">
+                        className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white  p-2 hover:text-primary col-span-3 rounded-md">
                         <div className="flex flex-row space-x-2 justify-center items-center">
                           <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -194,7 +194,7 @@ const DetailPage = () => {
                 </div>
               ) : null}
       </div>
-    </div >
+    </NavBarWrapper>
   )
 };
 
