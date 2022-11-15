@@ -56,7 +56,7 @@ const SetSecretsPage = () => {
               <select
                 value={secrets.awsDefaultRegion}
                 onChange={(event) => setSecrets({ ...secrets, awsDefaultRegion: event.target.value })}
-                className="form-select mt-1  w-full bg-primaryContainer text-white   focus:border-primary focus:ring-0 placeholder:text-sm">
+                className="input-primary">
                 <option value="eu-west-1">eu-west-1</option>
                 <option value="eu-west-2">eu-west-2</option>
                 <option value="us-west-1">us-west-1</option>
@@ -69,7 +69,7 @@ const SetSecretsPage = () => {
             <div>
               <div className="text-white text-xs font-bold">Access key (*)</div>
               <input
-                className="mt-1 block w-full bg-primaryContainer text-white focus:border-primary focus:ring-0 placeholder:text-sm"
+                className="input-primary"
                 type='text'
                 placeholder='Access key'
                 onChange={(event) => setSecrets({ ...secrets, awsAccessKey: event.target.value })}
@@ -79,7 +79,7 @@ const SetSecretsPage = () => {
             <div>
               <div className="text-white text-xs font-bold">Secret key (*)</div>
               <input
-                className="mt-1 block w-full bg-primaryContainer text-white focus:border-primary focus:ring-0 placeholder:text-sm"
+                className="input-primary"
                 type='password'
                 placeholder='Secret key'
                 onChange={(event) => setSecrets({ ...secrets, awsSecretKey: event.target.value })}
@@ -91,7 +91,7 @@ const SetSecretsPage = () => {
           <div className="grid grid-flow-row-dense grid-cols-2 grid-rows-1 gap-2">
             <button
               onClick={submitForm}
-              className="bg-primaryContainer text-white p-2 hover:bg-primaryContainer/60 hover:text-primary rounded-md">
+              className="btn-primary">
               <div className="flex flex-row space-x-2 justify-center items-center">
                 {mutation.isLoading ? (
                   <div role="status">
@@ -113,7 +113,7 @@ const SetSecretsPage = () => {
 
             <button onClick={() => {
               navigate(-1)
-            }} className="bg-primaryContainer  p-2 hover:bg-primaryContainer/60 text-white hover:text-primary rounded-md">
+            }} className="btn-primary">
               <div className="flex flex-row space-x-2 justify-center items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 fill-error">
                   <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clipRule="evenodd" />

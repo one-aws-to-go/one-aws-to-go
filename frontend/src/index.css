@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind variants;
+
+@layer components {
+  .btn-primary {
+    @apply bg-primaryContainer rounded-md enabled:hover:bg-primaryContainer/[.60] text-white p-2 enabled:hover:text-primary disabled:text-white/20;
+  }
+  .a-primary {
+    @apply bg-primaryContainer rounded-md hover:bg-primaryContainer/[.60] text-white p-2 hover:text-primary;
+  }
+  .input-primary {
+    @apply mt-1 block w-full bg-primaryContainer text-white focus:border-primary focus:ring-0 placeholder:text-sm disabled:text-white/20;
+  }
+}

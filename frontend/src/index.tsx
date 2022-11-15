@@ -3,11 +3,10 @@ import './index.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import ActionPage from './pages/ActionPage';
 import { CookiesProvider } from 'react-cookie';
 import CreateForkPage from './pages/CreateForkPage';
-import DetailPage from './pages/DetailPage';
 import { ErrorPage } from './pages/ErrorPage';
+import ForkPage from './pages/ForkPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Logs from './pages/Logs';
@@ -48,10 +47,10 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: 'actions/:id',
+    path: 'fork/:id',
     element: (
       <ProtectedRoute>
-        <ActionPage />
+        <ForkPage />
       </ProtectedRoute>
     )
   },
@@ -60,14 +59,6 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Logs />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: 'details/:id',
-    element: (
-      <ProtectedRoute>
-        <DetailPage />
       </ProtectedRoute>
     ),
   },

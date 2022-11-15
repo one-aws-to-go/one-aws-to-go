@@ -39,7 +39,7 @@ const CreateForkPage = () => {
                 <div>
                     <p className='text-white mb-1 font-semibold'>Project name (*)</p>
                     <input
-                        className='block w-full bg-primaryContainer text-white focus:border-primary focus:ring-0 placeholder:text-sm'
+                        className='input-primary'
                         id="project name"
                         type="text"
                         placeholder="Your fork name"
@@ -47,7 +47,7 @@ const CreateForkPage = () => {
                     />
                 </div>
                 <div className='mt-2'>
-                    <button className="bg-primaryContainer hover:bg-primaryContainer/[.60] text-white p-2 hover:text-primary rounded-md">
+                    <button className="btn-primary">
                         <div className="flex flex-row space-x-2 justify-center items-center">
                             {mutation.isLoading ? (
                                 <div role="status">

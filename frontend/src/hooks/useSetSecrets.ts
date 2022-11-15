@@ -20,7 +20,7 @@ export const useSetSecrets = () => {
     mutationFn: async (request: SetSecretsRequest) => {
       await axios.put(`/api/forks/${request.forkId}/secrets`, request.secrets);
       toast.success('Secrets updated succesfully!')
-      navigate(`/details/${request.forkId}`)
+      navigate(`/fork/${request.forkId}`)
 
       // Update extended fork secrets in cache
       const extendedFork = queryClient.getQueryData<ExtendedFork>(`forks/${request.forkId}`)

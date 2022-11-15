@@ -31,7 +31,6 @@ module.exports = {
         surface: "#212121",
         success: "#388E3C",
         error: "#b00d20",
-        disabled: "#2E2E2E"
       },
     },
   },
