@@ -4,6 +4,7 @@ import { ForkAwsSecretArgs } from "../models/ForkAwsSecretArgs"
 import NavBar from "../components/NavBar"
 import NavBarWrapper from "../components/NavBarWrapper"
 import aws from '../../img/aws.png'
+import toast from "react-hot-toast"
 import { useSetSecrets } from "../hooks/useSetSecrets"
 import { useState } from "react"
 
@@ -27,11 +28,25 @@ const SetSecretsPage = () => {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate({
-      forkId: id,
-      secrets: secrets
-    })
+    if (validateSecrets()) {
+      mutation.mutate({
+        forkId: id,
+        secrets: secrets
+      })
+    }
   };
+
+  const validateSecrets = (): boolean => {
+    if (secrets.awsAccessKey.length === 0) {
+      toast.error("You must provide aws accesss key!")
+      return false
+    }
+    if (secrets.awsSecretKey.length === 0) {
+      toast.error("You must provide aws secret key!")
+      return false
+    }
+    return true
+  }
 
   return (
     <NavBarWrapper>
@@ -52,7 +67,7 @@ const SetSecretsPage = () => {
           <div
             className="grid grid-flow-row grid-cols-1 auto-rows-max gap-2">
             <div>
-              <div className="text-white text-xs font-bold">Default region (*)</div>
+              <div className="text-white text-xs font-bold">Default region</div>
               <select
                 value={secrets.awsDefaultRegion}
                 onChange={(event) => setSecrets({ ...secrets, awsDefaultRegion: event.target.value })}
@@ -67,7 +82,7 @@ const SetSecretsPage = () => {
             </div>
 
             <div>
-              <div className="text-white text-xs font-bold">Access key (*)</div>
+              <div className="text-white text-xs font-bold">Access key</div>
               <input
                 className="input-primary"
                 type='text'
@@ -77,7 +92,7 @@ const SetSecretsPage = () => {
             </div>
 
             <div>
-              <div className="text-white text-xs font-bold">Secret key (*)</div>
+              <div className="text-white text-xs font-bold">Secret key</div>
               <input
                 className="input-primary"
                 type='password'
