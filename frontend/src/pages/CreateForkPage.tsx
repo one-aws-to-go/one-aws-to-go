@@ -37,7 +37,7 @@ const CreateForkPage = () => {
                     <p className='text-primary font-bold'>Create a project</p>
                 </div>
                 <div>
-                    <p className='text-white mb-1 font-semibold'>Project name (*)</p>
+                    <div className="text-white text-xs font-bold">Project name</div>
                     <input
                         className='input-primary'
                         id="project name"

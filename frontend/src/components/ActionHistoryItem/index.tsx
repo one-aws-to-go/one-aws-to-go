@@ -12,15 +12,14 @@ const ActionHistoryItem: FC<ActionHistoryItemProps> = ({ item }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
   const elapsedTime = (milliSeconds: number): string => {
-    let distance = `${formatDistanceToNowStrict(new Date(milliSeconds))} ago`
+    let distance = `${formatDistanceToNowStrict(new Date(milliSeconds), {addSuffix: true})}`
     return distance
   }
 
   return (
-    <div className='flex flex-col bg-primaryContainer text-white rounded-md  hover:cursor-pointer p-2'>
+    <div onClick={() => setIsExpanded(!isExpanded)} className='flex flex-col bg-primaryContainer text-white rounded-md  hover:cursor-pointer'>
       <div
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="flex flex-row flex-none justify-between hover:text-primary">
+        className="flex flex-row flex-none justify-between hover:text-primary p-2">
 
         <div className="flex flex-row items-center space-x-2">
           {item.running ? (

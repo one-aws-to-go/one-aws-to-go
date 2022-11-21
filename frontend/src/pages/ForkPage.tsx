@@ -56,7 +56,7 @@ const ForkPage = () => {
               <div className="text-3xl font-bold text-primary pt-2">{extendedFork.data.appName.toLocaleUpperCase()}</div>
               <div className="text-xl font-bold text-primary">Details</div>
 
-              <div className='flex flex-row flex-wrap items-center text-white gap-2 h-96'>
+              <div className='flex flex-row flex-wrap items-center text-white gap-2'>
                 <div className='flex flex-col border border-primaryContainer  flex-none items-center justify-center rounded-md p-4 h-20'>
                   <p className='font-bold'>Status</p>
                   <p>{extendedFork.data.state.toUpperCase()}</p>
@@ -76,6 +76,12 @@ const ForkPage = () => {
                     src={`../../assets/${extendedFork.data.provider}.png`}
                     alt={'logoImage'}
                   />
+                </div>
+                <div className='flex flex-col border border-primaryContainer flex-none items-center justify-center rounded-md p-4 h-20'>
+                  <p className='font-bold'>Template ID</p>
+                  <div className='inline-flex items-center justify-center whitespace-nowrap w-6 h-6 bg-black/20 rounded-full text-sm text-white'>
+                    {extendedFork.data.id}
+                  </div>
                 </div>
               </div>
 
@@ -126,7 +132,7 @@ const ForkPage = () => {
                       setActionsVisible(!areActionsVisible)
                     }}
                     className="btn-primary">
-                    <div className="flex flex-row space-x-2 justify-center items-center">
+                    <div className="flex flex-row space-x-2 items-center">
                       <div className="text-sm font-bold">Actions</div>
                       {mutation.isLoading ? (
                         <div role="status">
@@ -162,9 +168,9 @@ const ForkPage = () => {
 
               {/* Action history items */}
               <div className='space-y-2 pb-2'>
-                {actionHistory.data.map((item, index) => (
-                  <ActionHistoryItem key={index} item={item} />
-                ))}
+                {actionHistory.data.map((item, index) => {
+                  return <ActionHistoryItem key={index} item={item} />
+                })}
               </div>
             </>
           ) : null
