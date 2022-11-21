@@ -81,7 +81,7 @@ export enum ForkState {
 export enum ForkTemplateProvider {
   AWS = 'aws',
   AZURE = 'azure', // TODO: Not used!
-  GCP = 'gcp'      // TODO: Not used!
+  GCP = 'gcp' // TODO: Not used!
 }
 
 // INTERNAL DATA MODELS

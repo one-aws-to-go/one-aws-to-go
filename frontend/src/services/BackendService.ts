@@ -11,10 +11,10 @@ class BackendService {
   private backendURL = "TODO";
   private api: Axios;
 
-  constructor(userId: string) {
+  constructor(accessToken: string) {
     this.api = new Axios({
       baseURL: this.backendURL,
-      params: { userId },
+      headers: { authorization: `Bearer ${accessToken}` },
     });
     return this;
   }

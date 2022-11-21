@@ -1,5 +1,5 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
-import { getAuthTokenFromEvent } from './github'
+import { getGithubAccessTokenFromEvent } from './auth0'
 import { AuthorizedEvent } from './model'
 import { getRouteHandler } from './routes'
 import { buildJsonResponse } from './utils'
@@ -10,7 +10,7 @@ export const backendHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   ctx.callbackWaitsForEmptyEventLoop = false
   // Check that GitHub token exists as the first thing
-  const token = getAuthTokenFromEvent(e)
+  const token = await getGithubAccessTokenFromEvent(e)
   if (!token) {
     return buildJsonResponse(401, { message: 'Invalid GitHub token' })
   }

@@ -2,18 +2,10 @@ import { ForkTemplate } from '@prisma/client'
 import { APIGatewayEvent } from 'aws-lambda'
 import axios, { AxiosRequestHeaders } from 'axios'
 import sodium from 'libsodium-wrappers'
-import {
-  GitHubAction,
-  GithubPublicKey,
-  GitHubUser
-} from './model'
+import { getGithubAccessTokenFromEvent } from './auth0'
+import { GitHubAction, GithubPublicKey, GitHubUser } from './model'
 
 export const GITHUB_BASE_URL = 'https://api.github.com'
-
-// Cloud API Gateway uses "authorization"!
-export const getAuthTokenFromEvent = (e: APIGatewayEvent): string | undefined => {
-  return e.headers.Authorization || e.headers.authorization
-}
 
 const toGithubRepoUrl = (owner: string, name: string) => `${GITHUB_BASE_URL}/repos/${owner}/${name}`
 
@@ -90,7 +82,7 @@ const dispatchAction = async (
 const enableActions = async (token: string, owner: string, repo: string) => {
   // TODO: Find out why this does not work?
   const url = `${toGithubRepoUrl(owner, repo)}/actions/permissions`
-  await axios.put(url, { enabled: true }, { headers: createGithubHeaders(token)})
+  await axios.put(url, { enabled: true }, { headers: createGithubHeaders(token) })
 }
 
 const getRepoPublicKey = async (
