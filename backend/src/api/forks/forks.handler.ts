@@ -5,19 +5,20 @@ import {
   CreateForkArgs,
   ExtendedFork,
   Fork as ApiFork,
-  ForkActionRun,
   ForkAwsSecretArgs,
   ForkState,
   ForkTemplateProvider
 } from '../../model'
 import prisma from '../../prisma'
 import { buildJsonResponse } from '../../utils'
-import { createProviderSecrets, createSecrets, isValidForkName } from './forks.utils'
+import {
+  createProviderSecrets,
+  createSecrets,
+  githubActionRunToForkActionRun,
+  isValidForkName
+} from './forks.utils'
 
 type ForkWithTemplate = Fork & { template: ForkTemplate }
-
-// GitHub Action name -> Fork action information
-type GitHubForkActionMap = Map<string, { readonly key: string, readonly name: string }>
 
 const toApiFork = (f: ForkWithTemplate): ApiFork => ({
   id: f.id,
@@ -244,20 +245,13 @@ export const getForkHistoryHandler: AuthorizedEventHandler = async (e) => {
     return buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
   }
 
-  const runs = await github.getActionRuns(e.githubToken, fork.owner, fork.appName)
-  const githubActionMap: GitHubForkActionMap = new Map(
-    fork.template.actions.map((a) => [a.githubActionName, { key: a.key, name: a.name }])
+  const runs = await github.getActionRuns(
+    e.githubToken,
+    fork.owner,
+    fork.appName
   )
 
-  const history: ForkActionRun[] = runs.map((r) => ({
-    key: githubActionMap.get(r.name)?.key || 'unknown',
-    name: githubActionMap.get(r.name)?.name || 'Unknown',
-    logsId: r.id,
-    running: r.status !== 'completed',
-    success: r.conclusion ? r.conclusion === 'success' : null,
-    startedAt: r.created_at,
-    updatedAt: r.updated_at
-  }))
+  const history = runs.map(run => githubActionRunToForkActionRun(run, fork))
 
   return buildJsonResponse(200, history)
 }

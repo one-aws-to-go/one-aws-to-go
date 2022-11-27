@@ -1,5 +1,12 @@
+import { ForkAction } from '@prisma/client'
 import github from '../../github'
-import { AwsActionSecrets, ForkAwsSecretArgs, ForkTemplateProvider } from '../../model'
+import {
+  AwsActionSecrets,
+  ForkActionRun,
+  ForkAwsSecretArgs,
+  ForkTemplateProvider,
+  GitHubActionRun
+} from '../../model'
 
 const FORK_NAME_REGEX = /^[a-z0-9]+$/
 
@@ -43,5 +50,37 @@ export const createSecrets = async (
 ): Promise<void> => {
   for (const [key, value] of Object.entries(secrets)) {
     await github.createSecret(token, owner, repo, key, value as string)
+  }
+}
+
+// GitHub Action name -> Fork action information
+type GitHubForkActionMap = Map<
+string,
+{ readonly key: string; readonly name: string }
+>
+
+interface ForkWithActions {
+  template: { actions: ForkAction[] }
+}
+
+export const githubActionRunToForkActionRun = (
+  githubRun: GitHubActionRun,
+  fork: ForkWithActions
+): ForkActionRun => {
+  const githubActionMap: GitHubForkActionMap = new Map(
+    fork.template.actions.map((a) => [
+      a.githubActionName,
+      { key: a.key, name: a.name }
+    ])
+  )
+
+  return {
+    key: githubActionMap.get(githubRun.name)?.key || 'unknown',
+    name: githubActionMap.get(githubRun.name)?.name || 'Unknown',
+    runId: githubRun.id,
+    running: githubRun.status !== 'completed',
+    success: githubRun.conclusion ? githubRun.conclusion === 'success' : null,
+    startedAt: githubRun.created_at,
+    updatedAt: githubRun.updated_at
   }
 }

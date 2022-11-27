@@ -1,5 +1,4 @@
 import { APIGatewayProxyResult } from 'aws-lambda'
-import { ForkAwsSecretArgs, ForkTemplateProvider } from './model'
 
 export const PROD_ENV = process.env.NODE_ENV === 'production'
 

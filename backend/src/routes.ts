@@ -9,6 +9,7 @@ import {
   putSecretsHandler
 } from './api/forks/forks.handler'
 import { getHealthHandler } from './api/health/health.handler'
+import { getRunHandler } from './api/runs/runs.handler'
 import { getUserHandler } from './api/user/user.handler'
 import { AuthorizedEvent, AuthorizedEventHandler } from './model'
 import { getTemplateHandler, getTemplatesHandler } from './templates/templates.handler'
@@ -43,8 +44,10 @@ const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
   },
   '/api/forks/:id/history': {
     GET: getForkHistoryHandler
+  },
+  '/api/forks/:forkId/history/:runId': {
+    GET: getRunHandler
   }
-  // TODO: Logs
 }
 
 export const getRouteHandler = (event: AuthorizedEvent): AuthorizedEventHandler => {
