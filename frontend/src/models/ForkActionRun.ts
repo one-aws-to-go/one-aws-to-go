@@ -4,7 +4,7 @@ const ajv = new Ajv({ removeAdditional: 'all' });
 export interface ForkActionRun {
   readonly key: string
   readonly name: string
-  readonly logsId: number
+  readonly runId: number
   readonly running: boolean
   readonly success: boolean | null
   readonly startedAt: string
@@ -16,7 +16,7 @@ const forkActionsHistorySchema: JTDSchemaType<ForkActionRun[]> = {
     properties: {
       key: { type: 'string' },
       name: { type: 'string' },
-      logsId: { type: 'uint32' },
+      runId: { type: 'uint32' },
       running: { type: 'boolean' },
       success: { type: 'boolean', nullable: true },
       startedAt: { type: 'string' },

@@ -59,7 +59,7 @@ const ActionHistoryItem: FC<ActionHistoryItemProps> = ({ item }) => {
           <p className="text-xs">Started: {elapsedTime(Date.parse(item.startedAt))}</p>
           <p className="text-xs">Updated: {elapsedTime(Date.parse(item.updatedAt))}</p>
           <p className="text-xs">Action: {item.key.toUpperCase()}</p>
-          <p className="text-xs">Logs ID: {item.logsId}</p>
+          <p className="text-xs">Run ID: {item.runId}</p>
         </div>
       )}
     </div>

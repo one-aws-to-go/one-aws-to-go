@@ -47,7 +47,7 @@ export interface ExtendedFork extends Fork {
 export interface ForkActionRun {
   readonly key: string
   readonly name: string
-  readonly logsId: number
+  readonly runId: number
   readonly running: boolean
   readonly success: boolean | null
   readonly startedAt: string

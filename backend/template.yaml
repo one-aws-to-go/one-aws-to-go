@@ -48,10 +48,10 @@ Resources:
           Properties:
             Path: /api/forks/{id}/history
             Method: GET
-        GetForkHistoryLogs:
+        GetForkHistoryRun:
           Type: Api
           Properties:
-            Path: /api/forks/{id}/history/logs/{logsId}
+            Path: /api/forks/{forkId}/history/{runId}
             Method: GET
 
 Outputs:

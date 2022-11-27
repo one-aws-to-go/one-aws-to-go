@@ -20,7 +20,7 @@ If the authorization header is missing, the response will automatically be **401
 | [`PUT /forks/<fork_id>/secrets`](#put-forksfork_idsecrets) | Set fork secrets for IaC |
 | [`POST /forks/<fork_id>/actions/<action_name>`](#post-forksfork_idactionaction_name) | Trigger GitHub IaC Action |
 | [`GET /forks/<fork_id>/history`](#get-forksfork_idhistory) | Get fork's GitHub IaC Action history |
-| [`GET /forks/<fork_id>/history/logs/<logs_id>`](#get-forksfork_idhistorylogslogs_id-todo) (TODO) | Get fork's GitHub IaC Action logs |
+| [`GET /forks/<fork_id>/history/<run_id>`](#get-forksfork_idhistoryrunid) | Get fork's GitHub IaC Action run data |
 
 ### **`GET /user`**
 
@@ -134,16 +134,17 @@ The default template contains the following actions:
 | **200** | Found action history | [`ForkActionRun[]`](./src/model.ts) |
 | **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
 
-### `GET /forks/<fork_id>/history/logs/<logs_id>` (TODO)
+### `GET /forks/<fork_id>/history/<run_id>`
 
 **Request route params:**
 - `fork_id`: Unique identifier of the fork.
-- `logs_id`: Logs ID (see [`ForkActionRun.logsId`](./src/model.ts)).
+- `run_id`: Run ID (see [`ForkActionRun.runId`](./src/model.ts)).
 
 **Responses:**
 | **Status** | **Description** | **Body** |
 | ----- | ----- | ----- |
-| **200** | Action logs | TODO |
+| **200** | Run data | [`RunData`](./src/model.ts) |
+| **400** | Invalid parameters | [`ErrorMessage`](./src/model.ts) |
 | **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
 
 ## Local Development
