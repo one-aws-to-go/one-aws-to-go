@@ -72,6 +72,19 @@ export interface ForkAwsSecretArgs {
 }
 
 /**
+ * `GET /forks/<fork_id>/history/<run_id>` response body
+ */
+export interface RunData {
+  actionRun: ForkActionRun
+  logFiles: ActionStepLog[]
+}
+
+export interface ActionStepLog {
+  name: string
+  data: string
+}
+
+/**
  * Error message template
  */
 export interface ErrorMessage {

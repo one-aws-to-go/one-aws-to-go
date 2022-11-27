@@ -100,6 +100,18 @@ const getActionRuns = async (token: string, owner: string, repo: string): Promis
   return response.data.workflow_runs || []
 }
 
+const getZippedLogData = async (token: string, owner: string, repo: string, runId: number): Promise<Buffer> => {
+  const url = `${toGithubRepoUrl(owner, repo)}/actions/runs/${runId}/logs`
+  const response = await axios.get(url, { headers: createGithubHeaders(token), responseType: 'arraybuffer' })
+  return response.data
+}
+
+const getActionRun = async (token: string, owner: string, repo: string, runId: number): Promise<GitHubActionRun> => {
+  const url = `${toGithubRepoUrl(owner, repo)}/actions/runs/${runId}`
+  const response = await axios.get(url)
+  return response.data
+}
+
 const getRepoPublicKey = async (
   token: string,
   repoOwner: string,
@@ -130,5 +142,7 @@ export default {
   getActions,
   dispatchAction,
   enableActions,
-  getActionRuns
+  getActionRuns,
+  getActionRun,
+  getZippedLogData
 }
