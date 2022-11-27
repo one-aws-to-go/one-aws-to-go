@@ -1,5 +1,5 @@
-import prisma from '../src/prisma'
 import { ForkState, ForkTemplateProvider } from '../src/model'
+import prisma from '../src/prisma'
 
 const seed = async () => {
   const { id } = await prisma.forkTemplate.create({
