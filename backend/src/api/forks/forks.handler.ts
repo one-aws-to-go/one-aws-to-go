@@ -1,4 +1,5 @@
 import { Fork, ForkAction, ForkTemplate } from '@prisma/client'
+import { AxiosError } from 'axios'
 import github from '../../github'
 import {
   AuthorizedEventHandler,
@@ -276,7 +277,22 @@ export const deleteForkHandler: AuthorizedEventHandler = async (e) => {
     return buildJsonResponse(400, { messsage: 'Fork with state "up" cannot be deleted!' })
   }
 
-  // TODO: Actually delete the fork
+  let deleteFromDb = false
+  try {
+    await github.deleteFork(e.githubToken, fork.owner, fork.appName)
+    deleteFromDb = true
+  } catch (err) {
+    // Also delete if the repo is no longer found!
+    if ((err as AxiosError).response?.status === 404) {
+      deleteFromDb = true
+    }
+  }
 
-  return { statusCode: 204, body: '' } // No content
+  if (deleteFromDb) {
+    await prisma.fork.delete({
+      where: { id: fork.id }
+    })
+  }
+
+  return buildJsonResponse(204) // No content
 }
