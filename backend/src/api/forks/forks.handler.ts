@@ -273,18 +273,27 @@ export const deleteForkHandler: AuthorizedEventHandler = async (e) => {
     return buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
   }
 
-  if (fork.state === ForkState.UP) {
+  let forkExists = true
+  try {
+    await github.getRepo(e.githubToken, fork.owner, fork.appName)
+  } catch (err) {
+    if ((err as AxiosError).response?.status === 404) {
+      forkExists = false
+    }
+  }
+
+  // Check the state only if the fork exists
+  if (forkExists && fork.state === ForkState.UP) {
     return buildJsonResponse(400, { messsage: 'Fork with state "up" cannot be deleted!' })
   }
 
-  let deleteFromDb = false
+  let deleteFromDb = true
   try {
     await github.deleteFork(e.githubToken, fork.owner, fork.appName)
-    deleteFromDb = true
   } catch (err) {
     // Also delete if the repo is no longer found!
-    if ((err as AxiosError).response?.status === 404) {
-      deleteFromDb = true
+    if ((err as AxiosError).response?.status !== 404) {
+      deleteFromDb = false
     }
   }
 
