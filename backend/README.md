@@ -21,6 +21,7 @@ If the authorization header is missing, the response will automatically be **401
 | [`POST /forks/<fork_id>/actions/<action_name>`](#post-forksfork_idactionaction_name) | Trigger GitHub IaC Action |
 | [`GET /forks/<fork_id>/history`](#get-forksfork_idhistory) | Get fork's GitHub IaC Action history |
 | [`GET /forks/<fork_id>/history/<run_id>`](#get-forksfork_idhistoryrunid) | Get fork's GitHub IaC Action run data |
+| [`DELETE /forks/<fork_id>`](#delete-forksfork_id) | Delete fork
 
 ### **`GET /user`**
 
@@ -145,6 +146,17 @@ The default template contains the following actions:
 | ----- | ----- | ----- |
 | **200** | Run data | [`RunData`](./src/model.ts) |
 | **400** | Invalid parameters | [`ErrorMessage`](./src/model.ts) |
+| **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
+
+### `DELETE /forks/<fork_id>`
+
+**Request route params:**
+- `fork_id`: Unique identifier of the fork.
+
+**Responses:**
+| **Status** | **Description** | **Body** |
+| ----- | ----- | ----- |
+| **204** | Fork deleted | - |
 | **404** | Fork not found | [`ErrorMessage`](./src/model.ts) |
 
 ## Local Development

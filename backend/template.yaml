@@ -53,6 +53,11 @@ Resources:
           Properties:
             Path: /api/forks/{forkId}/history/{runId}
             Method: GET
+        DeleteFork:
+          Type: Api
+          Properties:
+            Path: /api/forks/{id}
+            Method: DELETE
 
 Outputs:
   BackendFunction:

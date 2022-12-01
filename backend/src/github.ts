@@ -36,6 +36,11 @@ const getUser = async (token: string): Promise<GitHubUser> => {
   }
 }
 
+const getRepo = async (token: string, owner: string, repo: string) => {
+  const response = await axios.get(toGithubRepoUrl(owner, repo), { headers: createGithubHeaders(token) })
+  return response.data
+}
+
 const createFork = async (token: string, newForkName: string, template: ForkTemplate) => {
   await axios.post(
     `${toGithubRepoUrl(template.owner, template.repo)}/forks`,
@@ -106,10 +111,15 @@ const getZippedLogData = async (token: string, owner: string, repo: string, runI
   return response.data
 }
 
+// TODO: Token?
 const getActionRun = async (token: string, owner: string, repo: string, runId: number): Promise<GitHubActionRun> => {
   const url = `${toGithubRepoUrl(owner, repo)}/actions/runs/${runId}`
   const response = await axios.get(url)
   return response.data
+}
+
+const deleteFork = async (token: string, owner: string, repo: string) => {
+  await axios.delete(toGithubRepoUrl(owner, repo), { headers: createGithubHeaders(token) })
 }
 
 const getRepoPublicKey = async (
@@ -136,6 +146,7 @@ const encrypt = async (valueToEncrypt: string, key: GithubPublicKey) => {
 
 export default {
   getUser,
+  getRepo,
   createFork,
   createSecret,
   getRepoSecrets,
@@ -144,5 +155,6 @@ export default {
   enableActions,
   getActionRuns,
   getActionRun,
-  getZippedLogData
+  getZippedLogData,
+  deleteFork
 }

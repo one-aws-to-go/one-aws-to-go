@@ -34,9 +34,13 @@ export const backendHandler = async (
 
   // Handle the event
   const routeHandler = getRouteHandler(authorizedEvent)
-  try {
-    return await routeHandler(authorizedEvent)
-  } catch (err) {
-    return buildJsonResponse(500, { message: `${err}` })
+  if (routeHandler) {
+    try {
+      return await routeHandler(authorizedEvent)
+    } catch (err) {
+      return buildJsonResponse(500, { message: `${err}` })
+    }
+  } else {
+    return buildJsonResponse(404, { message: 'Unknown endpoint' })
   }
 }

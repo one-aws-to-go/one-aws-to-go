@@ -1,4 +1,5 @@
 import { Fork, ForkAction, ForkTemplate } from '@prisma/client'
+import { AxiosError } from 'axios'
 import github from '../../github'
 import {
   AuthorizedEventHandler,
@@ -254,4 +255,53 @@ export const getForkHistoryHandler: AuthorizedEventHandler = async (e) => {
   const history = runs.map(run => githubActionRunToForkActionRun(run, fork))
 
   return buildJsonResponse(200, history)
+}
+
+export const deleteForkHandler: AuthorizedEventHandler = async (e) => {
+  const forkId = Number(e.pathParameters?.id)
+  const githubUser = await github.getUser(e.githubToken)
+  const fork = await prisma.fork.findFirst({
+    where: { userId: githubUser.id, id: forkId },
+    include: {
+      template: {
+        include: { actions: true }
+      }
+    }
+  })
+
+  if (!fork) {
+    return buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
+  }
+
+  let forkExists = true
+  try {
+    await github.getRepo(e.githubToken, fork.owner, fork.appName)
+  } catch (err) {
+    if ((err as AxiosError).response?.status === 404) {
+      forkExists = false
+    }
+  }
+
+  // Check the state only if the fork exists
+  if (forkExists && fork.state === ForkState.UP) {
+    return buildJsonResponse(400, { messsage: 'Fork with state "up" cannot be deleted!' })
+  }
+
+  let deleteFromDb = true
+  try {
+    await github.deleteFork(e.githubToken, fork.owner, fork.appName)
+  } catch (err) {
+    // Also delete if the repo is no longer found!
+    if ((err as AxiosError).response?.status !== 404) {
+      deleteFromDb = false
+    }
+  }
+
+  if (deleteFromDb) {
+    await prisma.fork.delete({
+      where: { id: fork.id }
+    })
+  }
+
+  return buildJsonResponse(204) // No content
 }
