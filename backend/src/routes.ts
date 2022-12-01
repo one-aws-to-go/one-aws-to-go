@@ -1,5 +1,6 @@
 import { pathToRegexp } from 'path-to-regexp'
 import {
+  deleteForkHandler,
   getForkHandler,
   getForkHistoryHandler,
   getForksHandler,
@@ -33,7 +34,8 @@ const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
     POST: postForkHandler
   },
   '/api/forks/:id': {
-    GET: getForkHandler
+    GET: getForkHandler,
+    DELETE: deleteForkHandler
   },
   '/api/forks/:id/secrets': {
     GET: getSecretsHandler,
@@ -50,13 +52,13 @@ const routes: Record<string, Record<string, AuthorizedEventHandler>> = {
   }
 }
 
-export const getRouteHandler = (event: AuthorizedEvent): AuthorizedEventHandler => {
+export const getRouteHandler = (event: AuthorizedEvent): AuthorizedEventHandler | null => {
   const path = event.path
   const method = event.httpMethod
   for (const route of Object.keys(routes)) {
     const regexp = pathToRegexp(route)
     if (regexp.exec(path)) {
-      return routes[route][method]
+      return routes[route][method] ?? null
     }
   }
 

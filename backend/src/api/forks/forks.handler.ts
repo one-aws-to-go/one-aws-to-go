@@ -255,3 +255,28 @@ export const getForkHistoryHandler: AuthorizedEventHandler = async (e) => {
 
   return buildJsonResponse(200, history)
 }
+
+export const deleteForkHandler: AuthorizedEventHandler = async (e) => {
+  const forkId = Number(e.pathParameters?.id)
+  const githubUser = await github.getUser(e.githubToken)
+  const fork = await prisma.fork.findFirst({
+    where: { userId: githubUser.id, id: forkId },
+    include: {
+      template: {
+        include: { actions: true }
+      }
+    }
+  })
+
+  if (!fork) {
+    return buildJsonResponse(404, { message: `Fork not found with ID: ${forkId}` })
+  }
+
+  if (fork.state === ForkState.UP) {
+    return buildJsonResponse(400, { messsage: 'Fork with state "up" cannot be deleted!' })
+  }
+
+  // TODO: Actually delete the fork
+
+  return { statusCode: 204, body: '' } // No content
+}
