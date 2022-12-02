@@ -17,7 +17,7 @@ export const getTemplatesHandler: AuthorizedEventHandler = async (e) => {
 }
 
 export const getTemplateHandler: AuthorizedEventHandler = async (e) => {
-  const templateId = e.pathParameters?.id ? Number(e.pathParameters.id) : null
+  const templateId = e.pathParams?.id ? Number(e.pathParams.id) : null
   if (templateId === null || isNaN(templateId)) {
     return buildJsonResponse(400, { message: 'Invalid template ID' })
   }

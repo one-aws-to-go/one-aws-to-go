@@ -1,4 +1,4 @@
-import { pathToRegexp } from 'path-to-regexp'
+import { match } from 'path-to-regexp'
 import {
   deleteForkHandler,
   getForkHandler,
@@ -56,8 +56,10 @@ export const getRouteHandler = (event: AuthorizedEvent): AuthorizedEventHandler 
   const path = event.path
   const method = event.httpMethod
   for (const route of Object.keys(routes)) {
-    const regexp = pathToRegexp(route)
-    if (regexp.exec(path)) {
+    const routeMatcher = match(route)
+    const matchedRoute = routeMatcher(path)
+    if (matchedRoute) {
+      event.pathParams = matchedRoute.params as Record<string, string>
       return routes[route][method] ?? null
     }
   }

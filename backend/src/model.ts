@@ -8,6 +8,7 @@ export type AuthorizedEventHandler = (event: AuthorizedEvent) => Promise<APIGate
 export interface AuthorizedEvent extends Omit<APIGatewayEvent, 'body'> {
   readonly githubToken: string
   readonly body: { readonly [key: string]: any } | null
+  pathParams?: { [key: string]: string } 
 }
 
 export interface GitHubUser {

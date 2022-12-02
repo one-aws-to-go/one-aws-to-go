@@ -23,41 +23,6 @@ Resources:
           Properties:
             Path: /{all+}
             Method: any
-        GetTemplate:
-          Type: Api
-          Properties:
-            Path: /api/templates/{id}
-            Method: GET
-        GetFork:
-          Type: Api
-          Properties:
-            Path: /api/forks/{id}
-            Method: GET
-        Secrets:
-          Type: Api
-          Properties:
-            Path: /api/forks/{id}/secrets 
-            Method: any
-        PostAction:
-          Type: Api
-          Properties:
-            Path: /api/forks/{id}/actions/{actionName} 
-            Method: POST
-        GetForkHistory:
-          Type: Api
-          Properties:
-            Path: /api/forks/{id}/history
-            Method: GET
-        GetForkHistoryRun:
-          Type: Api
-          Properties:
-            Path: /api/forks/{forkId}/history/{runId}
-            Method: GET
-        DeleteFork:
-          Type: Api
-          Properties:
-            Path: /api/forks/{id}
-            Method: DELETE
 
 Outputs:
   BackendFunction:
