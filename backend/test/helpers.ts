@@ -54,11 +54,11 @@ export async function resetDb() {
 
 export function getMockAuthorizedEvent(
   body?: any,
-  pathParameters?: any
+  pathParams?: any
 ): AuthorizedEvent {
   return {
     body,
-    pathParameters,
+    pathParams,
     githubToken: 'OsaipaKoodata'
   } as AuthorizedEvent
 }

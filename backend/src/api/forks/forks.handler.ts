@@ -52,7 +52,7 @@ export const getForksHandler: AuthorizedEventHandler = async (e) => {
 }
 
 export const getForkHandler: AuthorizedEventHandler = async (e) => {
-  const forkId = Number(e.pathParameters!.id)
+  const forkId = Number(e.pathParams!.id)
   const githubUser = await github.getUser(e.githubToken)
   const fork = await prisma.fork.findFirst({
     where: { id: forkId, userId: githubUser.id },
@@ -115,7 +115,7 @@ export const postForkHandler: AuthorizedEventHandler = async (e) => {
 
 export const putSecretsHandler: AuthorizedEventHandler = async (e) => {
   const secretArgs: ForkAwsSecretArgs = e.body as ForkAwsSecretArgs
-  const forkId = Number(e.pathParameters!.id)
+  const forkId = Number(e.pathParams!.id)
   const githubUser = await github.getUser(e.githubToken)
   const fork = await prisma.fork.findFirst({
     where: { userId: githubUser.id, id: forkId },
@@ -152,7 +152,7 @@ export const putSecretsHandler: AuthorizedEventHandler = async (e) => {
 }
 
 export const getSecretsHandler: AuthorizedEventHandler = async (e) => {
-  const forkId = Number(e.pathParameters!.id)
+  const forkId = Number(e.pathParams!.id)
   const githubUser = await github.getUser(e.githubToken)
   const fork = await prisma.fork.findFirst({
     where: { userId: githubUser.id, id: forkId }
@@ -169,8 +169,8 @@ export const getSecretsHandler: AuthorizedEventHandler = async (e) => {
 }
 
 export const postActionHandler: AuthorizedEventHandler = async (e) => {
-  const forkId = Number(e.pathParameters?.id)
-  const actionName = e.pathParameters?.actionName
+  const forkId = Number(e.pathParams?.id)
+  const actionName = e.pathParams?.actionName
   const githubUser = await github.getUser(e.githubToken)
   const fork = await prisma.fork.findFirst({
     where: { userId: githubUser.id, id: forkId },
@@ -231,7 +231,7 @@ export const postActionHandler: AuthorizedEventHandler = async (e) => {
 }
 
 export const getForkHistoryHandler: AuthorizedEventHandler = async (e) => {
-  const forkId = Number(e.pathParameters?.id)
+  const forkId = Number(e.pathParams?.id)
   const githubUser = await github.getUser(e.githubToken)
   const fork = await prisma.fork.findFirst({
     where: { userId: githubUser.id, id: forkId },
@@ -258,7 +258,7 @@ export const getForkHistoryHandler: AuthorizedEventHandler = async (e) => {
 }
 
 export const deleteForkHandler: AuthorizedEventHandler = async (e) => {
-  const forkId = Number(e.pathParameters?.id)
+  const forkId = Number(e.pathParams?.id)
   const githubUser = await github.getUser(e.githubToken)
   const fork = await prisma.fork.findFirst({
     where: { userId: githubUser.id, id: forkId },

@@ -6,12 +6,11 @@ import { githubActionRunToForkActionRun } from '../forks/forks.utils'
 import { unzipLogFiles } from './runs.utils'
 
 export const getRunHandler: AuthorizedEventHandler = async (e) => {
-  console.log(e.pathParameters)
-  const forkId = Number(e.pathParameters?.forkId)
+  const forkId = Number(e.pathParams?.forkId)
   if (isNaN(forkId)) {
     return buildJsonResponse(400, { message: `Invalid forkId: ${forkId}` })
   }
-  const runId = Number(e.pathParameters?.runId)
+  const runId = Number(e.pathParams?.runId)
   if (isNaN(runId)) {
     return buildJsonResponse(400, { message: `Invalid runId: ${runId}` })
   }
