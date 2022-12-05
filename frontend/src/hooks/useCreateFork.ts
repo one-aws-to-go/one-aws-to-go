@@ -22,7 +22,7 @@ export const useCreateFork = (provider: string) => {
       const createdFork = response.data
 
       if (validateFork(createdFork)) {
-        navigate(`/set_secrets/${fork.templateId}`,
+        navigate(`/set_secrets/${createdFork.id}`,
           {
             replace: true,
             state: {

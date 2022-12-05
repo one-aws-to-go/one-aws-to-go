@@ -90,7 +90,7 @@ const Main = () => {
                       <div className='flex flex-row items-center space-x-2'>
                         <p className='ml-4 font-bold'>{item.appName}</p>
                         <div className='inline-flex items-center justify-center whitespace-nowrap w-7 h-7 bg-black/20 rounded-full text-sm text-white'>
-                          {item.id}
+                          {item.templateId}
                         </div>
                       </div>
                       <img

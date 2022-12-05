@@ -10,7 +10,9 @@
   "dependencies": {
     "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^2.0.11",
+    "@preline/overlay": "^1.3.0",
     "ajv": "^8.11.0",
+    "ansi-to-react": "6.1.6",
     "axios": "^0.27.2",
     "date-fns": "^2.29.3",
     "react": "^18.2.0",
@@ -34,5 +36,11 @@
     "vite": "^3.2.2",
     "vite-plugin-svgr": "^2.2.2",
     "vite-tsconfig-paths": "^3.5.2"
+  },
+  "overrides": {
+    "ansi-to-react": {
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+    }
   }
 }

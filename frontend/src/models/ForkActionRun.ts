@@ -11,18 +11,20 @@ export interface ForkActionRun {
   readonly updatedAt: string
 }
 
-const forkActionsHistorySchema: JTDSchemaType<ForkActionRun[]> = {
-  elements: {
-    properties: {
-      key: { type: 'string' },
-      name: { type: 'string' },
-      runId: { type: 'uint32' },
-      running: { type: 'boolean' },
-      success: { type: 'boolean', nullable: true },
-      startedAt: { type: 'string' },
-      updatedAt: { type: 'string' },
-    },
-  }
+export const forkActionRunSchema: JTDSchemaType<ForkActionRun> = {
+  properties: {
+    key: { type: 'string' },
+    name: { type: 'string' },
+    runId: { type: 'uint32' },
+    running: { type: 'boolean' },
+    success: { type: 'boolean', nullable: true },
+    startedAt: { type: 'string' },
+    updatedAt: { type: 'string' },
+  },
 };
 
-export const validateForkActionsHistory = ajv.compile(forkActionsHistorySchema)
+const forkActionRunsSchema: JTDSchemaType<ForkActionRun[]> = {
+  elements: forkActionRunSchema
+};
+
+export const validateForkActionsHistory = ajv.compile(forkActionRunsSchema)
