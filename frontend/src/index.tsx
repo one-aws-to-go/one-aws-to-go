@@ -10,6 +10,7 @@ import ForkPage from './pages/ForkPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Logs from './pages/Logs';
+import LogsPage from './pages/Logs';
 import { ProtectedRoute } from './utils/ProtectedRoute';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -55,10 +56,10 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: 'logs',
+    path: 'logs/:forkId/:runId',
     element: (
       <ProtectedRoute>
-        <Logs />
+        <LogsPage />
       </ProtectedRoute>
     ),
   },

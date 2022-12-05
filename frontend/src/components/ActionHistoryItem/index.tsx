@@ -2,24 +2,26 @@ import React, { FC, useState } from 'react';
 import { formatDistance, formatDistanceToNow, formatDistanceToNowStrict, subDays } from 'date-fns';
 
 import { ForkActionRun } from '../../models/ForkActionRun'
+import { useNavigate } from 'react-router-dom';
 
 export interface ActionHistoryItemProps {
   item: ForkActionRun
+  forkId: string | undefined
 }
 
-const ActionHistoryItem: FC<ActionHistoryItemProps> = ({ item }) => {
-
-  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+const ActionHistoryItem: FC<ActionHistoryItemProps> = ({ item, forkId }) => {
+  const navigate = useNavigate()
 
   const elapsedTime = (milliSeconds: number): string => {
-    let distance = `${formatDistanceToNowStrict(new Date(milliSeconds), {addSuffix: true})}`
+    let distance = `${formatDistanceToNowStrict(new Date(milliSeconds), { addSuffix: true })}`
     return distance
   }
 
   return (
-    <div onClick={() => setIsExpanded(!isExpanded)} className='flex flex-col bg-primaryContainer text-white rounded-md  hover:cursor-pointer'>
+    <div onClick={() => navigate(`/logs/${forkId}/${item.runId}`)} className='flex flex-col bg-primaryContainer text-white rounded-md  hover:cursor-pointer'>
       <div
-        className="flex flex-row flex-none justify-between hover:text-primary p-2">
+        className="flex flex-row flex-none justify-between items-center p-2"
+      >
 
         <div className="flex flex-row items-center space-x-2">
           {item.running ? (
@@ -42,26 +44,14 @@ const ActionHistoryItem: FC<ActionHistoryItemProps> = ({ item }) => {
           )}
           <p className="font-bold">{item.name}</p>
         </div>
-
-        {isExpanded ? (
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
-        )}
       </div>
 
-      {isExpanded && (
-        <div className='flex flex-col p-2'>
-          <p className="text-xs">Started: {elapsedTime(Date.parse(item.startedAt))}</p>
-          <p className="text-xs">Updated: {elapsedTime(Date.parse(item.updatedAt))}</p>
-          <p className="text-xs">Action: {item.key.toUpperCase()}</p>
-          <p className="text-xs">Run ID: {item.runId}</p>
-        </div>
-      )}
+      <div className='flex flex-col pb-2 px-2 items-start'>
+        <p className="text-xs">Started: {elapsedTime(Date.parse(item.startedAt))}</p>
+        <p className="text-xs">Updated: {elapsedTime(Date.parse(item.updatedAt))}</p>
+        <p className="text-xs">Action: {item.key.toUpperCase()}</p>
+        <p className="text-xs">Run ID: {item.runId}</p>
+      </div>
     </div>
   );
 };

@@ -29,6 +29,7 @@ export enum ForkState {
 
 export interface Fork extends ForkCommon {
   readonly appName: string
+  readonly templateId: number
 }
 
 export interface ExtendedFork extends Fork {
@@ -61,7 +62,8 @@ const forkSchema: JTDSchemaType<Fork> = {
         ForkTemplateProvider.AZURE,
         ForkTemplateProvider.GCP
       ]
-    }
+    },
+    templateId: { type: 'int16' }
   },
 };
 
@@ -83,7 +85,7 @@ const forkTemplatesSchema: JTDSchemaType<ForkTemplate[]> = {
           ForkTemplateProvider.GCP
         ]
       },
-      description: { type: 'string', nullable: true }
+      description: { type: 'string', nullable: true },
     },
   }
 };
@@ -110,7 +112,8 @@ const extendedForkSchema: JTDSchemaType<ExtendedFork> = {
       ]
     },
     secretsSet: { type: 'boolean' },
-    actions: { elements: GithubActionSchema }
+    actions: { elements: GithubActionSchema },
+    templateId: { type: 'int16' }
   },
 };
 
