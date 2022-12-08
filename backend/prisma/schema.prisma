@@ -41,16 +41,25 @@ model ForkAction {
 }
 
 model Fork {
-  id             Int     @id @default(autoincrement())
-  appName        String  @unique()
+  id             Int                @id @default(autoincrement())
+  appName        String             @unique()
   owner          String
   state          String
-  actionsEnabled Boolean @default(false)
-  secretsSet     Boolean @default(false)
-  ref            String  @default("master")
+  actionsEnabled Boolean            @default(false)
+  secretsSet     Boolean            @default(false)
+  ref            String             @default("master")
+  pendingState   ForkStateMutation?
 
   userId     Int
   user       User         @relation(fields: [userId], references: [githubId])
   templateId Int
   template   ForkTemplate @relation(fields: [templateId], references: [id])
+}
+
+model ForkStateMutation {
+  actionRunId String // Stringified integer!
+  toState     String
+
+  forkId Int  @unique
+  fork   Fork @relation(fields: [forkId], references: [id], onDelete: Cascade)
 }

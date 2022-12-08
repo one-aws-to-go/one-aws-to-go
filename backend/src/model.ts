@@ -31,6 +31,7 @@ export interface ForkTemplate extends ForkCommon {
 
 export interface Fork extends ForkCommon {
   readonly appName: string
+  readonly pending: boolean // Whether there is a pending state mutation
   readonly templateId: number
 }
 
@@ -125,6 +126,7 @@ export interface GitHubActionRun {
   readonly conclusion: 'success' | 'failure' | null
   readonly created_at: string
   readonly updated_at: string
+  readonly workflow_id: number
 }
 
 export interface CommonActionSecrets {

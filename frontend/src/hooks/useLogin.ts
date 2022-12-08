@@ -11,7 +11,7 @@ export const useLogin = (token: string) => {
   const login = useQuery(["user"], async () => {
     axios.defaults.headers.common['Authorization'] = `bearer ${token}`
 
-    const response = await axios('/api/user');
+    const response = await axios('http://localhost:3001/api/user');
 
     if (validateGithubUser(response.data)) {
       toast.success('Authenticated succesfully!')
