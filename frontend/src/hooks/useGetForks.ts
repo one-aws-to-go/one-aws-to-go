@@ -3,16 +3,23 @@ import toast from "react-hot-toast";
 import { useQuery } from "react-query";
 import { validateErrorMessage } from "../models/ErrorMessage";
 import { validateForks } from "../models/Fork";
+import { useAuth0 } from "@auth0/auth0-react";
+import BackendService from "../services/BackendService";
 
 export const useGetForks = () => {
-  return useQuery(["forks"], async () => {
-    const response = await axios.get('/api/forks');
+  const { user, isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
 
-    if (validateForks(response.data)) {
-      return response.data
+  return useQuery(["forks"], async () => {
+    if (!user?.sub) {
+      return
+    }
+    const accessToken = await getAccessTokenSilently({ audience: "lambda" });
+    const forks = await new BackendService(accessToken).getForks();
+    if (validateForks(forks)) {
+      return forks;
     }
     else {
-      console.log(validateForks.errors);
+      console.error(validateForks.errors)
       toast.error('Unknown error occurred, please contact administrator [SCHEMA]')
     }
   }, {

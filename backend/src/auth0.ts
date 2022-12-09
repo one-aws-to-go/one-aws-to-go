@@ -60,19 +60,22 @@ const getSigningKeyFromHeader = async (header: JwtHeader) => {
 const verifyAccessToken = async (token: string) => {
   const unverifiedHeader = jwt.decode(token, { complete: true })?.header
   if (!unverifiedHeader) {
+    console.warn("No header in jwt token")
     return
   }
   const signingKey = await getSigningKeyFromHeader(unverifiedHeader)
   if (!signingKey) {
+    console.warn("No signing key in jwt token")
     return
   }
   const payload = await jwt.verify(token, signingKey, { audience: 'lambda' })
   return payload
 }
 
-const getUserIDFromEvent = async (event: any) => {
+const getUserIDFromEvent = async (event: APIGatewayEvent) => {
   const authHeader = event.headers.Authorization ?? event.headers.authorization
   if (!authHeader) {
+    console.warn("No Auth header")
     return
   }
   // Cut the 'Bearer ' -part out
@@ -82,6 +85,7 @@ const getUserIDFromEvent = async (event: any) => {
     const payload = await verifyAccessToken(token)
     if (!payload) {
       console.error('invalid payload')
+      console.error(payload)
       return
     }
     if (typeof payload !== 'string') {
@@ -101,13 +105,15 @@ const getUserIDFromEvent = async (event: any) => {
 const getGithubAccessTokenFromEvent = async (event: APIGatewayEvent) => {
   const userId = await getUserIDFromEvent(event)
   if (!userId) {
+    console.warn("No userId")
     return
   }
   const token = await getGithubAccessTokenByUserId(userId)
   if (!token) {
+    console.warn("No Token")
     return
   }
-  return token
+  return `Bearer ${token}`
 }
 
 export { getGithubAccessTokenFromEvent }

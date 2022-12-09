@@ -1,20 +1,32 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useQuery } from "react-query";
 import { validateErrorMessage } from "../models/ErrorMessage";
 import { validateExtendedFork } from "../models/Fork";
+import BackendService from "../services/BackendService";
 
 export const useGetExtendedFork = (id: string | undefined) => {
-  return useQuery(["extendedFork"], async () => {
-    const response = await axios.get(`/api/forks/${id}`);
+  const { user, isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
 
-    if (validateExtendedFork(response.data)) {
-      return response.data
+  return useQuery(["extendedFork"], async () => {
+    if (!user?.sub) {
+      return
+    }
+    const accessToken = await getAccessTokenSilently({ audience: "lambda" });
+    if (!id) {
+      console.warn("Empty id for useGetExtendedFork")
+      return
+    }
+    const fork = await new BackendService(accessToken).getExtendedFork(id);
+    if (validateExtendedFork(fork)) {
+      return fork
     }
     else {
       console.log(validateExtendedFork.errors);
       toast.error('Unknown error occurred, please contact administrator [SCHEMA]')
     }
+
   }, {
     refetchOnWindowFocus: false,
     onError: (error) => {

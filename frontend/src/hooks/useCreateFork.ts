@@ -3,6 +3,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { validateErrorMessage } from "../models/ErrorMessage";
+import { useAuth0 } from "@auth0/auth0-react";
+import BackendService from "../services/BackendService";
 
 export interface CreateForkRequest {
   name: string,
@@ -11,11 +13,18 @@ export interface CreateForkRequest {
 
 export const useCreateFork = (fork: CreateForkRequest) => {
   let navigate = useNavigate()
+  const { user, isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
 
   const createFork = useQuery(["createFork"], async () => {
-    await axios.post('/api/forks', fork);
+    if (!user?.sub) {
+      console.error("Empty user sub in useCreateFork");
+      return
+    }
+    const accessToken = await getAccessTokenSilently({ audience: "lambda" });
+    await new BackendService(accessToken).createFork(fork);
     navigate(`/set_secrets/1`, { replace: true })
     toast.success('Fork created succesfully!')
+
   }, {
     enabled: false, retry: false,
     keepPreviousData: true,

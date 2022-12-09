@@ -1,10 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider      = "prisma-client-js"
+  ///output        = "../build/node_modules/.prisma/client"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
-  output        = "../build/node_modules/.prisma/client"
 }
 
 datasource db {
@@ -18,37 +15,34 @@ model User {
 }
 
 model ForkTemplate {
-  id       Int    @id @default(autoincrement())
+  id       Int          @id @default(autoincrement())
   owner    String
   repo     String
   provider String
-
-  forks   Fork[]
-  actions ForkAction[]
+  forks    Fork[]
+  actions  ForkAction[]
 }
 
 model ForkAction {
   key              String
   githubActionName String
   toState          String
-
-  templateId Int
-  template   ForkTemplate @relation(fields: [templateId], references: [id])
+  templateId       Int
+  template         ForkTemplate @relation(fields: [templateId], references: [id])
 
   @@unique([key, templateId])
 }
 
 model Fork {
-  id             Int     @id @default(autoincrement())
-  appName        String  @unique()
+  id             Int          @id @default(autoincrement())
+  appName        String       @unique
   owner          String
+  userId         Int
+  templateId     Int
+  actionsEnabled Boolean      @default(false)
+  ref            String       @default("master")
+  secretsSet     Boolean      @default(false)
   state          String
-  actionsEnabled Boolean @default(false)
-  secretsSet     Boolean @default(false)
-  ref            String  @default("master")
-
-  userId     Int
-  user       User         @relation(fields: [userId], references: [githubId])
-  templateId Int
-  template   ForkTemplate @relation(fields: [templateId], references: [id])
+  template       ForkTemplate @relation(fields: [templateId], references: [id])
+  user           User         @relation(fields: [userId], references: [githubId])
 }

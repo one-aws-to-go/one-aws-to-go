@@ -8,13 +8,14 @@ export interface CreateForkRequest {
 }
 
 class BackendService {
-  private backendURL = "TODO";
+  private backendURL = "http://localhost:3000";
   private api: Axios;
 
   constructor(accessToken: string) {
     this.api = new Axios({
       baseURL: this.backendURL,
       headers: { authorization: `Bearer ${accessToken}` },
+      withCredentials: false
     });
     return this;
   }
