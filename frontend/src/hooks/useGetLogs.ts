@@ -19,13 +19,6 @@ export const useGetLogs = (forkId: string | undefined, runId: string | undefined
     }
   }, {
     refetchOnWindowFocus: false,
-    /* refetchInterval: (data) => {
-      // Poll action history until there are no running actions
-      if (data?.some(action => action.running === true)) {
-        return 10000
-      }
-      return false
-    }, */
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         let data = error.response?.data

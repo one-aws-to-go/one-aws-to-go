@@ -29,18 +29,9 @@ export const useGithubAction = () => {
     mutationFn: async (request: GithubActionRequest) => {
       await axios.post(`/api/forks/${request.forkId}/actions/${request.action.key}`);
       toast.success(`Action (${request.action.key}) executed succesfully!`)
-
-      // Update extended fork state
-      const extendedFork = queryClient.getQueryData<ExtendedFork>(`forks/${request.forkId}`)
-      if (extendedFork) {
-        queryClient.setQueryData(`extendedFork/${request.forkId}`, {
-          ...extendedFork,
-          state: getForkStateFromAction(request.action)
-        })
-      }
     },
-    onSuccess: (data, variables) => {
-      queryClient.refetchQueries(`forks/${variables.forkId}/history`)
+    onSuccess: (data, request) => {
+      queryClient.refetchQueries(`forks/${request.forkId}/history`)
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
