@@ -31,12 +31,12 @@ export interface ForkTemplate extends ForkCommon {
 
 export interface Fork extends ForkCommon {
   readonly appName: string
-  readonly pending: boolean // Whether there is a pending state mutation
   readonly templateId: number
 }
 
 export interface ExtendedFork extends Fork {
   readonly state: ForkState
+  readonly pending: boolean // Whether there is a pending state mutation
   readonly secretsSet: boolean
   readonly actions: {
     readonly key: string

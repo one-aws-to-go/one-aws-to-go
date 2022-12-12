@@ -20,7 +20,8 @@ import {
   isValidForkName
 } from './forks.utils'
 
-type ForkWithTemplate = Fork & { template: ForkTemplate } & { pendingState: ForkStateMutation | null }
+type ForkWithTemplate = Fork & { template: ForkTemplate }
+type ForkWithMutation = ForkWithTemplate & { pendingState: ForkStateMutation | null }
 
 const toApiFork = (f: ForkWithTemplate): ApiFork => ({
   id: f.id,
@@ -28,13 +29,13 @@ const toApiFork = (f: ForkWithTemplate): ApiFork => ({
   owner: f.owner,
   repo: f.appName,
   provider: f.template.provider as ForkTemplateProvider,
-  pending: !!f.pendingState,
   templateId: f.templateId
 })
 
-const toExtendedFork = (f: ForkWithTemplate, actions: ForkAction[]): ExtendedFork => ({
+const toExtendedFork = (f: ForkWithMutation, actions: ForkAction[]): ExtendedFork => ({
   ...toApiFork(f),
   state: f.state as ForkState,
+  pending: !!f.pendingState,
   secretsSet: f.secretsSet,
   actions: actions.map((a) => ({
     key: a.key,
@@ -47,10 +48,7 @@ export const getForksHandler: AuthorizedEventHandler = async (e) => {
   const githubUser = await github.getUser(e.githubToken)
   const forks = await prisma.fork.findMany({
     where: { userId: githubUser.id },
-    include: {
-      template: true,
-      pendingState: true
-    }
+    include: { template: true }
   })
 
   return buildJsonResponse(200, forks.map(toApiFork))
