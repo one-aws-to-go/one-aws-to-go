@@ -124,9 +124,9 @@ export interface GitHubActionRun {
   readonly name: string
   readonly status: 'completed' | 'in_progress'
   readonly conclusion: 'success' | 'failure' | null
+  readonly workflow_id: number
   readonly created_at: string
   readonly updated_at: string
-  readonly workflow_id: number
 }
 
 export interface CommonActionSecrets {

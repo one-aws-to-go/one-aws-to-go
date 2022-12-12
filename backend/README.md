@@ -18,7 +18,7 @@ If the authorization header is missing, the response will automatically be **401
 | [`POST /forks`](#post-forks) | Create new fork |
 | [`GET /forks/<fork_id>`](#get-forksfork_id) | Get fork information
 | [`PUT /forks/<fork_id>/secrets`](#put-forksfork_idsecrets) | Set fork secrets for IaC |
-| [`POST /forks/<fork_id>/actions/<action_name>`](#post-forksfork_idactionaction_name) | Trigger GitHub IaC Action |
+| [`POST /forks/<fork_id>/actions/<action_name>`](#post-forksfork_idactionsaction_name) | Trigger GitHub IaC Action |
 | [`GET /forks/<fork_id>/history`](#get-forksfork_idhistory) | Get fork's GitHub IaC Action history |
 | [`GET /forks/<fork_id>/history/<run_id>`](#get-forksfork_idhistoryrunid) | Get fork's GitHub IaC Action run data |
 | [`DELETE /forks/<fork_id>`](#delete-forksfork_id) | Delete fork
