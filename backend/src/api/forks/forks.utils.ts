@@ -1,4 +1,4 @@
-import { ForkAction } from '@prisma/client'
+import { ForkAction, ForkStateMutation } from '@prisma/client'
 import github from '../../github'
 import {
   AwsActionSecrets,
@@ -82,5 +82,25 @@ export const githubActionRunToForkActionRun = (
     success: githubRun.conclusion ? githubRun.conclusion === 'success' : null,
     startedAt: githubRun.created_at,
     updatedAt: githubRun.updated_at
+  }
+}
+
+/**
+ * Returns:
+ * - `true`: the pending action was successful
+ * - `false`: the pending action failed
+ * - `null`: the pending action could not be found or its still running.
+ */
+export const isForkPendingStateSuccess = async (
+  token: string,
+  owner: string,
+  repo: string,
+  mutation: ForkStateMutation
+): Promise<boolean | null> => {
+  const run = await github.getActionRun(token, owner, repo, Number(mutation.actionRunId))
+  switch (run.conclusion) {
+    case 'success': return true
+    case 'failure': return false
+    default: return null
   }
 }

@@ -1,6 +1,7 @@
 import { ForkTemplate } from '@prisma/client'
 import { APIGatewayEvent } from 'aws-lambda'
 import axios, { AxiosRequestHeaders } from 'axios'
+import { isAfter, parseISO } from 'date-fns'
 import sodium from 'libsodium-wrappers'
 import {
   GitHubAction,
@@ -15,6 +16,8 @@ export const GITHUB_BASE_URL = 'https://api.github.com'
 export const getAuthTokenFromEvent = (e: APIGatewayEvent): string | undefined => {
   return e.headers.Authorization || e.headers.authorization
 }
+
+const GET_ACTION_AFTER_DISPATCH_RETRY_COUNT = 10
 
 const toGithubRepoUrl = (owner: string, name: string) => `${GITHUB_BASE_URL}/repos/${owner}/${name}`
 
@@ -82,15 +85,35 @@ const getActions = async (token: string, owner: string, repo: string): Promise<G
   return response.data.workflows || []
 }
 
+/**
+ * Dispatches a GitHub Action and returns its triggered workflow's run ID.
+ */
 const dispatchAction = async (
   token: string,
   owner: string,
   repo: string,
   actionId: number,
   ref: string
-) => {
+): Promise<number | null> => {
   const url = `${toGithubRepoUrl(owner, repo)}/actions/workflows/${actionId}/dispatches`
+
+  const now = new Date()
   await axios.post(url, { ref }, { headers: createGithubHeaders(token) })
+
+  let i = 0
+  while (i <= GET_ACTION_AFTER_DISPATCH_RETRY_COUNT) {
+    const runs = await getActionRuns(token, owner, repo)
+    const id = runs.find(r => r.workflow_id === actionId && isAfter(parseISO(r.created_at), now))?.id
+    if (id) {
+      return id
+    }
+
+    // Else retry few times
+    await new Promise(r => setTimeout(r, 1000)) // Sleep for 1 s
+    ++i
+  }
+
+  return null
 }
 
 const enableActions = async (token: string, owner: string, repo: string) => {

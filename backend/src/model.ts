@@ -36,6 +36,7 @@ export interface Fork extends ForkCommon {
 
 export interface ExtendedFork extends Fork {
   readonly state: ForkState
+  readonly pending: boolean // Whether there is a pending state mutation
   readonly secretsSet: boolean
   readonly actions: {
     readonly key: string
@@ -123,6 +124,7 @@ export interface GitHubActionRun {
   readonly name: string
   readonly status: 'completed' | 'in_progress'
   readonly conclusion: 'success' | 'failure' | null
+  readonly workflow_id: number
   readonly created_at: string
   readonly updated_at: string
 }

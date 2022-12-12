@@ -2,7 +2,7 @@ import { AuthorizedEvent, ForkState, ForkTemplateProvider } from '../src/model'
 import prisma from '../src/prisma'
 
 async function testSeed() {
-  console.log('Seeding db for tests...')
+  // console.log('Seeding db for tests...')
   const { id } = await prisma.forkTemplate.create({
     data: {
       id: 1,
@@ -44,7 +44,7 @@ async function testSeed() {
 }
 
 export async function resetDb() {
-  console.log('Clearing database...')
+  // console.log('Clearing database...')
   await prisma.fork.deleteMany({})
   await prisma.user.deleteMany({})
   await prisma.forkAction.deleteMany({})
@@ -59,7 +59,7 @@ export function getMockAuthorizedEvent(
   return {
     body,
     pathParams,
-    githubToken: 'OsaipaKoodata'
+    githubToken: 'OsaispaKoodata'
   } as AuthorizedEvent
 }
 
@@ -114,4 +114,13 @@ export async function setForkSecrets(forkId: number) {
       secretsSet: true
     }
   })
+}
+
+export const isForkStatePending = async (id: number): Promise<boolean> => {
+  const f = await prisma.fork.findUnique({
+    where: { id },
+    include: { pendingState: true }
+  })
+
+  return !!f?.pendingState
 }
